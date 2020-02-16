@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import aron.utcn.licenta.dto.JwtTokenDto;
 import aron.utcn.licenta.dto.LoginDto;
 import aron.utcn.licenta.jwt.JwtResponse;
 import aron.utcn.licenta.jwt.JwtTokenUtil;
@@ -39,16 +40,17 @@ public class LoginController {
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@PostMapping("/login")
-	public String createAuthenticationToken(@RequestBody LoginDto authenticationRequest) throws Exception {
+	public JwtTokenDto createAuthenticationToken(@RequestBody LoginDto authenticationRequest) throws Exception {
 
 		Person person = personManagementService.findByUsername(authenticationRequest.getUsername());
 		if(!passwordEncoder.matches(authenticationRequest.getPassword(), person.getPassword())) {
-			return "false";
+			return new JwtTokenDto("false");
 		}
 		
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
-		return ResponseEntity.ok(new JwtResponse(token)).getBody().getToken();
+		
+		return new JwtTokenDto(ResponseEntity.ok(new JwtResponse(token)).getBody().getToken());
 	}
 
 	private void authenticate(String username, String password) throws Exception {

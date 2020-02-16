@@ -1,0 +1,13 @@
+﻿  DetectChars.cpp
+C:\Users\User\source\repos\opencvtest\opencvtest\DetectChars.h(6,9): fatal error C1083: Cannot open include file: 'opencv2/core/core.hpp': No such file or directory
+  DetectPlates.cpp
+C:\Users\User\source\repos\opencvtest\opencvtest\DetectPlates.h(6,9): fatal error C1083: Cannot open include file: 'opencv2/core/core.hpp': No such file or directory
+  Main.cpp
+C:\Users\User\source\repos\opencvtest\opencvtest\Main.h(6,9): fatal error C1083: Cannot open include file: 'opencv2/core/core.hpp': No such file or directory
+  PossibleChar.cpp
+C:\Users\User\source\repos\opencvtest\opencvtest\PossibleChar.h(6,9): fatal error C1083: Cannot open include file: 'opencv2/core/core.hpp': No such file or directory
+  PossiblePlate.cpp
+C:\Users\User\source\repos\opencvtest\opencvtest\PossiblePlate.h(8,9): fatal error C1083: Cannot open include file: 'opencv2/core/core.hpp': No such file or directory
+  Preprocess.cpp
+C:\Users\User\source\repos\opencvtest\opencvtest\Preprocess.h(6,9): fatal error C1083: Cannot open include file: 'opencv2/core/core.hpp': No such file or directory
+  Generating Code...
