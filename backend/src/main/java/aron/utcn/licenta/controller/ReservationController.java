@@ -18,6 +18,7 @@ public class ReservationController {
 	
 	@PostMapping("/reservation")
 	public void reserveParkingLot(@RequestBody ReservationDto reservation) throws ParseException {
-		reservationManagementService.reserveParkingLot(reservation);
+		reservationManagementService.reserveParkingPlace(reservation);
 	}
+	
 }

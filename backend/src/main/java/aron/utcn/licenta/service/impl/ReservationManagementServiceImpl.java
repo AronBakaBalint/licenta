@@ -21,7 +21,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	
 	@Override
 	@Transactional
-	public void reserveParkingLot(ReservationDto reservationDto) throws ParseException {
+	public void reserveParkingPlace(ReservationDto reservationDto) throws ParseException {
 		reservationManagementRepository.reserveParkingLot(dtoToReservationConverter.convertDtoToReservation(reservationDto));		
 	}
 

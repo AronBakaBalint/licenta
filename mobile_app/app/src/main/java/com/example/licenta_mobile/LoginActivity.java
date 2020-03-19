@@ -2,6 +2,7 @@ package com.example.licenta_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,6 +45,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getToken();
                     System.out.println(responseBody);
+                    Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
+                    startActivity(intent);
                 }
             }
 

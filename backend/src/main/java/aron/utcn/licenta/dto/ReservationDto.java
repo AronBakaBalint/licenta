@@ -7,8 +7,6 @@ public class ReservationDto {
 
 	private Integer parkingLotId;
 	private String licensePlateNumber;
-	private String reservationStartTime;
-	private String reservationDuration;
 }
 
 /*

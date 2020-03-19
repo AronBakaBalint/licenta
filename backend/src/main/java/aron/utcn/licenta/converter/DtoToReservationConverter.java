@@ -19,20 +19,10 @@ public class DtoToReservationConverter {
 		reservation.setParkingLotId(reservationDto.getParkingLotId());
 		reservation.setArrived(false);
 		
-		Date reservationStart = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(reservationDto.getReservationStartTime());  
+		Date reservationStart = new Date();
 		reservation.setReservationStartTime(reservationStart);
 		
-		Date reservationEnd = addHoursToJavaUtilDate(reservationStart, Integer.parseInt(reservationDto.getReservationDuration()));
-		reservation.setReservationEndTime(reservationEnd);
-		
 		return reservation;
-	}
-	
-	private static Date addHoursToJavaUtilDate(Date date, int hours) {
-	    Calendar calendar = Calendar.getInstance();
-	    calendar.setTime(date);
-	    calendar.add(Calendar.HOUR_OF_DAY, hours);
-	    return calendar.getTime();
 	}
 	
 }
