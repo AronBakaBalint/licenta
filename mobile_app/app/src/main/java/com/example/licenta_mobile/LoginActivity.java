@@ -4,15 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.LoginRequestDto;
 import com.example.licenta_mobile.rest.LoginService;
 import com.example.licenta_mobile.rest.RestClient;
+import com.example.licenta_mobile.security.Token;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<JwtTokenDto> call, Response<JwtTokenDto> response) {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getToken();
-                    System.out.println(responseBody);
+                    Token.setJwtToken(responseBody);
                     Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
                     startActivity(intent);
                 }
