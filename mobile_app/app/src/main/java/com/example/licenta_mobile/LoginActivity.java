@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 
@@ -12,6 +13,8 @@ import com.example.licenta_mobile.dto.LoginRequestDto;
 import com.example.licenta_mobile.rest.LoginService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
+
+import java.io.UnsupportedEncodingException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,6 +47,11 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getToken();
                     Token.setJwtToken(responseBody);
+                    try{
+                        System.out.println(getJson(responseBody));
+                    } catch (UnsupportedEncodingException e){
+                        System.out.println("Wrong encoding");
+                    }
                     Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
                     startActivity(intent);
                 }
@@ -55,5 +63,10 @@ public class LoginActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    private  String getJson(String strEncoded) throws UnsupportedEncodingException {
+        byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
+        return new String(decodedBytes, "UTF-8");
     }
 }

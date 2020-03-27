@@ -1,6 +1,5 @@
 package aron.utcn.licenta.repository.impl;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -19,33 +18,10 @@ public class PersonHibernateRepositoryImpl implements PersonHibernateRepository 
 	private final EntityManager entityManager;
 
 	@Override
-	public void save(Person person) {
-		entityManager.persist(person);
+	public Person findById(int id) {
+		return entityManager.find(Person.class, id);
 	}
 
-	@Override
-	public void delete(int id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void update(Person person) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Optional<Person> findById(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<Person> getAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Optional<Person> findByUsername(String username) {
@@ -58,5 +34,11 @@ public class PersonHibernateRepositoryImpl implements PersonHibernateRepository 
 			throw new UsernameNotFoundException("User not found!");
 		}
 		
+	}
+
+
+	@Override
+	public void save(Person person) {
+		entityManager.persist(person);
 	}
 }
