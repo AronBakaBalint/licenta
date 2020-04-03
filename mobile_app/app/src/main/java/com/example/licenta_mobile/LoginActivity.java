@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.JsonReader;
 import android.view.View;
 import android.widget.EditText;
 
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.LoginRequestDto;
+import com.example.licenta_mobile.dto.RegistrationDto;
 import com.example.licenta_mobile.rest.LoginService;
+import com.example.licenta_mobile.rest.RegistrationService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
 
@@ -24,11 +27,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginService loginService;
 
+    private RegistrationService registrationService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginService = RestClient.getClient().create(LoginService.class);
+
+        //
+        registrationService = RestClient.getClient().create(RegistrationService.class);
+        registerUser("Aron Baka", "abaka97", "abc", "aronbaka97@yahoo.com");
     }
 
     public void loginRequest(View view) {
@@ -68,5 +77,25 @@ public class LoginActivity extends AppCompatActivity {
     private  String getJson(String strEncoded) throws UnsupportedEncodingException {
         byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
         return new String(decodedBytes, "UTF-8");
+    }
+
+    private void registerUser(String name, String username, String password, String email){
+        RegistrationDto registrationDto = new RegistrationDto(name, username, email, password);
+        Call<String> call = registrationService.register(registrationDto);
+        call.enqueue(new Callback<String>(){
+
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                if (response.isSuccessful()) {
+                    System.out.println(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println(t.getMessage());
+                call.cancel();
+            }
+        });
     }
 }
