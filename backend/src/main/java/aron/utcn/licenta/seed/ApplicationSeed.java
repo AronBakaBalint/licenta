@@ -26,7 +26,9 @@ public class ApplicationSeed implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		Person person = new Person();
-		person.setUsername("asd");
+		person.setUsername("asd31");
+		person.setName("John Doe");
+		person.setEmail("asd31@gmail.com");
 		person.setPassword(passwordEncoder.encode("123"));
 		personManagementService.save(person);
 		
