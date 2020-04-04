@@ -27,17 +27,11 @@ public class LoginActivity extends AppCompatActivity {
 
     private LoginService loginService;
 
-    private RegistrationService registrationService;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginService = RestClient.getClient().create(LoginService.class);
-
-        //
-        registrationService = RestClient.getClient().create(RegistrationService.class);
-        registerUser("Aron Baka", "abaka97", "abc", "aronbaka97@yahoo.com");
     }
 
     public void loginRequest(View view) {
@@ -79,23 +73,10 @@ public class LoginActivity extends AppCompatActivity {
         return new String(decodedBytes, "UTF-8");
     }
 
-    private void registerUser(String name, String username, String password, String email){
-        RegistrationDto registrationDto = new RegistrationDto(name, username, email, password);
-        Call<String> call = registrationService.register(registrationDto);
-        call.enqueue(new Callback<String>(){
-
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                if (response.isSuccessful()) {
-                    System.out.println(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                System.out.println(t.getMessage());
-                call.cancel();
-            }
-        });
+    public void register(View view){
+        Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+        startActivity(intent);
     }
+
+
 }
