@@ -1,7 +1,9 @@
 package com.example.licenta_mobile;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -61,6 +63,9 @@ public class ParkingActivity extends AppCompatActivity {
         System.out.println(uiParkingPlaces.size());
         for(int i=0;i < uiParkingPlaces.size(); i++){
             uiParkingPlaces.get(i).setBackgroundColor(statusToColor(parkingPlaces.get(i).getStatus()));
+            if(!parkingPlaces.get(i).getStatus().equals("free")){
+                uiParkingPlaces.get(i).setClickable(false);
+            }
         }
     }
 
@@ -71,6 +76,7 @@ public class ParkingActivity extends AppCompatActivity {
         for(int i =0; i< layout.getChildCount(); i++){
             View v =layout.getChildAt(i);
             if(v instanceof Button){
+                v.setId(i+1);
                 parkingPlaces.add((Button) v);
             }
         }
@@ -79,6 +85,7 @@ public class ParkingActivity extends AppCompatActivity {
         for(int i =0; i< layout.getChildCount(); i++){
             View v =layout.getChildAt(i);
             if(v instanceof Button){
+                v.setId(layout.getChildCount()+i+1);
                 parkingPlaces.add((Button) v);
             }
         }
@@ -87,6 +94,7 @@ public class ParkingActivity extends AppCompatActivity {
         for(int i =0; i< layout.getChildCount(); i++){
             View v =layout.getChildAt(i);
             if(v instanceof Button){
+                v.setId(2*layout.getChildCount()+i+1);
                 parkingPlaces.add((Button) v);
             }
         }
@@ -95,6 +103,7 @@ public class ParkingActivity extends AppCompatActivity {
         for(int i =0; i< layout.getChildCount(); i++){
             View v =layout.getChildAt(i);
             if(v instanceof Button){
+                v.setId(3*layout.getChildCount()+i+1);
                 parkingPlaces.add((Button) v);
             }
         }
@@ -116,5 +125,37 @@ public class ParkingActivity extends AppCompatActivity {
         Blue = Blue & 0x000000FF; //Mask out anything not blue.
 
         return 0xFF000000 | Red | Green | Blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
+    }
+
+    public void startReservation(View view) {
+        final int parkingPlaceId = view.getId();
+        String parkingPlaceName = ((Button) view).getText().toString();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Reservation");
+        builder.setMessage("Reserve parking place "+parkingPlaceName+"?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                startReservationActivity(parkingPlaceId);
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void startReservationActivity(int parkingPlaceId){
+        System.out.println(parkingPlaceId);
     }
 }

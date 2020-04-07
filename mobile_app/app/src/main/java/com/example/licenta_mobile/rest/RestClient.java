@@ -12,14 +12,11 @@ public class RestClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient() {
-        Gson gson = new GsonBuilder()
-                .setLenient()
-                .create();
 
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit;

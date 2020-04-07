@@ -16,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="A1" />
 
         <Button
@@ -23,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="A2" />
 
         <Button
@@ -30,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="A3" />
 
         <Button
@@ -37,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="A4" />
 
         <Button
@@ -44,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="A5" />
 
         <Button
@@ -51,6 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="A6" />
     </LinearLayout>
 
@@ -69,6 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="B1" />
 
         <Button
@@ -76,6 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="B2" />
 
         <Button
@@ -83,6 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="B3" />
 
         <Button
@@ -90,6 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="B4" />
 
         <Button
@@ -97,6 +107,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="B5" />
 
         <Button
@@ -104,6 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="B6" />
     </LinearLayout>
 
@@ -118,6 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="C1" />
 
         <Button
@@ -125,6 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="C2" />
 
         <Button
@@ -132,6 +146,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="C3" />
 
         <Button
@@ -139,6 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="C4" />
 
         <Button
@@ -146,6 +162,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="C5" />
 
         <Button
@@ -153,6 +170,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="C6" />
     </LinearLayout>
 
@@ -171,6 +189,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="D1" />
 
         <Button
@@ -178,6 +197,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="D2" />
 
         <Button
@@ -185,6 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="D3" />
 
         <Button
@@ -192,6 +213,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="D4" />
 
         <Button
@@ -199,6 +221,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="D5" />
 
         <Button
@@ -206,6 +229,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
+            android:onClick="startReservation"
             android:text="D6" />
     </LinearLayout>
 

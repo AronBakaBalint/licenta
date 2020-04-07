@@ -16,9 +16,8 @@ public class Reservation {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer reservationId;
-	private Integer parkingLotId;
+	private Integer parkingPlaceId;
 	private Date reservationStartTime;
-	private Date reservationEndTime;
 	private String licensePlateNumber;
 	private Boolean arrived;
 }
