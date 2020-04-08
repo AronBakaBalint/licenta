@@ -8,6 +8,7 @@ import android.util.Base64;
 import android.util.JsonReader;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.LoginRequestDto;
@@ -50,13 +51,10 @@ public class LoginActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getToken();
                     Token.setJwtToken(responseBody);
-                    try{
-                        System.out.println(getJson(responseBody));
-                    } catch (UnsupportedEncodingException e){
-                        System.out.println("Wrong encoding");
-                    }
                     Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
                     startActivity(intent);
+                } else {
+                    Toast.makeText(LoginActivity.this,"Incorrect Username or Password", Toast.LENGTH_LONG).show();
                 }
             }
 

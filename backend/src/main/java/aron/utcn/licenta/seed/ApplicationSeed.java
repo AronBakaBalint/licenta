@@ -3,6 +3,7 @@ package aron.utcn.licenta.seed;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,7 @@ public class ApplicationSeed implements CommandLineRunner {
 	
 	private final ParkingPlaceService parkingPlaceService;
 	
-	private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Override
 	public void run(String... args) throws Exception {

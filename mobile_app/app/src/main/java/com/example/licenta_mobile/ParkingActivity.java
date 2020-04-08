@@ -8,9 +8,11 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.licenta_mobile.dialog.ReservationDialog;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
@@ -27,6 +29,8 @@ public class ParkingActivity extends AppCompatActivity {
 
     private ReservationService reservationService;
 
+    private ReservationDialog reservationDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +41,6 @@ public class ParkingActivity extends AppCompatActivity {
 
     private void displayParkingPlaceStatus(){
 
-        System.out.println(Token.getJwtToken());
         Call<List<ParkingPlaceDto>> call = reservationService.getAllParkingPlaces("Bearer "+Token.getJwtToken());
         call.enqueue(new Callback<List<ParkingPlaceDto>>(){
 
@@ -60,7 +63,6 @@ public class ParkingActivity extends AppCompatActivity {
     private void setParkingPlaceColors(List<ParkingPlaceDto> parkingPlaces){
         ViewGroup viewGroup = (ViewGroup) getWindow().getDecorView();
         List<Button> uiParkingPlaces = getAllParkingPlacesFromUI();
-        System.out.println(uiParkingPlaces.size());
         for(int i=0;i < uiParkingPlaces.size(); i++){
             uiParkingPlaces.get(i).setBackgroundColor(statusToColor(parkingPlaces.get(i).getStatus()));
             if(!parkingPlaces.get(i).getStatus().equals("free")){
@@ -138,7 +140,7 @@ public class ParkingActivity extends AppCompatActivity {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                startReservationActivity(parkingPlaceId);
+                showReservationDialog(parkingPlaceId);
                 dialog.dismiss();
             }
         });
@@ -155,7 +157,16 @@ public class ParkingActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void startReservationActivity(int parkingPlaceId){
-        System.out.println(parkingPlaceId);
+    private void showReservationDialog(int parkingPlaceId){
+        List<String> licensePlates = new ArrayList<>();
+        licensePlates.add("No Item Selected");
+        licensePlates.add("CJ25BBA");
+        reservationDialog = new ReservationDialog(this, parkingPlaceId, licensePlates);
+        reservationDialog.show();
+    }
+
+    public void confirmReservation(View view){
+
+        System.out.println("Reservation completed");
     }
 }
