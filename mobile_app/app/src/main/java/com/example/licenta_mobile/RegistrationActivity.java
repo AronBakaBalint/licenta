@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.RegistrationDto;
 import com.example.licenta_mobile.rest.RegistrationService;
 import com.example.licenta_mobile.rest.RestClient;
@@ -45,13 +46,13 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registerUser(String name, String username, String password, String email){
         RegistrationDto registrationDto = new RegistrationDto(name, username, email, password);
-        Call<String> call = registrationService.register(registrationDto);
-        call.enqueue(new Callback<String>(){
+        Call<MessageDto> call = registrationService.register(registrationDto);
+        call.enqueue(new Callback<MessageDto>(){
 
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
-                    String responseBody = response.body();
+                    String responseBody = response.body().getMessage();
                     if("ok".equals(responseBody)){
                         Toast.makeText(RegistrationActivity.this,"Registration successful!", Toast.LENGTH_SHORT).show();
                         finish();
@@ -60,7 +61,7 @@ public class RegistrationActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<MessageDto> call, Throwable t) {
                 System.out.println(t.getMessage());
                 call.cancel();
             }

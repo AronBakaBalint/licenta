@@ -23,7 +23,8 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	@Transactional
 	public void reserveParkingPlace(ReservationDto reservationDto) {
-		reservationManagementRepository.saveReservation(dtoToReservationConverter.convertDtoToReservation(reservationDto));		
+		reservationManagementRepository.saveReservation(dtoToReservationConverter.convertDtoToReservation(reservationDto));	
+		reserve(reservationDto.getParkingPlaceId(), reservationDto.getLicensePlate());
 	}
 	
 	@Transactional

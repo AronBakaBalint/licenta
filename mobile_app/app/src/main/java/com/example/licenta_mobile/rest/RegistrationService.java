@@ -1,5 +1,6 @@
 package com.example.licenta_mobile.rest;
 
+import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.dto.RegistrationDto;
 
@@ -17,5 +18,5 @@ public interface RegistrationService {
     @Headers( {
             "Content-Type: application/json"
     } )
-    Call<String> register (@Body RegistrationDto registrationDto);
+    Call<MessageDto> register (@Body RegistrationDto registrationDto);
 }

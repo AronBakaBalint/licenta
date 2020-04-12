@@ -172,7 +172,7 @@ public class ParkingActivity extends AppCompatActivity {
 
     public void confirmReservation(View view) {
         String licensePlate = reservationDialog.getIntroducedLicensePlate().getText().toString();
-        Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
+        final Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setParkingPlaceId(parkingPlaceId);
         reservationDto.setLicensePlate(licensePlate);
@@ -185,7 +185,9 @@ public class ParkingActivity extends AppCompatActivity {
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
                     String message = response.body().getMessage();
-                    System.out.println(message);
+                    if("ok".equals(message)){
+                        setParkingPlaceReserved(parkingPlaceId);
+                    }
                 }
             }
 
@@ -195,5 +197,15 @@ public class ParkingActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    private void setParkingPlaceReserved(int parkingPlaceId){
+        List<Button> parkingPlaces = getAllParkingPlacesFromUI();
+        for(int i=0;i < parkingPlaces.size(); i++){
+            if(parkingPlaces.get(i).getId() == parkingPlaceId){
+                parkingPlaces.get(i).setBackgroundColor(statusToColor("reserved"));
+                parkingPlaces.get(i).setClickable(false);
+            }
+        }
     }
 }
