@@ -4,5 +4,6 @@ import aron.utcn.licenta.model.Reservation;
 
 public interface ReservationManagementRepository {
 
-	public void reserveParkingLot(Reservation reservation);
+	public void saveReservation(Reservation reservation);
+
 }

@@ -15,8 +15,8 @@ public class ReservationManagementRepositoryImpl implements ReservationManagemen
 	private final EntityManager entityManager;
 	
 	@Override
-	public void reserveParkingLot(Reservation reservation) {
-		entityManager.persist(reservation);		
+	public void saveReservation(Reservation reservation) {
+		entityManager.persist(reservation);
 	}
 
 }

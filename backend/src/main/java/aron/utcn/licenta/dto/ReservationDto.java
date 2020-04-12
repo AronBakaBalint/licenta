@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class ReservationDto {
 
-	private Integer parkingLotId;
-	private String licensePlateNumber;
+	private Integer parkingPlaceId;
+	private String licensePlate;
 }

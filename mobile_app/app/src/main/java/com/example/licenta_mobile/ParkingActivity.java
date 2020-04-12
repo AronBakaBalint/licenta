@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -11,9 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.licenta_mobile.dialog.ReservationDialog;
+import com.example.licenta_mobile.dto.JwtTokenDto;
+import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
+import com.example.licenta_mobile.dto.ReservationDto;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
@@ -165,8 +170,30 @@ public class ParkingActivity extends AppCompatActivity {
         reservationDialog.show();
     }
 
-    public void confirmReservation(View view){
+    public void confirmReservation(View view) {
+        String licensePlate = reservationDialog.getIntroducedLicensePlate().getText().toString();
+        Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
+        ReservationDto reservationDto = new ReservationDto();
+        reservationDto.setParkingPlaceId(parkingPlaceId);
+        reservationDto.setLicensePlate(licensePlate);
+        reservationDialog.dismiss();
 
-        System.out.println("Reservation completed");
+        Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
+        call.enqueue(new Callback<MessageDto>(){
+
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                if (response.isSuccessful()) {
+                    String message = response.body().getMessage();
+                    System.out.println(message);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                System.out.println(t.getMessage());
+                call.cancel();
+            }
+        });
     }
 }

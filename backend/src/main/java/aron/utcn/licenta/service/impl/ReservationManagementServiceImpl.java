@@ -1,12 +1,11 @@
 package aron.utcn.licenta.service.impl;
 
-import java.text.ParseException;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import aron.utcn.licenta.converter.DtoToReservationConverter;
 import aron.utcn.licenta.dto.ReservationDto;
+import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import aron.utcn.licenta.repository.ReservationManagementRepository;
 import aron.utcn.licenta.service.ReservationManagementService;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +16,19 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	private final ReservationManagementRepository reservationManagementRepository;
 	
+	private final ParkingPlaceRepository parkingPlaceRespository;
+	
 	private final DtoToReservationConverter dtoToReservationConverter;
 	
 	@Override
 	@Transactional
-	public void reserveParkingPlace(ReservationDto reservationDto) throws ParseException {
-		reservationManagementRepository.reserveParkingLot(dtoToReservationConverter.convertDtoToReservation(reservationDto));		
+	public void reserveParkingPlace(ReservationDto reservationDto) {
+		reservationManagementRepository.saveReservation(dtoToReservationConverter.convertDtoToReservation(reservationDto));		
+	}
+	
+	@Transactional
+	private void reserve(int parkingPlaceId, String licensePlate) {
+		parkingPlaceRespository.makeReservation(parkingPlaceId, licensePlate);
 	}
 
 }

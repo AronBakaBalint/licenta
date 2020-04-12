@@ -1,11 +1,10 @@
 package aron.utcn.licenta.controller;
 
-import java.text.ParseException;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import aron.utcn.licenta.dto.MessageDto;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.service.ReservationManagementService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +16,10 @@ public class ReservationController {
 	private final ReservationManagementService reservationManagementService;
 	
 	@PostMapping("/reservation")
-	public void reserveParkingPlace(@RequestBody ReservationDto reservation) throws ParseException {
+	public MessageDto reserveParkingPlace(@RequestBody ReservationDto reservation) {
+		System.out.println(reservation);
 		reservationManagementService.reserveParkingPlace(reservation);
+		return new MessageDto("ok");
 	}
 	
 }

@@ -21,6 +21,22 @@ public class ReservationDialog extends Dialog {
     private EditText introducedLicensePlate;
     private Spinner selectedLicensePlate;
 
+    public int getParkingPlaceId() {
+        return parkingPlaceId;
+    }
+
+    public void setParkingPlaceId(int parkingPlaceId) {
+        this.parkingPlaceId = parkingPlaceId;
+    }
+
+    public EditText getIntroducedLicensePlate() {
+        return introducedLicensePlate;
+    }
+
+    public void setIntroducedLicensePlate(EditText introducedLicensePlate) {
+        this.introducedLicensePlate = introducedLicensePlate;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +48,8 @@ public class ReservationDialog extends Dialog {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, licensePlates);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         selectedNumber.setAdapter(dataAdapter);
+
+        introducedLicensePlate = findViewById(R.id.licensePlateEditor);
     }
 
     public ReservationDialog(Activity activity, int parkingPlaceId, List<String> licensePlates) {

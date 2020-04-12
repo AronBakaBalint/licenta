@@ -1,7 +1,5 @@
 package aron.utcn.licenta.model;
 
-import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +15,6 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer reservationId;
 	private Integer parkingPlaceId;
-	private Date reservationStartTime;
 	private String licensePlateNumber;
-	private Boolean arrived;
+	private String status;
 }
