@@ -11,4 +11,6 @@ public interface ParkingPlaceRepository {
 	public void makeReservation(int parkingPlaceId, String licensePlate);
 	
 	public void save(ParkingPlace parkingPlace);
+	
+	public ParkingPlace findById(int id);
 }

@@ -32,4 +32,9 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 		parkingPlace.setReserved(licensePlate);
 	}
 
+	@Override
+	public ParkingPlace findById(int id) {
+		return entityManager.find(ParkingPlace.class, id);
+	}
+
 }

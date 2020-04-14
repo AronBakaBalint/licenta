@@ -10,4 +10,6 @@ public interface ParkingPlaceService {
 	public List<ParkingPlaceDto> getAllParkingPlaces();
 	
 	public void save(ParkingPlace parkingPlace);
+	
+	public ParkingPlaceDto findById(int id);
 }

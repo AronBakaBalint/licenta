@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import aron.utcn.licenta.converter.DtoToReservationConverter;
 import aron.utcn.licenta.converter.ParkingPlaceToDtoConverter;
 import aron.utcn.licenta.dto.ParkingPlaceDto;
 import aron.utcn.licenta.model.ParkingPlace;
@@ -32,6 +31,11 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	@Transactional
 	public void save(ParkingPlace parkingPlace) {
 		parkingPlaceRepository.save(parkingPlace);
+	}
+
+	@Override
+	public ParkingPlaceDto findById(int id) {
+		return parkingPlaceToDtoConverter.convertParkingPlaceToDto(parkingPlaceRepository.findById(id));
 	}
 
 }

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -187,6 +188,7 @@ public class ParkingActivity extends AppCompatActivity {
                     String message = response.body().getMessage();
                     if("ok".equals(message)){
                         setParkingPlaceReserved(parkingPlaceId);
+                        startCountDown(parkingPlaceId);
                     }
                 }
             }
@@ -207,5 +209,42 @@ public class ParkingActivity extends AppCompatActivity {
                 parkingPlaces.get(i).setClickable(false);
             }
         }
+    }
+
+    private void startCountDown(int parkingId){
+        final Handler handler = new Handler();
+        final int parkingPlaceId = parkingId;
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkArrived(parkingPlaceId);
+                System.out.println("checked");
+            }
+        }, 10000);
+    }
+
+    private void checkArrived(int parkingPlaceId) {
+        Call<MessageDto> call = reservationService.getReservationStatus("Bearer " + Token.getJwtToken(), parkingPlaceId);
+        call.enqueue(new Callback<MessageDto>() {
+
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                if (response.isSuccessful()) {
+                    if("reserved".equals(response.body().getMessage())){
+                        showNotification();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                System.out.println(t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void showNotification(){
+        System.out.println("Notification shown");
     }
 }

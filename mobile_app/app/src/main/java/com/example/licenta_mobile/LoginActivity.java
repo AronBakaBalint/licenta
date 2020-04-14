@@ -61,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<JwtTokenDto> call, Throwable t) {
                 System.out.println(t.getMessage());
+                Toast.makeText(LoginActivity.this, "Connection Error! Please try again later!", Toast.LENGTH_LONG).show();
                 call.cancel();
             }
         });

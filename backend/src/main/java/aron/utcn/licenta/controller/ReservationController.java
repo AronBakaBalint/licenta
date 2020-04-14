@@ -17,7 +17,6 @@ public class ReservationController {
 	
 	@PostMapping("/reservation")
 	public MessageDto reserveParkingPlace(@RequestBody ReservationDto reservation) {
-		System.out.println(reservation);
 		reservationManagementService.reserveParkingPlace(reservation);
 		return new MessageDto("ok");
 	}
