@@ -7,6 +7,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -224,7 +225,6 @@ public class ParkingActivity extends AppCompatActivity {
             @Override
             public void run() {
                 checkArrived(parkingPlaceId);
-                System.out.println("checked");
             }
         }, 10000);
     }
@@ -236,8 +236,8 @@ public class ParkingActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
-                    if("reserved".equals(response.body().getMessage())){
-                        showNotification();
+                    if(response.body().getMessage().contains("reserved")){
+                        showNotification(Integer.parseInt(response.body().getMessage().replace("reserved", "")));
                     }
                 }
             }
@@ -250,8 +250,7 @@ public class ParkingActivity extends AppCompatActivity {
         });
     }
 
-    private void showNotification(){
-        System.out.println("Notification shown");
+    private void showNotification(int parkingPlaceId){
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ){
             NotificationChannel notificationChannel = new NotificationChannel("myNotification", "myNotification", NotificationManager.IMPORTANCE_DEFAULT);
@@ -259,10 +258,16 @@ public class ParkingActivity extends AppCompatActivity {
             manager.createNotificationChannel(notificationChannel);
         }
 
+        Intent intent = new Intent(this, ReservationExtensionActivity.class);
+        intent.putExtra("parkingPlaceId", parkingPlaceId+"");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
         NotificationCompat.Builder builder  = new NotificationCompat.Builder(getApplicationContext(), "myNotification")
             .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("Notification Alert, Click Me!")
-            .setContentText("Hi, This is Android Notification Detail!")
+            .setContentTitle("Reservation overdue")
+            .setContentText("Tap here to extend or cancel reservation")
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true);
 
         NotificationManagerCompat manager = NotificationManagerCompat.from(this);

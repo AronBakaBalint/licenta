@@ -50,11 +50,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<JwtTokenDto> call, Response<JwtTokenDto> response) {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getToken();
-                    Token.setJwtToken(responseBody);
-                    Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(LoginActivity.this,"Incorrect Username or Password", Toast.LENGTH_LONG).show();
+                    if("false".equals(responseBody)) {
+                        Toast.makeText(LoginActivity.this,"Incorrect Username or Password", Toast.LENGTH_LONG).show();
+                    } else {
+                        Token.setJwtToken(responseBody);
+                        Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
+                        startActivity(intent);
+                    }
                 }
             }
 
