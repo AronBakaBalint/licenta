@@ -6,4 +6,6 @@ public interface ReservationManagementService {
 
 	public void reserveParkingPlace(ReservationDto reservation);
 	
+	public void cancelReservation(int parkingPlaceId);
+	
 }

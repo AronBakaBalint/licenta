@@ -32,4 +32,10 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		parkingPlaceRespository.makeReservation(parkingPlaceId, licensePlate);
 	}
 
+	@Override
+	@Transactional
+	public void cancelReservation(int parkingPlaceId) {
+		parkingPlaceRespository.free(parkingPlaceId);
+	}
+
 }

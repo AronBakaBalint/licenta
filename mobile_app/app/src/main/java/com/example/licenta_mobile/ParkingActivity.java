@@ -229,15 +229,15 @@ public class ParkingActivity extends AppCompatActivity {
         }, 10000);
     }
 
-    private void checkArrived(int parkingPlaceId) {
+    private void checkArrived(final int parkingPlaceId) {
         Call<MessageDto> call = reservationService.getReservationStatus("Bearer " + Token.getJwtToken(), parkingPlaceId);
         call.enqueue(new Callback<MessageDto>() {
 
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
-                    if(response.body().getMessage().contains("reserved")){
-                        showNotification(Integer.parseInt(response.body().getMessage().replace("reserved", "")));
+                    if(response.body().getMessage().equals("reserved")){
+                        showNotification(parkingPlaceId);
                     }
                 }
             }
@@ -259,8 +259,8 @@ public class ParkingActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ReservationExtensionActivity.class);
-        intent.putExtra("parkingPlaceId", parkingPlaceId+"");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Global.parkinPlaceId = parkingPlaceId;
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder builder  = new NotificationCompat.Builder(getApplicationContext(), "myNotification")

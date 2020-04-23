@@ -25,6 +25,6 @@ public class ParkingPlaceController {
 	@GetMapping("/parking/{id}")
 	public MessageDto getParkingPlaceStatus(@PathVariable Integer id) {
 		ParkingPlaceDto parkingPlace = parkingPlaceService.findById(id);
-		return new MessageDto(parkingPlace.getStatus()+id);
+		return new MessageDto(parkingPlace.getStatus());
 	}
 }

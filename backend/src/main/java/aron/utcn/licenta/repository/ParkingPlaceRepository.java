@@ -13,4 +13,6 @@ public interface ParkingPlaceRepository {
 	public void save(ParkingPlace parkingPlace);
 	
 	public ParkingPlace findById(int id);
+	
+	public void free(int parkingPlaceId);
 }

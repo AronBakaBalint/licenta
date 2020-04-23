@@ -8,6 +8,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
@@ -26,4 +27,8 @@ public interface ReservationService {
     @GET("/parking/{id}")
     @Headers({ "Content-Type: application/json" } )
     Call<MessageDto> getReservationStatus (@Header("Authorization") String auth, @Path("id") Integer id);
+
+    @DELETE("/reservation/{id}")
+    @Headers({ "Content-Type: application/json" } )
+    Call<MessageDto> cancelReservation (@Header("Authorization") String auth, @Path("id") Integer id);
 }

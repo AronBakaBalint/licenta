@@ -37,4 +37,11 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 		return entityManager.find(ParkingPlace.class, id);
 	}
 
+	@Override
+	public void free(int parkingPlaceId) {
+		ParkingPlace parkingPlace = entityManager.find(ParkingPlace.class, parkingPlaceId);
+		parkingPlace.setFree();
+		entityManager.persist(parkingPlace);
+	}
+
 }
