@@ -15,11 +15,14 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licenta_mobile.dialog.ReservationDialog;
@@ -33,16 +36,19 @@ import com.example.licenta_mobile.security.Token;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+
 public class ParkingActivity extends AppCompatActivity {
 
     private ReservationService reservationService;
-
     private ReservationDialog reservationDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +189,7 @@ public class ParkingActivity extends AppCompatActivity {
         final Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setParkingPlaceId(parkingPlaceId);
+        reservationDto.setUserId(Token.getUserId());
         reservationDto.setLicensePlate(licensePlate);
         reservationDialog.dismiss();
 
@@ -259,14 +266,13 @@ public class ParkingActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, ReservationExtensionActivity.class);
-        Global.parkinPlaceId = parkingPlaceId;
-        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder  = new NotificationCompat.Builder(getApplicationContext(), "myNotification")
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setContentTitle("Reservation overdue")
-            .setContentText("Tap here to extend or cancel reservation")
+            .setContentText("Tap for more details")
             .setContentIntent(pendingIntent)
             .setAutoCancel(true);
 

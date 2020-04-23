@@ -15,6 +15,7 @@ public class Reservation {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer reservationId;
 	private Integer parkingPlaceId;
+	private Integer userId;
 	private String licensePlateNumber;
 	private String status;
 }

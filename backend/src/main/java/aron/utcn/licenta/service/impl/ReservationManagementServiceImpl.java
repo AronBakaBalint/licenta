@@ -24,12 +24,12 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Transactional
 	public void reserveParkingPlace(ReservationDto reservationDto) {
 		reservationManagementRepository.saveReservation(dtoToReservationConverter.convertDtoToReservation(reservationDto));	
-		reserve(reservationDto.getParkingPlaceId(), reservationDto.getLicensePlate());
+		reserve(reservationDto.getParkingPlaceId(), reservationDto.getLicensePlate(), reservationDto.getUserId());
 	}
 	
 	@Transactional
-	private void reserve(int parkingPlaceId, String licensePlate) {
-		parkingPlaceRespository.makeReservation(parkingPlaceId, licensePlate);
+	private void reserve(int parkingPlaceId, String licensePlate, int userId) {
+		parkingPlaceRespository.makeReservation(parkingPlaceId, licensePlate, userId);
 	}
 
 	@Override

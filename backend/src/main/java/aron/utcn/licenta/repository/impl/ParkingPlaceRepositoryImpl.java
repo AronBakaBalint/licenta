@@ -27,9 +27,9 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 	}
 
 	@Override
-	public void makeReservation(int parkingPlaceId, String licensePlate) {
+	public void makeReservation(int parkingPlaceId, String licensePlate, int userId) {
 		ParkingPlace parkingPlace = entityManager.find(ParkingPlace.class, parkingPlaceId);
-		parkingPlace.setReserved(licensePlate);
+		parkingPlace.setReserved(licensePlate, userId);
 	}
 
 	@Override

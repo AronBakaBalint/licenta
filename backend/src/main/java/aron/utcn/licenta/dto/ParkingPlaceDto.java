@@ -6,5 +6,6 @@ import lombok.Data;
 public class ParkingPlaceDto {
 	private Integer id;
 	private String status;
+	private Integer userId;
 	private String occupierCarPlate;
 }
