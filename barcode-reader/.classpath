@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="lib" path="C:/Users/User/Desktop/licenta/Java/webcam-qr-barcode-scanner-master/bridj-0.7.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Desktop/licenta/Java/webcam-qr-barcode-scanner-master/slf4j-api-1.7.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Desktop/licenta/Java/webcam-qr-barcode-scanner-master/webcam-capture-0.3.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Desktop/licenta/Java/webcam-qr-barcode-scanner-master/zxing-core-1.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/User/Desktop/licenta/Java/webcam-qr-barcode-scanner-master/Webcam.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

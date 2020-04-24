@@ -204,8 +204,7 @@ public class ParkingActivity extends AppCompatActivity {
                     String message = response.body().getMessage();
                     if("ok".equals(message)){
                         finish();
-                        Intent intent = new Intent(ParkingActivity.this, ParkingActivity.class);
-                        startActivity(intent);
+                        startActivity(getIntent());
                         notificationHandler.startCountdownForNotification(parkingPlaceId);
                     }
                 }
