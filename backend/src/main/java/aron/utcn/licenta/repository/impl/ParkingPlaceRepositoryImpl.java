@@ -44,4 +44,12 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 		entityManager.persist(parkingPlace);
 	}
 
+	@Override
+	public List<ParkingPlace> findReservationsByUser(int userId) {
+		return (List<ParkingPlace>)entityManager.createQuery(
+				"SELECT parkingPlace FROM ParkingPlace parkingPlace WHERE parkingPlace.userId LIKE :userId")
+				.setParameter("userId", userId)
+				.getResultList();
+	}
+
 }

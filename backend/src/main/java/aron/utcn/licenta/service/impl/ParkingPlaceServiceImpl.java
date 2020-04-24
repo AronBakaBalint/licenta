@@ -1,5 +1,6 @@
 package aron.utcn.licenta.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import aron.utcn.licenta.converter.ParkingPlaceToDtoConverter;
+import aron.utcn.licenta.converter.UnconfirmedReservationToDtoConverter;
 import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.UnconfirmedReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import aron.utcn.licenta.service.ParkingPlaceService;
@@ -20,6 +23,8 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	private final ParkingPlaceRepository parkingPlaceRepository;
 	
 	private final ParkingPlaceToDtoConverter parkingPlaceToDtoConverter;
+	
+	private final UnconfirmedReservationToDtoConverter unconfirmedReservationToDtoConverter;
 	
 	@Override
 	public List<ParkingPlaceDto> getAllParkingPlaces() {
@@ -36,6 +41,13 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	@Override
 	public ParkingPlaceDto findById(int id) {
 		return parkingPlaceToDtoConverter.convertParkingPlaceToDto(parkingPlaceRepository.findById(id));
+	}
+
+	@Override
+	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId) {
+		List<ParkingPlace> reservedPlaces = parkingPlaceRepository.findReservationsByUser(userId);
+		reservedPlaces = reservedPlaces.stream().filter(rp->rp.getStatus().equals("reserved")).collect(Collectors.toList());
+		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto).collect(Collectors.toList());
 	}
 
 }

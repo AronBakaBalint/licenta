@@ -3,6 +3,7 @@ package aron.utcn.licenta.service;
 import java.util.List;
 
 import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.UnconfirmedReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
 
 public interface ParkingPlaceService {
@@ -12,4 +13,6 @@ public interface ParkingPlaceService {
 	public void save(ParkingPlace parkingPlace);
 	
 	public ParkingPlaceDto findById(int id);
+	
+	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId);
 }

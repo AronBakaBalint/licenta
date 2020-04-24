@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.MessageDto;
 import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.UnconfirmedReservationDto;
 import aron.utcn.licenta.service.ParkingPlaceService;
 import lombok.RequiredArgsConstructor;
 
@@ -26,5 +27,10 @@ public class ParkingPlaceController {
 	public MessageDto getParkingPlaceStatus(@PathVariable Integer id) {
 		ParkingPlaceDto parkingPlace = parkingPlaceService.findById(id);
 		return new MessageDto(parkingPlace.getStatus());
+	}
+	
+	@GetMapping("/parking/unoccupied/{id}")
+	public List<UnconfirmedReservationDto> getUnoccupiedPlaces(@PathVariable Integer id) {
+		return parkingPlaceService.findUnconfirmedReservations(id);
 	}
 }
