@@ -22,7 +22,6 @@ public class Token {
         decodedString = decodedString.substring(decodedString.indexOf("\"jti\":"));
         decodedString = decodedString.substring(0, decodedString.indexOf("}"));
         decodedString = decodedString.replace("\"jti\":", "").replace("\"", "");
-        System.out.println(decodedString);
         return Integer.parseInt(decodedString);
     }
 }

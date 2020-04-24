@@ -4,6 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ReservationExtensionActivity">
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="match_parent"
+        android:layout_height="97dp"
+        android:layout_margin="5pt"
+        android:layout_weight="1"
+        android:text="Pending reservations"
+        android:textSize="8pt" />
+
+    <ListView
+        android:id="@+id/pendingReservationList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </LinearLayout>

@@ -48,6 +48,7 @@ public class ParkingActivity extends AppCompatActivity {
 
     private ReservationService reservationService;
     private ReservationDialog reservationDialog;
+    private NotificationHandler notificationHandler;
 
 
     @Override
@@ -55,6 +56,7 @@ public class ParkingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
+        notificationHandler = new NotificationHandler(this);
         displayParkingPlaceStatus();
     }
 
@@ -201,8 +203,10 @@ public class ParkingActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String message = response.body().getMessage();
                     if("ok".equals(message)){
-                        setParkingPlaceReserved(parkingPlaceId);
-                        startCountDown(parkingPlaceId);
+                        finish();
+                        Intent intent = new Intent(ParkingActivity.this, ParkingActivity.class);
+                        startActivity(intent);
+                        notificationHandler.startCountdownForNotification(parkingPlaceId);
                     }
                 }
             }
@@ -215,68 +219,4 @@ public class ParkingActivity extends AppCompatActivity {
         });
     }
 
-    private void setParkingPlaceReserved(int parkingPlaceId){
-        List<Button> parkingPlaces = getAllParkingPlacesFromUI();
-        for(int i=0;i < parkingPlaces.size(); i++){
-            if(parkingPlaces.get(i).getId() == parkingPlaceId){
-                parkingPlaces.get(i).setBackgroundColor(statusToColor("reserved"));
-                parkingPlaces.get(i).setClickable(false);
-            }
-        }
-    }
-
-    private void startCountDown(int parkingId){
-        final Handler handler = new Handler();
-        final int parkingPlaceId = parkingId;
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                checkArrived(parkingPlaceId);
-            }
-        }, 10000);
-    }
-
-    private void checkArrived(final int parkingPlaceId) {
-        Call<MessageDto> call = reservationService.getReservationStatus("Bearer " + Token.getJwtToken(), parkingPlaceId);
-        call.enqueue(new Callback<MessageDto>() {
-
-            @Override
-            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
-                if (response.isSuccessful()) {
-                    if(response.body().getMessage().equals("reserved")){
-                        showNotification(parkingPlaceId);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageDto> call, Throwable t) {
-                System.out.println(t.getMessage());
-                call.cancel();
-            }
-        });
-    }
-
-    private void showNotification(int parkingPlaceId){
-
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ){
-            NotificationChannel notificationChannel = new NotificationChannel("myNotification", "myNotification", NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(notificationChannel);
-        }
-
-        Intent intent = new Intent(this, ReservationExtensionActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Builder builder  = new NotificationCompat.Builder(getApplicationContext(), "myNotification")
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("Reservation overdue")
-            .setContentText("Tap for more details")
-            .setContentIntent(pendingIntent)
-            .setAutoCancel(true);
-
-        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-        manager.notify(999, builder.build());
-    }
 }

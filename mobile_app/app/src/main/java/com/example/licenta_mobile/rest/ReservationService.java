@@ -3,6 +3,7 @@ package com.example.licenta_mobile.rest;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.dto.ReservationDto;
+import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 
 import java.util.List;
 
@@ -31,4 +32,8 @@ public interface ReservationService {
     @DELETE("/reservation/{id}")
     @Headers({ "Content-Type: application/json" } )
     Call<MessageDto> cancelReservation (@Header("Authorization") String auth, @Path("id") Integer id);
+
+    @GET("/parking/unoccupied/{id}")
+    @Headers({ "Content-Type: application/json" } )
+    Call<List<UnconfirmedReservationDto>> getUnoccupiedPlaces (@Header("Authorization") String auth, @Path("id") Integer id);
 }
