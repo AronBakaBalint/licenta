@@ -14,5 +14,7 @@ public interface ParkingPlaceService {
 	
 	public ParkingPlaceDto findById(int id);
 	
+	public List<UnconfirmedReservationDto> findAllReservations(int userId);
+	
 	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId);
 }

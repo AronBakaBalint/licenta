@@ -17,21 +17,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReservationExtensionActivity extends AppCompatActivity {
+public class ActiveReservationsActivity extends AppCompatActivity {
 
     private ReservationService reservationService;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservations);
         reservationService = RestClient.getClient().create(ReservationService.class);
-        handleUnconfirmedReservations();
+        handleReservations();
     }
 
-    private void handleUnconfirmedReservations(){
+    private void handleReservations(){
         int userId = Token.getUserId();
-        Call<List<UnconfirmedReservationDto>> call = reservationService.getUnoccupiedPlaces("Bearer " + Token.getJwtToken(), userId);
+        Call<List<UnconfirmedReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<List<UnconfirmedReservationDto>>() {
 
             @Override
@@ -56,6 +55,5 @@ public class ReservationExtensionActivity extends AppCompatActivity {
         ListView lView = findViewById(R.id.pendingReservationList);
         lView.setAdapter(adapter);
     }
-
 
 }

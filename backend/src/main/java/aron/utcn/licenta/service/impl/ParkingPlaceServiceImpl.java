@@ -1,6 +1,5 @@
 package aron.utcn.licenta.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +46,12 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId) {
 		List<ParkingPlace> reservedPlaces = parkingPlaceRepository.findReservationsByUser(userId);
 		reservedPlaces = reservedPlaces.stream().filter(rp->rp.getStatus().equals("reserved")).collect(Collectors.toList());
+		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<UnconfirmedReservationDto> findAllReservations(int userId) {
+		List<ParkingPlace> reservedPlaces = parkingPlaceRepository.findReservationsByUser(userId);
 		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto).collect(Collectors.toList());
 	}
 

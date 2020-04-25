@@ -33,4 +33,9 @@ public class ParkingPlaceController {
 	public List<UnconfirmedReservationDto> getUnoccupiedPlaces(@PathVariable Integer id) {
 		return parkingPlaceService.findUnconfirmedReservations(id);
 	}
+	
+	@GetMapping("/parking/reserved/{id}")
+	public List<UnconfirmedReservationDto> getAllReservedPlaces(@PathVariable Integer id) {
+		return parkingPlaceService.findAllReservations(id);
+	}
 }

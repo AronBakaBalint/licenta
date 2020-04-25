@@ -71,6 +71,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         //Handle buttons and add onClickListeners
         Button extendBtn = view.findViewById(R.id.extendReservation);
         Button cancelBtn = view.findViewById(R.id.cancelReservation);
+        Button qrCodeBtn = view.findViewById(R.id.viewQR);
 
         extendBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -86,6 +87,14 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                 cancelReservation(list.get(position).getParkingPlaceId());
                 list.remove(position);
                 notifyDataSetChanged();
+            }
+        });
+
+        qrCodeBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                cancelReservation(list.get(position).getParkingPlaceId());
+                System.out.println("QR Code shown");
             }
         });
 

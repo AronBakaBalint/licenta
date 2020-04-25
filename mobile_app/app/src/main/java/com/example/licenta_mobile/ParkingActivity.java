@@ -16,20 +16,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.licenta_mobile.adapter.PendingReservationAdapter;
 import com.example.licenta_mobile.dialog.ReservationDialog;
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.dto.ReservationDto;
+import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
@@ -54,6 +60,15 @@ public class ParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_parking_place_selector);
+        reservationService = RestClient.getClient().create(ReservationService.class);
+        notificationHandler = new NotificationHandler(this);
+        displayParkingPlaceStatus();
+    }
+
+    @Override
+    public void onRestart(){
+        super.onRestart();
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
         notificationHandler = new NotificationHandler(this);
@@ -203,9 +218,7 @@ public class ParkingActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String message = response.body().getMessage();
                     if("ok".equals(message)){
-                        finish();
-                        startActivity(getIntent());
-                        notificationHandler.startCountdownForNotification(parkingPlaceId);
+                        showReservationInfoDialog(parkingPlaceId);
                     }
                 }
             }
@@ -218,4 +231,70 @@ public class ParkingActivity extends AppCompatActivity {
         });
     }
 
+    private void showReservationInfoDialog(final int parkingPlaceId){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your reservation has been made. You can find the code which has to be shown at the entrance in the reservation history.")
+                .setCancelable(false)
+                .setTitle("Reservation Info")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        startActivity(getIntent());
+                        notificationHandler.startCountdownForNotification(parkingPlaceId);
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.username_item);
+        menuItem.setTitle("Unknown");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        //sign out operation
+        if (id == R.id.profile) {
+            viewProfile();
+            return true;
+
+        } else if (id == R.id.reservations) {
+            viewReservations();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void viewProfile(){
+
+    }
+
+    private void viewReservations(){
+        int userId = Token.getUserId();
+        Call<List<UnconfirmedReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
+        call.enqueue(new Callback<List<UnconfirmedReservationDto>>() {
+
+            @Override
+            public void onResponse(Call<List<UnconfirmedReservationDto>> call, Response<List<UnconfirmedReservationDto>> response) {
+                if (response.isSuccessful()) {
+                    Intent intent = new Intent(ParkingActivity.this, ActiveReservationsActivity.class);
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UnconfirmedReservationDto>> call, Throwable t) {
+                System.out.println(t.getMessage());
+                call.cancel();
+            }
+        });
+    }
 }
