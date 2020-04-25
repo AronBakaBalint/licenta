@@ -38,7 +38,7 @@ public class ApplicationSeed implements CommandLineRunner {
 		
 		ParkingPlace parkingPlace2 = new ParkingPlace();
 		parkingPlace2.setOccupied();
-		parkingPlace2.setOccupierCarPlate("CJ25BBA");
+		parkingPlace2.setOccupierCarPlate("cj34ggf");
 		parkingPlace2.setUserId(3);
 		parkingPlaceService.save(parkingPlace2);
 		
@@ -48,7 +48,7 @@ public class ApplicationSeed implements CommandLineRunner {
 		}
 		
 		ParkingPlace p24 = new ParkingPlace();
-		p24.setReserved("CJ17ABC", 4);
+		p24.setReserved("cj17abc", 4);
 		parkingPlaceService.save(p24);
 		
 	}

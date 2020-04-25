@@ -52,7 +52,7 @@ public class ReservationExtensionActivity extends AppCompatActivity {
 
     private void buildView(List<UnconfirmedReservationDto> pendingReservations){
         NotificationHandler notificationHandler = new NotificationHandler(this);
-        PendingReservationAdapter adapter = new PendingReservationAdapter(pendingReservations, this, notificationHandler);
+        PendingReservationAdapter adapter = new PendingReservationAdapter(pendingReservations, this, notificationHandler, this);
         ListView lView = findViewById(R.id.pendingReservationList);
         lView.setAdapter(adapter);
     }

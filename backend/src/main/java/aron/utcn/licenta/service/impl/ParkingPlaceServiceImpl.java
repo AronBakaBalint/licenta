@@ -55,4 +55,10 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto).collect(Collectors.toList());
 	}
 
+	@Override
+	@Transactional
+	public void setArrived(String licensePlate) {
+		parkingPlaceRepository.setArrived(licensePlate);
+	}
+
 }
