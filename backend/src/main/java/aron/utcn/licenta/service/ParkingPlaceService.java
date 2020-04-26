@@ -18,5 +18,5 @@ public interface ParkingPlaceService {
 	
 	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId);
 	
-	public void setArrived(String licensePlate);
+	public void handleScannedPlate(String licensePlate);
 }

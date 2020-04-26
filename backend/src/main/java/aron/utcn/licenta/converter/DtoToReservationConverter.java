@@ -13,7 +13,6 @@ public class DtoToReservationConverter {
 		reservation.setUserId(reservationDto.getUserId());
 		reservation.setLicensePlateNumber(reservationDto.getLicensePlate());
 		reservation.setParkingPlaceId(reservationDto.getParkingPlaceId());
-		reservation.setStatus("reserved");
 		return reservation;
 	}
 	

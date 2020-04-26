@@ -18,5 +18,5 @@ public interface ParkingPlaceRepository {
 	
 	public List<ParkingPlace> findReservationsByUser(int userId);
 	
-	public void setArrived(String licensePlate);
+	public ParkingPlace findByPlate(String licensePlate);
 }

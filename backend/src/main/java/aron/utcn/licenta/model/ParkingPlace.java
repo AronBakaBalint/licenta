@@ -1,5 +1,7 @@
 package aron.utcn.licenta.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +21,7 @@ public class ParkingPlace {
 	private Integer userId;
 	private String status = "free";
 	private String occupierCarPlate;
+	private Date arrivalTime;
 	
 	public void setOccupied() {
 		status = "occupied";
@@ -34,5 +37,9 @@ public class ParkingPlace {
 		status = "free";
 		occupierCarPlate = null;
 		userId = null;
+	}
+	
+	public boolean isOccupied() {
+		return status.equals("occupied");
 	}
 }

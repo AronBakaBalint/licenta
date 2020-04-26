@@ -17,5 +17,4 @@ public class Reservation {
 	private Integer parkingPlaceId;
 	private Integer userId;
 	private String licensePlateNumber;
-	private String status;
 }

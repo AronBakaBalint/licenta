@@ -53,12 +53,11 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 	}
 
 	@Override
-	public void setArrived(String licensePlate) {
-		ParkingPlace parkingPlace = (ParkingPlace)entityManager.createQuery(
+	public ParkingPlace findByPlate(String licensePlate) {
+		return (ParkingPlace)entityManager.createQuery(
 				"SELECT parkingPlace FROM ParkingPlace parkingPlace WHERE occupierCarPlate LIKE :licensePlate")
 				.setParameter("licensePlate", licensePlate)
 				.getResultList().get(0);
-		parkingPlace.setOccupied();	
 	}
 
 }
