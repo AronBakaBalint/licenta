@@ -16,7 +16,9 @@ import aron.utcn.licenta.converter.UnconfirmedReservationToDtoConverter;
 import aron.utcn.licenta.dto.ParkingPlaceDto;
 import aron.utcn.licenta.dto.UnconfirmedReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
+import aron.utcn.licenta.repository.PersonHibernateRepository;
 import aron.utcn.licenta.service.ArduinoService;
 import aron.utcn.licenta.service.ParkingPlaceService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,8 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	private final ParkingPlaceRepository parkingPlaceRepository;
 	
 	private final ParkingPlaceToDtoConverter parkingPlaceToDtoConverter;
+	
+	private final PersonHibernateRepository personRepository;
 	
 	private final UnconfirmedReservationToDtoConverter unconfirmedReservationToDtoConverter;
 	
@@ -70,13 +74,19 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	public void handleScannedPlate(String licensePlate) {
 		ParkingPlace parkingPlace = parkingPlaceRepository.findByPlate(licensePlate);
 		if(parkingPlace.isOccupied()) {
-			parkingPlace.setFree();
+			Person person = personRepository.findById(parkingPlace.getUserId());
 			Date departureTime = new Date();
 			Date arrivalTime = parkingPlace.getArrivalTime();
 			float price = calculatePrice(arrivalTime, departureTime);
 			DecimalFormat df = new DecimalFormat("#.##");
 			df.setRoundingMode(RoundingMode.CEILING);
-			arduinoService.displayOnLCD(df.format(price)+ " lei");
+			price = Float.valueOf(df.format(price));
+			if(person.pay(price)) {
+				parkingPlace.setFree();
+				arduinoService.displayOnLCD(price+ " lei;"+df.format(person.getBalance()));
+			} else {
+				arduinoService.displayOnLCD("no money");
+			}
 		} else {
 			arduinoService.activateBarrier();
 			parkingPlace.setOccupied();

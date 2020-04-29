@@ -22,6 +22,16 @@ public class Person {
 	private String username;
 	private String name;
 	private String email;
+	private Double balance = 50.0;
 	private String password;
+	
+	public boolean pay(double amount) {
+		if(amount > balance) {
+			return false;
+		}
+		
+		balance -= amount;
+		return true;
+	}
 	
 }
