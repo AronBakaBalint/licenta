@@ -1,5 +1,6 @@
 package aron.utcn.licenta.service.impl;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Enumeration;
 
@@ -12,13 +13,12 @@ import gnu.io.SerialPort;
 @Component
 public class ArduinoServiceImpl implements ArduinoService {
 
-	private Enumeration portList;
-	private CommPortIdentifier portId;
-	private SerialPort serialPort;
-	private OutputStream outputStream;
+	private static Enumeration portList;
+	private static CommPortIdentifier portId;
+	private static SerialPort serialPort;
+	private static OutputStream outputStream;
 	
-	@Override
-	public void displayOnLCD(String message) {
+	static {
 		portList = CommPortIdentifier.getPortIdentifiers();
 		
 	    while (portList.hasMoreElements()) {
@@ -33,24 +33,27 @@ public class ArduinoServiceImpl implements ArduinoService {
 	                        SerialPort.DATABITS_8,
 	                        SerialPort.STOPBITS_1,
 	                        SerialPort.PARITY_NONE);
-
-	                    outputStream.write(message.getBytes());
-
-	                    outputStream.close();
-	                    serialPort.close();
 	                } catch(Exception e) {
 	                	System.out.println("Problem with sending data on serial port");
 	                }
 	            }
 	        }
 	    }
-		
+	}
+	
+	@Override
+	public void displayOnLCD(String message) {
+		try {
+			outputStream.write(message.getBytes());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void activateBarrier() {
-		// TODO Auto-generated method stub
-		
+		displayOnLCD("welcome");
 	}
 
 }

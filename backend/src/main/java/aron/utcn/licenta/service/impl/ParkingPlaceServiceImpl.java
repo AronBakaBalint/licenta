@@ -74,11 +74,11 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 			Date departureTime = new Date();
 			Date arrivalTime = parkingPlace.getArrivalTime();
 			float price = calculatePrice(arrivalTime, departureTime);
-			System.out.println(price);
 			DecimalFormat df = new DecimalFormat("#.##");
 			df.setRoundingMode(RoundingMode.CEILING);
 			arduinoService.displayOnLCD(df.format(price)+ " lei");
 		} else {
+			arduinoService.activateBarrier();
 			parkingPlace.setOccupied();
 			parkingPlace.setArrivalTime(new Date());
 		}
