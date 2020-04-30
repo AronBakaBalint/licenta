@@ -32,6 +32,7 @@ import com.example.licenta_mobile.R;
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
+import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
@@ -45,8 +46,6 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Context.WINDOW_SERVICE;
 
 public class PendingReservationAdapter extends BaseAdapter implements ListAdapter {
 
@@ -98,7 +97,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         extendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                extendReservation(list.get(position));
+                extendReservation(list.get(position).getParkingPlaceId());
                 notificationHandler.startCountdownForNotification(list.get(position).getParkingPlaceId());
             }
         });
@@ -106,9 +105,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelReservation(list.get(position).getParkingPlaceId());
-                list.remove(position);
-                notifyDataSetChanged();
+                cancelReservation(list.get(position));
             }
         });
 
@@ -122,22 +119,21 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         return view;
     }
 
-    private void cancelReservation(int parkintPlaceId) {
-        Call<MessageDto> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), parkintPlaceId);
-        call.enqueue(new Callback<MessageDto>() {
+    private void cancelReservation(final UnconfirmedReservationDto reservationDto) {
+        Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getParkingPlaceId());
+        call.enqueue(new Callback<Void>() {
 
             @Override
-            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    String message = response.body().getMessage();
-                    if ("ok".equals(message)) {
-                        Toast.makeText(context, "Reservation canceled", Toast.LENGTH_SHORT).show();
-                    }
+                    Toast.makeText(context, "Reservation canceled", Toast.LENGTH_SHORT).show();
+                    list.remove(reservationDto);
+                    notifyDataSetChanged();
                 }
             }
 
             @Override
-            public void onFailure(Call<MessageDto> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 System.out.println(t.getMessage());
                 call.cancel();
             }
@@ -174,9 +170,9 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         builder.show();
     }
 
-    private void showExtensionDialog(float extensionCost) {
+    private void showExtensionDialog(final int parkingPlaceId, final double extensionCost) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setMessage("Extend reservation for an extra "+extensionCost+" lei?");
+        builder1.setMessage("Extend reservation for an extra " + extensionCost + " lei?");
         builder1.setTitle("Extend Reservation");
         builder1.setCancelable(true);
 
@@ -185,6 +181,11 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
+                        if (UserData.getCurrentSold() < extensionCost) {
+                            showNotEnoughMoneyDialog();
+                        } else {
+                            sendExtendReservationRequest(extensionCost, parkingPlaceId);
+                        }
                     }
                 });
 
@@ -200,7 +201,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         alert11.show();
     }
 
-    private void extendReservation(UnconfirmedReservationDto unconfirmedReservation) {
+    private void extendReservation(final int parkingPlaceId) {
         Call<MessageDto> call = reservationService.getExtensionPrice("Bearer " + Token.getJwtToken());
         call.enqueue(new Callback<MessageDto>() {
 
@@ -209,12 +210,40 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getMessage();
                     Float extensionCost = Float.parseFloat(responseBody);
-                    showExtensionDialog(extensionCost);
+                    showExtensionDialog(parkingPlaceId, extensionCost);
                 }
             }
 
             @Override
             public void onFailure(Call<MessageDto> call, Throwable t) {
+                System.out.println(t.getMessage());
+                call.cancel();
+            }
+        });
+    }
+
+    private void showNotEnoughMoneyDialog() {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        builder1.setTitle("Not Enough Money");
+        builder1.setMessage("It seems you don't have enough money.\nGo to options -> profile and transfer some money");
+        builder1.setCancelable(true);
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    private void sendExtendReservationRequest(final Double extensionCost, int parkingPlaceId) {
+        Call<Void> call = reservationService.extendReservation("Bearer " + Token.getJwtToken(), parkingPlaceId);
+        call.enqueue(new Callback<Void>() {
+
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    UserData.setCurrentSold(UserData.getCurrentSold() - extensionCost);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
                 System.out.println(t.getMessage());
                 call.cancel();
             }

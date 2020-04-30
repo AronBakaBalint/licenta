@@ -213,21 +213,18 @@ public class ParkingActivity extends AppCompatActivity {
         reservationDto.setLicensePlate(licensePlate);
         reservationDialog.dismiss();
 
-        Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
-        call.enqueue(new Callback<MessageDto>(){
+        Call<Void> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
+        call.enqueue(new Callback<Void>(){
 
             @Override
-            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+            public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    String message = response.body().getMessage();
-                    if("ok".equals(message)){
-                        showReservationInfoDialog(parkingPlaceId);
-                    }
+                    showReservationInfoDialog(parkingPlaceId);
                 }
             }
 
             @Override
-            public void onFailure(Call<MessageDto> call, Throwable t) {
+            public void onFailure(Call<Void> call, Throwable t) {
                 System.out.println(t.getMessage());
                 call.cancel();
             }
