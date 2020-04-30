@@ -2,6 +2,8 @@ package com.example.licenta_mobile.security;
 
 import android.util.Base64;
 
+import com.example.licenta_mobile.model.UserData;
+
 import java.util.Arrays;
 
 
@@ -10,13 +12,15 @@ public class Token {
 
     public static void setJwtToken(String token){
         jwtToken = token;
+        int userId = getUserId();
+        UserData.setUserId(userId);
     }
 
     public static String getJwtToken(){
         return jwtToken;
     }
 
-    public static int getUserId(){
+    private static int getUserId(){
         byte[] byteArray = Base64.decode(jwtToken.getBytes(),0);
         String decodedString = new String(byteArray);
         decodedString = decodedString.substring(decodedString.indexOf("\"jti\":"));

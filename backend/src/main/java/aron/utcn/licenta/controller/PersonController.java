@@ -14,7 +14,7 @@ public class PersonController {
 
 	private final PersonManagementService personManagementService;
 	
-	@GetMapping("/details/{id}")
+	@GetMapping("/users/{id}")
 	public PersonDto getDetails(@PathVariable Integer id) {
 		return personManagementService.findById(id);
 	}

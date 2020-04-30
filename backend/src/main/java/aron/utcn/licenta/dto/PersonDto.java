@@ -7,5 +7,6 @@ public class PersonDto {
 
 	private String username;
 	private String email;
+	private Double currentSold;
 	
 }

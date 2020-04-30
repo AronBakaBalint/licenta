@@ -36,6 +36,7 @@ import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.dto.ReservationDto;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
+import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
@@ -60,6 +61,7 @@ public class ParkingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UserData.update();
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
         notificationHandler = new NotificationHandler(this);
@@ -69,6 +71,7 @@ public class ParkingActivity extends AppCompatActivity {
     @Override
     public void onRestart(){
         super.onRestart();
+        UserData.update();
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
         notificationHandler = new NotificationHandler(this);
@@ -206,7 +209,7 @@ public class ParkingActivity extends AppCompatActivity {
         final Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setParkingPlaceId(parkingPlaceId);
-        reservationDto.setUserId(Token.getUserId());
+        reservationDto.setUserId(UserData.getUserId());
         reservationDto.setLicensePlate(licensePlate);
         reservationDialog.dismiss();
 
@@ -252,7 +255,7 @@ public class ParkingActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
         MenuItem menuItem = menu.findItem(R.id.username_item);
-        menuItem.setTitle("Unknown");
+        menuItem.setTitle(UserData.getUserName());
         return true;
     }
 
@@ -278,7 +281,7 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     private void viewReservations(){
-        int userId = Token.getUserId();
+        int userId = UserData.getUserId();
         Call<List<UnconfirmedReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<List<UnconfirmedReservationDto>>() {
 

@@ -11,6 +11,8 @@ public class PersonToDtoConverter {
 	public PersonDto convertPersonToDto(Person person) {
 		PersonDto personDto = new PersonDto();
 		personDto.setUsername(person.getUsername());
+		personDto.setEmail(person.getEmail());
+		personDto.setCurrentSold(person.getBalance());
 		return personDto;
 	}
 }

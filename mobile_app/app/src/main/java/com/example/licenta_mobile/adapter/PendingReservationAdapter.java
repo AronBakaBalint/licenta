@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Message;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+
+import com.example.licenta_mobile.LoginActivity;
 import com.example.licenta_mobile.NotificationHandler;
 import com.example.licenta_mobile.ParkingActivity;
 import com.example.licenta_mobile.R;
+import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.rest.ReservationService;
@@ -89,16 +94,16 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         Button extendBtn = view.findViewById(R.id.extendReservation);
         Button cancelBtn = view.findViewById(R.id.cancelReservation);
         final Button qrCodeBtn = view.findViewById(R.id.viewQR);
-        
-        extendBtn.setOnClickListener(new View.OnClickListener(){
+
+        extendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Extended "+list.get(position).getParkingPlaceId()+" "+list.get(position).getLicensePlate());
+                extendReservation(list.get(position));
                 notificationHandler.startCountdownForNotification(list.get(position).getParkingPlaceId());
             }
         });
 
-        cancelBtn.setOnClickListener(new View.OnClickListener(){
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 cancelReservation(list.get(position).getParkingPlaceId());
@@ -107,7 +112,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
             }
         });
 
-        qrCodeBtn.setOnClickListener(new View.OnClickListener(){
+        qrCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showQRCodeDialog(list.get(position).getLicensePlate(), qrCodeBtn);
@@ -117,15 +122,15 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         return view;
     }
 
-    private void cancelReservation(int parkintPlaceId){
-        Call<MessageDto> call = reservationService.cancelReservation("Bearer "+Token.getJwtToken() , parkintPlaceId);
-        call.enqueue(new Callback<MessageDto>(){
+    private void cancelReservation(int parkintPlaceId) {
+        Call<MessageDto> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), parkintPlaceId);
+        call.enqueue(new Callback<MessageDto>() {
 
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
                     String message = response.body().getMessage();
-                    if("ok".equals(message)){
+                    if ("ok".equals(message)) {
                         Toast.makeText(context, "Reservation canceled", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -139,11 +144,11 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         });
     }
 
-    private void showQRCodeDialog(String licensePlate, View view){
+    private void showQRCodeDialog(String licensePlate, View view) {
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        int width = (int)(size.x*0.95);
+        int width = (int) (size.x * 0.95);
         QRGEncoder qrgEncoder = new QRGEncoder(licensePlate, null, QRGContents.Type.TEXT, width);
 
         Dialog builder = new Dialog(view.getContext());
@@ -167,5 +172,52 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
         builder.show();
+    }
+
+    private void showExtensionDialog(float extensionCost) {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        builder1.setMessage("Extend reservation for an extra "+extensionCost+" lei?");
+        builder1.setTitle("Extend Reservation");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
+    private void extendReservation(UnconfirmedReservationDto unconfirmedReservation) {
+        Call<MessageDto> call = reservationService.getExtensionPrice("Bearer " + Token.getJwtToken());
+        call.enqueue(new Callback<MessageDto>() {
+
+            @Override
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
+                if (response.isSuccessful()) {
+                    String responseBody = response.body().getMessage();
+                    Float extensionCost = Float.parseFloat(responseBody);
+                    showExtensionDialog(extensionCost);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageDto> call, Throwable t) {
+                System.out.println(t.getMessage());
+                call.cancel();
+            }
+        });
     }
 }

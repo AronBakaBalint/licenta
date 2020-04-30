@@ -40,4 +40,8 @@ public interface ReservationService {
     @GET("/parking/reserved/{id}")
     @Headers({ "Content-Type: application/json" } )
     Call<List<UnconfirmedReservationDto>> getAllReservedPlaces (@Header("Authorization") String auth, @Path("id") Integer id);
+
+    @GET("reservation/extension")
+    @Headers({ "Content-Type: application/json" } )
+    Call<MessageDto> getExtensionPrice (@Header("Authorization") String auth);
 }

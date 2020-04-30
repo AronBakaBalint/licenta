@@ -7,6 +7,7 @@ import android.widget.ListView;
 
 import com.example.licenta_mobile.adapter.PendingReservationAdapter;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
+import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.security.Token;
@@ -29,7 +30,7 @@ public class ActiveReservationsActivity extends AppCompatActivity {
     }
 
     private void handleReservations(){
-        int userId = Token.getUserId();
+        int userId = UserData.getUserId();
         Call<List<UnconfirmedReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<List<UnconfirmedReservationDto>>() {
 

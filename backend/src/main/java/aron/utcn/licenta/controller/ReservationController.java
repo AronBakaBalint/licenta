@@ -1,6 +1,8 @@
 package aron.utcn.licenta.controller;
 
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReservationController {
 
+	private final Environment environment;
+	
 	private final ReservationManagementService reservationManagementService;
 	
 	@PostMapping("/reservation")
@@ -27,6 +31,11 @@ public class ReservationController {
 	public MessageDto cancelReservation(@PathVariable("id") Integer parkingPlaceId) {
 		reservationManagementService.cancelReservation(parkingPlaceId);
 		return new MessageDto("ok");
+	}
+	
+	@GetMapping("reservation/extension")
+	public MessageDto getExtensionCost() {
+		return new MessageDto(environment.getProperty("parking.extension_cost"));
 	}
 	
 }

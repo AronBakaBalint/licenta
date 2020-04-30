@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.LoginRequestDto;
 import com.example.licenta_mobile.dto.RegistrationDto;
+import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.LoginService;
 import com.example.licenta_mobile.rest.RegistrationService;
 import com.example.licenta_mobile.rest.RestClient;
@@ -69,11 +70,6 @@ public class LoginActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
-    }
-
-    private  String getJson(String strEncoded) throws UnsupportedEncodingException {
-        byte[] decodedBytes = Base64.decode(strEncoded, Base64.URL_SAFE);
-        return new String(decodedBytes, "UTF-8");
     }
 
     public void register(View view){
