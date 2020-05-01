@@ -1,6 +1,7 @@
 package com.example.licenta_mobile.rest;
 
 import com.example.licenta_mobile.dto.MessageDto;
+import com.example.licenta_mobile.dto.MoneyTransferDto;
 import com.example.licenta_mobile.dto.RegistrationDto;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.dto.UserDataDto;
@@ -19,4 +20,8 @@ public interface UserDataService {
     @GET("/users/{id}")
     @Headers({ "Content-Type: application/json" } )
     Call<UserDataDto> getUserDetails (@Header("Authorization") String auth, @Path("id") Integer id);
+
+    @POST("/users/addMoney")
+    @Headers({ "Content-Type: application/json" } )
+    Call<Void> transferMoney (@Header("Authorization") String auth,@Body MoneyTransferDto moneyTransferDto);
 }

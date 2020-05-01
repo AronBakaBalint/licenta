@@ -15,26 +15,33 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PersonManagementServiceImpl implements PersonManagementService {
 
-	private final PersonRepository personHibernateRepository;
+	private final PersonRepository personRepository;
 	
 	private final PersonToDtoConverter personToDtoConverter;
 	
 	@Override
 	@Transactional
 	public void save(Person person) {
-		personHibernateRepository.save(person);
+		personRepository.save(person);
 	}
 
 	@Override
 	@Transactional
 	public PersonDto findById(int id) {
-		return personToDtoConverter.convertPersonToDto(personHibernateRepository.findById(id));
+		return personToDtoConverter.convertPersonToDto(personRepository.findById(id));
 	}
 	
 	@Override
 	@Transactional
 	public Person findByUsername(String username) {
-		return personHibernateRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+		return personRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+	}
+
+	@Override
+	@Transactional
+	public void addMoney(Integer userId, Double amount) {
+		Person person = personRepository.findById(userId);
+		person.setBalance(person.getBalance()+amount);
 	}
 
 }

@@ -276,7 +276,8 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     private void viewProfile(){
-
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     private void viewReservations(){

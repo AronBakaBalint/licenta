@@ -10,4 +10,6 @@ public interface PersonManagementService {
 	public void save(Person person);
 	
 	public Person findByUsername(String username);
+	
+	public void addMoney(Integer userId, Double amount);
 }

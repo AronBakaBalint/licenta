@@ -11,8 +11,8 @@ public class Token {
     private static String jwtToken;
 
     public static void setJwtToken(String token){
-        jwtToken = token;
-        int userId = getUserId();
+        Integer userId = Integer.parseInt(token.substring(0, token.indexOf(";")));
+        jwtToken = token.substring(token.indexOf(";")+1);
         UserData.setUserId(userId);
     }
 
@@ -20,12 +20,4 @@ public class Token {
         return jwtToken;
     }
 
-    private static int getUserId(){
-        byte[] byteArray = Base64.decode(jwtToken.getBytes(),0);
-        String decodedString = new String(byteArray);
-        decodedString = decodedString.substring(decodedString.indexOf("\"jti\":"));
-        decodedString = decodedString.substring(0, decodedString.indexOf("}"));
-        decodedString = decodedString.replace("\"jti\":", "").replace("\"", "");
-        return Integer.parseInt(decodedString);
-    }
 }

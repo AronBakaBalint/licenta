@@ -58,6 +58,4 @@ public class ReservationDialog extends Dialog {
         this.parkingPlaceId = parkingPlaceId;
     }
 
-
-
 }

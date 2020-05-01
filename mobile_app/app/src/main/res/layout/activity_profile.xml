@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ProfileActivity">
+
+    <TextView
+        android:id="@+id/profile_username"
+        android:layout_width="160dp"
+        android:layout_height="50dp"
+        android:layout_margin="4pt"
+        android:text="TextView"
+        android:textSize="16pt"
+        tools:layout_editor_absoluteX="54dp"
+        tools:layout_editor_absoluteY="40dp" />
+
+    <TextView
+        android:id="@+id/user_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4pt"
+        android:text="TextView"
+        android:textSize="8pt" />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="14dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/current_sold"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:text="TextView"
+            android:layout_marginLeft="8pt"
+            android:textSize="10pt" />
+
+        <ImageView
+            android:id="@+id/add_money"
+            android:layout_width="1pt"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="addMoney"
+            app:srcCompat="@drawable/add_money" />
+
+        <TextView
+            android:id="@+id/textView18"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Add money"
+            android:textSize="10pt" />
+
+    </LinearLayout>
+
+</LinearLayout>

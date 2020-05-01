@@ -2,6 +2,7 @@ package com.example.licenta_mobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
@@ -28,6 +29,12 @@ public class ReservationExtensionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reservations);
         reservationService = RestClient.getClient().create(ReservationService.class);
         handleUnconfirmedReservations();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, ParkingActivity.class);
+        startActivity(intent);
     }
 
     private void handleUnconfirmedReservations(){

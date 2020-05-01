@@ -22,7 +22,7 @@ public class Person {
 	private String username;
 	private String name;
 	private String email;
-	private Double balance = 50.0;
+	private Double balance = 0.0;
 	private String password;
 	
 	public boolean pay(double amount) {
