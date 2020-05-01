@@ -11,7 +11,7 @@ public class DtoToReservationConverter {
 	public Reservation convertDtoToReservation(ReservationDto reservationDto) {
 		Reservation reservation = new Reservation();
 		reservation.setUserId(reservationDto.getUserId());
-		reservation.setLicensePlateNumber(reservationDto.getLicensePlate());
+		reservation.setLicensePlate(reservationDto.getLicensePlate());
 		reservation.setParkingPlaceId(reservationDto.getParkingPlaceId());
 		return reservation;
 	}

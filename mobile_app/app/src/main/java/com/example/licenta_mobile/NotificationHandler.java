@@ -37,26 +37,25 @@ public class NotificationHandler {
         startCountDown(parkingPlaceId);
     }
 
-    private void startCountDown(int parkingId) {
+    private void startCountDown(final int reservationId) {
         final Handler handler = new Handler();
-        final int parkingPlaceId = parkingId;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                checkArrived(parkingPlaceId);
+                checkArrived(reservationId);
             }
         }, 10000);
     }
 
-    private void checkArrived(final int parkingPlaceId) {
-        Call<MessageDto> call = reservationService.getReservationStatus("Bearer " + Token.getJwtToken(), parkingPlaceId);
+    private void checkArrived(final int reservationId) {
+        Call<MessageDto> call = reservationService.getReservationStatus("Bearer " + Token.getJwtToken(), reservationId);
         call.enqueue(new Callback<MessageDto>() {
 
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
                     if (response.body().getMessage().equals("reserved")) {
-                        showNotification(parkingPlaceId);
+                        showNotification();
                     }
                 }
             }
@@ -69,7 +68,7 @@ public class NotificationHandler {
         });
     }
 
-    private void showNotification(int parkingPlaceId) {
+    private void showNotification() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("myNotification", "myNotification", NotificationManager.IMPORTANCE_DEFAULT);

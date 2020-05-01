@@ -6,10 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import aron.utcn.licenta.converter.DtoToReservationConverter;
 import aron.utcn.licenta.dto.ReservationDto;
+import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
+import aron.utcn.licenta.model.Reservation;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
-import aron.utcn.licenta.repository.PersonHibernateRepository;
-import aron.utcn.licenta.repository.ReservationManagementRepository;
+import aron.utcn.licenta.repository.PersonRepository;
+import aron.utcn.licenta.repository.ReservationRepository;
 import aron.utcn.licenta.service.ReservationManagementService;
 import lombok.RequiredArgsConstructor;
 
@@ -17,21 +19,24 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReservationManagementServiceImpl implements ReservationManagementService {
 
-	private final ReservationManagementRepository reservationManagementRepository;
+	private final ReservationRepository reservationRepository;
 	
 	private final ParkingPlaceRepository parkingPlaceRespository;
 	
 	private final DtoToReservationConverter dtoToReservationConverter;
 	
-	private final PersonHibernateRepository personRepository;
+	private final PersonRepository personRepository;
 	
 	private final Environment environment;
 	
 	@Override
 	@Transactional
-	public void reserveParkingPlace(ReservationDto reservationDto) {
-		reservationManagementRepository.saveReservation(dtoToReservationConverter.convertDtoToReservation(reservationDto));	
+	public Integer reserveParkingPlace(ReservationDto reservationDto) {
+		Reservation reservation = dtoToReservationConverter.convertDtoToReservation(reservationDto);
+		reservation.setStatus("reserved");
+		int reservationId = reservationRepository.saveReservation(reservation);	
 		reserve(reservationDto.getParkingPlaceId(), reservationDto.getLicensePlate(), reservationDto.getUserId());
+		return reservationId;
 	}
 	
 	@Transactional
@@ -41,16 +46,28 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	@Override
 	@Transactional
-	public void cancelReservation(int parkingPlaceId) {
-		parkingPlaceRespository.free(parkingPlaceId);
+	public void cancelReservation(int reservationId) {
+		Reservation reservation = reservationRepository.findById(reservationId);
+		reservation.cancel();
+		ParkingPlace parkingPlace = parkingPlaceRespository.findById(reservation.getParkingPlaceId());
+		parkingPlace.setFree();
 	}
 
 	@Override
 	@Transactional
-	public void extendReservation(int parkingPlaceId) {
+	public void extendReservation(int reservationId) {
 		Double extensionCost = Double.parseDouble(environment.getProperty("parking.extension_cost"));
-		Person person = personRepository.findById(parkingPlaceRespository.findById(parkingPlaceId).getUserId());
+		Reservation reservation = reservationRepository.findById(reservationId);
+		Person person = personRepository.findById(parkingPlaceRespository.findById(reservation.getParkingPlaceId()).getUserId());
 		person.pay(extensionCost);
 	}
+
+	@Override
+	public Reservation findById(int reservationId) {
+		return reservationRepository.findById(reservationId);
+	}
+	
+	
+
 
 }

@@ -3,15 +3,16 @@ package aron.utcn.licenta.converter;
 import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.dto.UnconfirmedReservationDto;
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.Reservation;
 
 @Component
 public class UnconfirmedReservationToDtoConverter {
 
-	public UnconfirmedReservationDto convertUnconfirmedReservationToDto(ParkingPlace parkingPlace) {
+	public UnconfirmedReservationDto convertUnconfirmedReservationToDto(Reservation reservation) {
 		UnconfirmedReservationDto reservationDto = new UnconfirmedReservationDto();
-		reservationDto.setLicensePlate(parkingPlace.getOccupierCarPlate());
-		reservationDto.setParkingPlaceId(parkingPlace.getId());
+		reservationDto.setReservationId(reservation.getReservationId());
+		reservationDto.setLicensePlate(reservation.getLicensePlate());
+		reservationDto.setParkingPlaceId(reservation.getParkingPlaceId());
 		return reservationDto;
 	}
 }

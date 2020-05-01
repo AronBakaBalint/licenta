@@ -213,25 +213,27 @@ public class ParkingActivity extends AppCompatActivity {
         reservationDto.setLicensePlate(licensePlate);
         reservationDialog.dismiss();
 
-        Call<Void> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
-        call.enqueue(new Callback<Void>(){
+        Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
+        call.enqueue(new Callback<MessageDto>(){
 
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
-                    showReservationInfoDialog(parkingPlaceId);
+                    int reservationId = Integer.parseInt(response.body().getMessage());
+                    System.out.println(reservationId);
+                    showReservationInfoDialog(reservationId);
                 }
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<MessageDto> call, Throwable t) {
                 System.out.println(t.getMessage());
                 call.cancel();
             }
         });
     }
 
-    private void showReservationInfoDialog(final int parkingPlaceId){
+    private void showReservationInfoDialog(final int reservationId){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Your reservation has been made. You can find the code which has to be shown at the entrance in the reservation history.")
                 .setCancelable(false)
@@ -240,7 +242,7 @@ public class ParkingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                         startActivity(getIntent());
-                        notificationHandler.startCountdownForNotification(parkingPlaceId);
+                        notificationHandler.startCountdownForNotification(reservationId);
                     }
                 });
         AlertDialog alert = builder.create();

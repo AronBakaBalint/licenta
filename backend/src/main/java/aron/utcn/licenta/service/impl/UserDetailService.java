@@ -10,14 +10,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.repository.PersonHibernateRepository;
+import aron.utcn.licenta.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailService implements UserDetailsService {
 
-	private final PersonHibernateRepository personHibernateRepository;
+	private final PersonRepository personHibernateRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

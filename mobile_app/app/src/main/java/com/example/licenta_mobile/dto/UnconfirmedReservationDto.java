@@ -3,6 +3,16 @@ package com.example.licenta_mobile.dto;
 public class UnconfirmedReservationDto {
 
     private int parkingPlaceId;
+    private int reservationId;
+
+    public int getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(int reservationId) {
+        this.reservationId = reservationId;
+    }
+
     private String licensePlate;
 
     public int getParkingPlaceId() {

@@ -17,8 +17,10 @@ import aron.utcn.licenta.dto.ParkingPlaceDto;
 import aron.utcn.licenta.dto.UnconfirmedReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
+import aron.utcn.licenta.model.Reservation;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
-import aron.utcn.licenta.repository.PersonHibernateRepository;
+import aron.utcn.licenta.repository.PersonRepository;
+import aron.utcn.licenta.repository.ReservationRepository;
 import aron.utcn.licenta.service.ArduinoService;
 import aron.utcn.licenta.service.ParkingPlaceService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +37,9 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	
 	private final ParkingPlaceToDtoConverter parkingPlaceToDtoConverter;
 	
-	private final PersonHibernateRepository personRepository;
+	private final ReservationRepository reservationRepository;
+	
+	private final PersonRepository personRepository;
 	
 	private final UnconfirmedReservationToDtoConverter unconfirmedReservationToDtoConverter;
 	
@@ -58,21 +62,22 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 
 	@Override
 	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId) {
-		List<ParkingPlace> reservedPlaces = parkingPlaceRepository.findReservationsByUser(userId);
+		List<Reservation> reservedPlaces = reservationRepository.findReservationsByUser(userId);
 		reservedPlaces = reservedPlaces.stream().filter(rp->rp.getStatus().equals("reserved")).collect(Collectors.toList());
 		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<UnconfirmedReservationDto> findAllReservations(int userId) {
-		List<ParkingPlace> reservedPlaces = parkingPlaceRepository.findReservationsByUser(userId);
+		List<Reservation> reservedPlaces = reservationRepository.findReservationsByUser(userId);
 		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto).collect(Collectors.toList());
 	}
 
 	@Override
 	@Transactional
 	public void handleScannedPlate(String licensePlate) {
-		ParkingPlace parkingPlace = parkingPlaceRepository.findByPlate(licensePlate);
+		Reservation reservation = reservationRepository.findByLicensePlate(licensePlate);
+		ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlaceId());
 		if(parkingPlace.isOccupied()) {
 			Person person = personRepository.findById(parkingPlace.getUserId());
 			Date departureTime = new Date();
@@ -82,13 +87,16 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 			df.setRoundingMode(RoundingMode.CEILING);
 			price = Float.valueOf(df.format(price));
 			if(person.pay(price)) {
+				reservation.setFinished();
 				parkingPlace.setFree();
+				df.setRoundingMode(RoundingMode.FLOOR);
 				arduinoService.displayOnLCD(price+ " lei;"+df.format(person.getBalance()));
 			} else {
 				arduinoService.displayOnLCD("no money");
 			}
 		} else {
 			arduinoService.activateBarrier();
+			reservation.setOccupied();
 			parkingPlace.setOccupied();
 			parkingPlace.setArrivalTime(new Date());
 		}

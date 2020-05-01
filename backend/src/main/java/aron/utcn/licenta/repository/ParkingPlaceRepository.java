@@ -15,8 +15,4 @@ public interface ParkingPlaceRepository {
 	public ParkingPlace findById(int id);
 	
 	public void free(int parkingPlaceId);
-	
-	public List<ParkingPlace> findReservationsByUser(int userId);
-	
-	public ParkingPlace findByPlate(String licensePlate);
 }

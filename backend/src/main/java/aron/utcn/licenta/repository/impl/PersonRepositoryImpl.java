@@ -8,12 +8,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.repository.PersonHibernateRepository;
+import aron.utcn.licenta.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class PersonHibernateRepositoryImpl implements PersonHibernateRepository {
+public class PersonRepositoryImpl implements PersonRepository {
 
 	private final EntityManager entityManager;
 

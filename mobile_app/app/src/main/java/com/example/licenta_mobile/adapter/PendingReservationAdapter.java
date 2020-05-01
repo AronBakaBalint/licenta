@@ -97,8 +97,8 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         extendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                extendReservation(list.get(position).getParkingPlaceId());
-                notificationHandler.startCountdownForNotification(list.get(position).getParkingPlaceId());
+                extendReservation(list.get(position).getReservationId());
+                notificationHandler.startCountdownForNotification(list.get(position).getReservationId());
             }
         });
 
@@ -120,7 +120,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
     }
 
     private void cancelReservation(final UnconfirmedReservationDto reservationDto) {
-        Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getParkingPlaceId());
+        Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getReservationId());
         call.enqueue(new Callback<Void>() {
 
             @Override
@@ -170,7 +170,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         builder.show();
     }
 
-    private void showExtensionDialog(final int parkingPlaceId, final double extensionCost) {
+    private void showExtensionDialog(final int reservationId, final double extensionCost) {
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setMessage("Extend reservation for an extra " + extensionCost + " lei?");
         builder1.setTitle("Extend Reservation");
@@ -184,7 +184,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                         if (UserData.getCurrentSold() < extensionCost) {
                             showNotEnoughMoneyDialog();
                         } else {
-                            sendExtendReservationRequest(extensionCost, parkingPlaceId);
+                            sendExtendReservationRequest(extensionCost, reservationId);
                         }
                     }
                 });
@@ -201,7 +201,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         alert11.show();
     }
 
-    private void extendReservation(final int parkingPlaceId) {
+    private void extendReservation(final int reservationId) {
         Call<MessageDto> call = reservationService.getExtensionPrice("Bearer " + Token.getJwtToken());
         call.enqueue(new Callback<MessageDto>() {
 
@@ -210,7 +210,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getMessage();
                     Float extensionCost = Float.parseFloat(responseBody);
-                    showExtensionDialog(parkingPlaceId, extensionCost);
+                    showExtensionDialog(reservationId, extensionCost);
                 }
             }
 
@@ -231,8 +231,8 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         alert11.show();
     }
 
-    private void sendExtendReservationRequest(final Double extensionCost, int parkingPlaceId) {
-        Call<Void> call = reservationService.extendReservation("Bearer " + Token.getJwtToken(), parkingPlaceId);
+    private void sendExtendReservationRequest(final Double extensionCost, int reservationId) {
+        Call<Void> call = reservationService.extendReservation("Bearer " + Token.getJwtToken(), reservationId);
         call.enqueue(new Callback<Void>() {
 
             @Override

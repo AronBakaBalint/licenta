@@ -24,9 +24,9 @@ public interface ReservationService {
 
     @POST("/reservation")
     @Headers({ "Content-Type: application/json" } )
-    Call<Void> reserveParkingPlace (@Header("Authorization") String auth, @Body ReservationDto reservationDto);
+    Call<MessageDto> reserveParkingPlace (@Header("Authorization") String auth, @Body ReservationDto reservationDto);
 
-    @GET("/parking/{id}")
+    @GET("/reservation/{id}")
     @Headers({ "Content-Type: application/json" } )
     Call<MessageDto> getReservationStatus (@Header("Authorization") String auth, @Path("id") Integer id);
 

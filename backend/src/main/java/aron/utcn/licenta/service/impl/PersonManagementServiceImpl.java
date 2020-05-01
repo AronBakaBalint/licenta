@@ -7,7 +7,7 @@ import aron.utcn.licenta.converter.PersonToDtoConverter;
 import aron.utcn.licenta.dto.PersonDto;
 import aron.utcn.licenta.exception.UserNotFoundException;
 import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.repository.PersonHibernateRepository;
+import aron.utcn.licenta.repository.PersonRepository;
 import aron.utcn.licenta.service.PersonManagementService;
 import lombok.RequiredArgsConstructor;
 
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PersonManagementServiceImpl implements PersonManagementService {
 
-	private final PersonHibernateRepository personHibernateRepository;
+	private final PersonRepository personHibernateRepository;
 	
 	private final PersonToDtoConverter personToDtoConverter;
 	

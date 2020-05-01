@@ -16,5 +16,18 @@ public class Reservation {
 	private Integer reservationId;
 	private Integer parkingPlaceId;
 	private Integer userId;
-	private String licensePlateNumber;
+	private String status;
+	private String licensePlate;
+	
+	public void cancel() {
+		status = "canceled";
+	}
+	
+	public void setOccupied() {
+		status = "occupied";
+	}
+	
+	public void setFinished() {
+		status = "finished";
+	}
 }

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import aron.utcn.licenta.model.Person;
 
-public interface PersonHibernateRepository {
+public interface PersonRepository {
 	
 	public Person findById(int id);
 	
