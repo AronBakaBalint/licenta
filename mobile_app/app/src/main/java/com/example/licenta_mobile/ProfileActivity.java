@@ -40,6 +40,8 @@ public class ProfileActivity extends AppCompatActivity {
         currentSold.setText(UserData.getCurrentSold()+" LEI");
         TextView username = findViewById(R.id.profile_username);
         username.setText(UserData.getUserName());
+        TextView email = findViewById(R.id.profile_email);
+        email.setText(UserData.getEmail());
     }
 
     public void addMoney(View view){
