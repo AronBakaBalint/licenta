@@ -228,8 +228,11 @@ public class ParkingActivity extends AppCompatActivity {
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
                     int reservationId = Integer.parseInt(response.body().getMessage());
-                    System.out.println(reservationId);
-                    showReservationInfoDialog(reservationId);
+                    if (reservationId == -1){
+                        showAlreadyExistingDialog();
+                    } else {
+                        showReservationInfoDialog(reservationId);
+                    }
                 }
             }
 
@@ -251,6 +254,20 @@ public class ParkingActivity extends AppCompatActivity {
                         finish();
                         startActivity(getIntent());
                         notificationHandler.startCountdownForNotification(reservationId);
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showAlreadyExistingDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("There is already a pending reservation for this license plate.\n Cancel the pending reservation first in order to be able to make a new one")
+                .setCancelable(false)
+                .setTitle("Reservation Info")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        
                     }
                 });
         AlertDialog alert = builder.create();
