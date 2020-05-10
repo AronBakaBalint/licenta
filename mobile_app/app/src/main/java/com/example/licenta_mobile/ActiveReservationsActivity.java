@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.licenta_mobile.adapter.PendingReservationAdapter;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
@@ -26,6 +27,8 @@ public class ActiveReservationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reservations);
         reservationService = RestClient.getClient().create(ReservationService.class);
+        TextView viewTitle = findViewById(R.id.reservationTitle);
+        viewTitle.setText("Reservation History");
         handleReservations();
     }
 

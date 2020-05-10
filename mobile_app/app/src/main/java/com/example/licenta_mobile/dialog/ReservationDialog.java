@@ -37,17 +37,25 @@ public class ReservationDialog extends Dialog {
         this.introducedLicensePlate = introducedLicensePlate;
     }
 
+    public Spinner getSelectedLicensePlate() {
+        return selectedLicensePlate;
+    }
+
+    public void setSelectedLicensePlate(Spinner selectedLicensePlate) {
+        this.selectedLicensePlate = selectedLicensePlate;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.reservation_dialog);
 
-        Spinner selectedNumber = findViewById(R.id.licensePlateSelector);
-        selectedNumber.setSelection(0);
+        selectedLicensePlate = findViewById(R.id.licensePlateSelector);
+        selectedLicensePlate.setSelection(0);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, licensePlates);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        selectedNumber.setAdapter(dataAdapter);
+        selectedLicensePlate.setAdapter(dataAdapter);
 
         introducedLicensePlate = findViewById(R.id.licensePlateEditor);
     }

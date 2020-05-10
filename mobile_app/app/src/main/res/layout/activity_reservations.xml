@@ -8,7 +8,7 @@
     tools:context=".ReservationExtensionActivity">
 
     <TextView
-        android:id="@+id/textView14"
+        android:id="@+id/reservationTitle"
         android:layout_width="match_parent"
         android:layout_height="97dp"
         android:layout_margin="5pt"

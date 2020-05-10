@@ -47,12 +47,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void confirmTransfer(View view){
-        Double introducedAmount = Double.parseDouble(moneyTransferDialog.getIntroducedAmount().getText().toString());
-        moneyTransferDialog.cancel();
-        MoneyTransferDto moneyTransferDto = new MoneyTransferDto();
-        moneyTransferDto.setUserId(UserData.getUserId());
-        moneyTransferDto.setAmount(introducedAmount);
-        transfer(moneyTransferDto);
+        try {
+            Double introducedAmount = Double.parseDouble(moneyTransferDialog.getIntroducedAmount().getText().toString());
+            MoneyTransferDto moneyTransferDto = new MoneyTransferDto();
+            moneyTransferDto.setUserId(UserData.getUserId());
+            moneyTransferDto.setAmount(introducedAmount);
+            transfer(moneyTransferDto);
+        }catch(Exception npe){
+            System.out.println("No value introduced");
+        } finally {
+            moneyTransferDialog.cancel();
+        }
     }
 
     private void transfer(final MoneyTransferDto moneyTransferDto){

@@ -11,11 +11,13 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -43,6 +45,7 @@ import com.example.licenta_mobile.security.Token;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -197,20 +200,25 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     private void showReservationDialog(int parkingPlaceId){
-        List<String> licensePlates = new ArrayList<>();
-        licensePlates.add("No Item Selected");
-        licensePlates.add("CJ25BBA");
+        List<String> licensePlates = getLicensePlateHistory();
         reservationDialog = new ReservationDialog(this, parkingPlaceId, licensePlates);
         reservationDialog.show();
     }
 
     public void confirmReservation(View view) {
-        String licensePlate = reservationDialog.getIntroducedLicensePlate().getText().toString();
-        final Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
+        String introducedLicensePlate = reservationDialog.getIntroducedLicensePlate().getText().toString();
+        String selectedLicensePlate = reservationDialog.getSelectedLicensePlate().getSelectedItem().toString();
+        Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setParkingPlaceId(parkingPlaceId);
         reservationDto.setUserId(UserData.getUserId());
-        reservationDto.setLicensePlate(licensePlate);
+
+        if(selectedLicensePlate.equals("No Item Selected")){
+            reservationDto.setLicensePlate(introducedLicensePlate);
+            handleNewLicensePlate(introducedLicensePlate);
+        } else {
+            reservationDto.setLicensePlate(selectedLicensePlate);
+        }
         reservationDialog.dismiss();
 
         Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
@@ -299,5 +307,25 @@ public class ParkingActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    private List<String> getLicensePlateHistory(){
+        List<String> licensePlates = new ArrayList<>();
+        licensePlates.add("No Item Selected");
+        SharedPreferences sharedPreferences = getSharedPreferences("licensePlates", MODE_PRIVATE);
+        Map<String, ?> allEntries = sharedPreferences.getAll();
+        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+            if(entry.getKey().contains("$lic$")){
+                licensePlates.add(entry.getKey().replace("$lic$", ""));
+            }
+        }
+        return licensePlates;
+    }
+
+    private void handleNewLicensePlate(String licensePlate){
+        SharedPreferences sharedPreferences = getSharedPreferences("licensePlates", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("$lic$"+licensePlate.toUpperCase(), "true");
+        editor.commit();
     }
 }
