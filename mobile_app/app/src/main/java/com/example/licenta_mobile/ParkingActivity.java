@@ -262,12 +262,12 @@ public class ParkingActivity extends AppCompatActivity {
 
     private void showAlreadyExistingDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("There is already a pending reservation for this license plate.\n Cancel the pending reservation first in order to be able to make a new one")
+        builder.setMessage("There is already a pending reservation for this license plate.\nFinish the existing reservation first in order to be able to make a new one")
                 .setCancelable(false)
                 .setTitle("Reservation Info")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        
+
                     }
                 });
         AlertDialog alert = builder.create();
