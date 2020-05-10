@@ -25,13 +25,12 @@ public class Person {
 	private Double balance = 0.0;
 	private String password;
 	
-	public boolean pay(double amount) {
-		if(amount > balance) {
-			return false;
-		}
-		
+	public boolean hasEnoughMoney(double amount) {
+		return balance > amount;
+	}
+	
+	public void pay(double amount) {		
 		balance -= amount;
-		return true;
 	}
 	
 }

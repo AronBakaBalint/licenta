@@ -1,6 +1,7 @@
 package aron.utcn.licenta.repository.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -27,15 +28,23 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 		return entityManager.find(Reservation.class, reservationId);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Reservation findByLicensePlate(String licensePlate) {
+	public Optional<Reservation> findByLicensePlate(String licensePlate) {
 		List<Reservation> reservationList =  (List<Reservation>)entityManager.createQuery(
 				"SELECT reservation FROM Reservation reservation WHERE licensePlate LIKE :licensePlate")
 				.setParameter("licensePlate", licensePlate)
 				.getResultList();
-		return reservationList.get(reservationList.size()-1);
+		Reservation reservation = null;
+		try {
+			reservation =  reservationList.get(reservationList.size()-1);
+		} catch (IndexOutOfBoundsException ioube) {
+			return Optional.empty();
+		}
+		return reservation.getStatus().equals("finished") ? Optional.empty() : Optional.ofNullable(reservation);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Reservation> findReservationsByUser(int userId) {
 		return (List<Reservation>)entityManager.createQuery(

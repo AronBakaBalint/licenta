@@ -6,6 +6,7 @@ import java.util.Enumeration;
 
 import org.springframework.stereotype.Component;
 
+import aron.utcn.licenta.exception.LCDNotFoundException;
 import aron.utcn.licenta.service.ArduinoService;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
@@ -45,15 +46,14 @@ public class ArduinoServiceImpl implements ArduinoService {
 	public void displayOnLCD(String message) {
 		try {
 			outputStream.write(message.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("Hardware not found!");
 		}
 	}
 
 	@Override
-	public void activateBarrier() {
-		displayOnLCD("welcome");
+	public void activateBarrier() throws LCDNotFoundException {
+			displayOnLCD("welcome");
 	}
 
 }
