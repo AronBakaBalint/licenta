@@ -37,7 +37,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		Reservation reservation = dtoToReservationConverter.convertDtoToReservation(reservationDto);
 		Optional<Reservation> optreservation = reservationRepository
 				.findByLicensePlate(reservationDto.getLicensePlate());
-		if (optreservation.isPresent() && optreservation.get().getStatus().equals("reserved")) {
+		if (optreservation.isPresent() && (optreservation.get().getStatus().equals("reserved") || optreservation.get().getStatus().equals("occupied"))) {
 				return -1;
 		} else {
 			reservation.setStatus("reserved");
