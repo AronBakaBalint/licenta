@@ -55,7 +55,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	@Transactional
 	public void cancelReservation(int reservationId) {
-		Reservation reservation = reservationRepository.findById(reservationId);
+		Reservation reservation = reservationRepository.findById(reservationId).get();
 		reservation.cancel();
 		ParkingPlace parkingPlace = parkingPlaceRespository.findById(reservation.getParkingPlaceId());
 		parkingPlace.setFree();
@@ -65,7 +65,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Transactional
 	public void extendReservation(int reservationId) {
 		Double extensionCost = Double.parseDouble(environment.getProperty("parking.extension_cost"));
-		Reservation reservation = reservationRepository.findById(reservationId);
+		Reservation reservation = reservationRepository.findById(reservationId).get();
 		Person person = personRepository
 				.findById(parkingPlaceRespository.findById(reservation.getParkingPlaceId()).getUserId());
 		person.pay(extensionCost);
@@ -73,7 +73,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	@Override
 	public Reservation findById(int reservationId) {
-		return reservationRepository.findById(reservationId);
+		return reservationRepository.findById(reservationId).get();
 	}
 
 }

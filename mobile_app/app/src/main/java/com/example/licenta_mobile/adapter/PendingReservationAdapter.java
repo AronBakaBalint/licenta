@@ -118,7 +118,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         qrCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showQRCodeDialog(list.get(position).getLicensePlate(), qrCodeBtn);
+                showQRCodeDialog(list.get(position).getReservationId()+"", qrCodeBtn);
             }
         });
 
@@ -146,12 +146,12 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         });
     }
 
-    private void showQRCodeDialog(String licensePlate, View view) {
+    private void showQRCodeDialog(String reservationId, View view) {
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         int width = (int) (size.x * 0.95);
-        QRGEncoder qrgEncoder = new QRGEncoder(licensePlate, null, QRGContents.Type.TEXT, width);
+        QRGEncoder qrgEncoder = new QRGEncoder(reservationId, null, QRGContents.Type.TEXT, width);
 
         Dialog builder = new Dialog(view.getContext());
         builder.requestWindowFeature(Window.FEATURE_NO_TITLE);

@@ -42,4 +42,5 @@ public class ParkingPlace {
 	public boolean isOccupied() {
 		return status.equals("occupied");
 	}
+	
 }

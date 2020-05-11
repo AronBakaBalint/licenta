@@ -24,8 +24,9 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	}
 
 	@Override
-	public Reservation findById(int reservationId) {
-		return entityManager.find(Reservation.class, reservationId);
+	public Optional<Reservation> findById(int reservationId) {
+		Reservation reservation =  entityManager.find(Reservation.class, reservationId);
+		return reservation == null ? Optional.empty() : Optional.ofNullable(reservation);
 	}
 
 	@SuppressWarnings("unchecked")

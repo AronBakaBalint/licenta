@@ -9,7 +9,7 @@ public interface ReservationRepository {
 
 	public Integer saveReservation(Reservation reservation);
 	
-	public Reservation findById(int reservationId);
+	public Optional<Reservation> findById(int reservationId);
 	
 	public Optional<Reservation> findByLicensePlate(String licensePlate);
 	

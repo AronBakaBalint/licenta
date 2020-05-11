@@ -30,4 +30,16 @@ public class Reservation {
 	public void setFinished() {
 		status = "finished";
 	}
+	
+	public boolean isFinished() {
+		return status.equals("finished");
+	}
+	
+	public boolean isCancelled() {
+		return status.equals("canceled");
+	}
+	
+	public boolean isExpired() {
+		return isCancelled() || isFinished();
+	}
 }

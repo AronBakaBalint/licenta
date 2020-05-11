@@ -80,50 +80,61 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 
 	@Override
 	@Transactional
-	public void handleScannedPlate(String licensePlate) {
-		Optional<Reservation> optreservation = reservationRepository.findByLicensePlate(licensePlate);
+	public void handleScannedCode(String qrCode) {
+		int reservationId = 0;
+		try {
+			reservationId = Integer.parseInt(qrCode);
+		} catch (NumberFormatException nfe) {
+			displayOnLCD("no reservation found");
+			return;
+		}
+		Optional<Reservation> optreservation = reservationRepository.findById(reservationId);
 		if (optreservation.isPresent()) {
-			Reservation reservation = reservationRepository.findByLicensePlate(licensePlate).get();
-			ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlaceId());
-			if(parkingPlace.isOccupied()) {
-				Person person = personRepository.findById(parkingPlace.getUserId());
-				Date departureTime = new Date();
-				Date arrivalTime = parkingPlace.getArrivalTime();
-				double price = calculatePrice(arrivalTime, departureTime);
-				DecimalFormat df = new DecimalFormat("#.##");
-				df.setRoundingMode(RoundingMode.CEILING);
-				price = Double.valueOf(df.format(price));
-				if(person.hasEnoughMoney(price)) {
-					person.pay(price);
-					reservation.setFinished();
-					parkingPlace.setFree();
-					df.setRoundingMode(RoundingMode.FLOOR);
-					displayOnLCD(price+ " lei;"+df.format(person.getBalance()));
-				} else {
-					displayOnLCD("no money");
-				}
+			Reservation reservation = optreservation.get();
+			if (reservation.isExpired()) {
+				displayOnLCD("reservation expired");
 			} else {
-				openBarrier();
-				reservation.setOccupied();
-				parkingPlace.setOccupied();
-				parkingPlace.setArrivalTime(new Date());
+				ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlaceId());
+				if (parkingPlace.isOccupied()) {
+					Person person = personRepository.findById(parkingPlace.getUserId());
+					double price = calculatePrice(parkingPlace);
+					DecimalFormat df = new DecimalFormat("#.##");
+					df.setRoundingMode(RoundingMode.CEILING);
+					price = Double.valueOf(df.format(price));
+					if (person.hasEnoughMoney(price)) {
+						person.pay(price);
+						reservation.setFinished();
+						parkingPlace.setFree();
+						df.setRoundingMode(RoundingMode.FLOOR);
+						displayOnLCD(price + " lei;" + df.format(person.getBalance()));
+					} else {
+						displayOnLCD("no money");
+					}
+				} else {
+					openBarrier();
+					reservation.setOccupied();
+					parkingPlace.setOccupied();
+					parkingPlace.setArrivalTime(new Date());
+				}
 			}
 		} else {
 			displayOnLCD("no reservation found");
 		}
 	}
 
-	private float calculatePrice(Date arrival, Date departure) {
-		long diffInMillies = Math.abs(departure.getTime() - arrival.getTime());
-	    long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-	    float pricePerHour = Float.parseFloat(environment.getProperty("parking.price_per_hour"));
-	    return diff * pricePerHour / 3600;
+	private float calculatePrice(ParkingPlace parkingPlace) {
+		Date departureTime = new Date();
+		Date arrivalTime = parkingPlace.getArrivalTime();
+		long diffInMillies = Math.abs(departureTime.getTime() - arrivalTime.getTime());
+		long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+		float pricePerHour = Float.parseFloat(environment.getProperty("parking.price_per_hour"));
+		return diff * pricePerHour / 3600;
 	}
-	
+
 	private void displayOnLCD(String message) {
 		arduinoService.displayOnLCD(message);
 	}
-	
+
 	private void openBarrier() {
 		arduinoService.activateBarrier();
 	}
