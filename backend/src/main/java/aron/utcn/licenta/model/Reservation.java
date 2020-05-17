@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import lombok.Data;
 
@@ -13,9 +14,13 @@ public class Reservation {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer reservationId;
-	private Integer parkingPlaceId;
-	private Integer userId;
+	private Integer id;
+	
+	@OneToOne
+	private ParkingPlace parkingPlace;
+	
+	@OneToOne
+	private Person user;
 	private String status;
 	private String licensePlate;
 	

@@ -33,23 +33,10 @@ public class ApplicationSeed implements CommandLineRunner {
 		person.setPassword(passwordEncoder.encode("123"));
 		personManagementService.save(person);
 		
-		ParkingPlace parkingPlace1 = new ParkingPlace();
-		parkingPlaceService.save(parkingPlace1);
-		
-		ParkingPlace parkingPlace2 = new ParkingPlace();
-		parkingPlace2.setOccupied();
-		parkingPlace2.setOccupierCarPlate("cj34ggf");
-		parkingPlace2.setUserId(3);
-		parkingPlaceService.save(parkingPlace2);
-		
-		for(int i=3;i<=23; i++) {
+		for(int i=1;i<=24; i++) {
 			ParkingPlace p = new ParkingPlace();
 			parkingPlaceService.save(p);
 		}
-		
-		ParkingPlace p24 = new ParkingPlace();
-		p24.setReserved("cj17abc", 4);
-		parkingPlaceService.save(p24);
 		
 	}
 	

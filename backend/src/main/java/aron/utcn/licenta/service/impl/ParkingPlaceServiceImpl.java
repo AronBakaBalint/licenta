@@ -94,9 +94,10 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 			if (reservation.isExpired()) {
 				displayOnLCD("reservation expired");
 			} else {
-				ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlaceId());
+				ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlace().getId());
+				System.out.println(parkingPlace.getId());
 				if (parkingPlace.isOccupied()) {
-					Person person = personRepository.findById(parkingPlace.getUserId());
+					Person person = personRepository.findById(parkingPlace.getUser().getId());
 					double price = calculatePrice(parkingPlace);
 					DecimalFormat df = new DecimalFormat("#.##");
 					df.setRoundingMode(RoundingMode.CEILING);

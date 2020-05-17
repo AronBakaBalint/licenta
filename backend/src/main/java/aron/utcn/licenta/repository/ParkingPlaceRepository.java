@@ -8,8 +8,6 @@ public interface ParkingPlaceRepository {
 
 	public List<ParkingPlace> getAllParkingPlaces();
 	
-	public void makeReservation(int parkingPlaceId, String licensePlate, int userId);
-	
 	public void save(ParkingPlace parkingPlace);
 	
 	public ParkingPlace findById(int id);

@@ -18,7 +18,7 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 	
 	@Override
 	public List<ParkingPlace> getAllParkingPlaces() {
-		return entityManager.createQuery("SELECT p FROM ParkingPlace p").getResultList();
+		return entityManager.createQuery("SELECT p FROM ParkingPlace p left join fetch p.user u order by p.id").getResultList();
 	}
 
 	@Override
@@ -27,14 +27,10 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 	}
 
 	@Override
-	public void makeReservation(int parkingPlaceId, String licensePlate, int userId) {
-		ParkingPlace parkingPlace = entityManager.find(ParkingPlace.class, parkingPlaceId);
-		parkingPlace.setReserved(licensePlate.toLowerCase(), userId);
-	}
-
-	@Override
 	public ParkingPlace findById(int id) {
-		return entityManager.find(ParkingPlace.class, id);
+		return (ParkingPlace)entityManager.createQuery("SELECT p FROM ParkingPlace p left join fetch p.user u WHERE p.id = :id")
+				.setParameter("id", id)
+				.getResultList().get(0);
 	}
 
 	@Override

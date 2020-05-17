@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +19,9 @@ public class ParkingPlace {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	private Integer userId;
+	
+	@OneToOne
+	private Person user;
 	private String status = "free";
 	private String occupierCarPlate;
 	private Date arrivalTime;
@@ -27,16 +30,16 @@ public class ParkingPlace {
 		status = "occupied";
 	}
 	
-	public void setReserved(String licensePlate, Integer userId) {
+	public void setReserved(String licensePlate, Person user) {
 		occupierCarPlate = licensePlate;
 		status = "reserved";
-		this.userId = userId;
+		this.user = user;
 	}
 	
 	public void setFree() {
 		status = "free";
 		occupierCarPlate = null;
-		userId = null;
+		user = null;
 	}
 	
 	public boolean isOccupied() {

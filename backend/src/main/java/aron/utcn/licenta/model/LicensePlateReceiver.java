@@ -37,7 +37,6 @@ public class LicensePlateReceiver implements Runnable {
 			ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 			String message = (String)ois.readObject();
 			parkingPlaceService.handleScannedCode(message.toLowerCase());
-			System.out.println(message);
 			ois.close();
 			socket.close();
 		}

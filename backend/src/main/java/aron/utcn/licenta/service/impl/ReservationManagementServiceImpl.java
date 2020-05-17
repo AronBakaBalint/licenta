@@ -49,7 +49,10 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	@Transactional
 	private void reserve(int parkingPlaceId, String licensePlate, int userId) {
-		parkingPlaceRespository.makeReservation(parkingPlaceId, licensePlate, userId);
+		Person user = personRepository.findById(userId);
+		ParkingPlace parkingPlace = parkingPlaceRespository.findById(parkingPlaceId);
+		System.out.println(parkingPlace.getId());
+		parkingPlace.setReserved(licensePlate, user);
 	}
 
 	@Override
@@ -57,7 +60,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	public void cancelReservation(int reservationId) {
 		Reservation reservation = reservationRepository.findById(reservationId).get();
 		reservation.cancel();
-		ParkingPlace parkingPlace = parkingPlaceRespository.findById(reservation.getParkingPlaceId());
+		ParkingPlace parkingPlace = parkingPlaceRespository.findById(reservation.getParkingPlace().getId());
 		parkingPlace.setFree();
 	}
 
@@ -67,7 +70,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		Double extensionCost = Double.parseDouble(environment.getProperty("parking.extension_cost"));
 		Reservation reservation = reservationRepository.findById(reservationId).get();
 		Person person = personRepository
-				.findById(parkingPlaceRespository.findById(reservation.getParkingPlaceId()).getUserId());
+				.findById(parkingPlaceRespository.findById(reservation.getParkingPlace().getId()).getUser().getId());
 		person.pay(extensionCost);
 	}
 

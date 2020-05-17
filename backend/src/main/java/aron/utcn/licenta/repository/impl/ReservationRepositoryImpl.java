@@ -20,12 +20,14 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	@Override
 	public Integer saveReservation(Reservation reservation) {
 		entityManager.persist(reservation);
-		return reservation.getReservationId();
+		return reservation.getId();
 	}
 
 	@Override
 	public Optional<Reservation> findById(int reservationId) {
-		Reservation reservation =  entityManager.find(Reservation.class, reservationId);
+		Reservation reservation =  (Reservation)entityManager.createQuery("SELECT r FROM Reservation r left join fetch r.parkingPlace p WHERE r.id = :id")
+				.setParameter("id", reservationId)
+				.getResultList().get(0);
 		return reservation == null ? Optional.empty() : Optional.ofNullable(reservation);
 	}
 
@@ -49,7 +51,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	@Override
 	public List<Reservation> findReservationsByUser(int userId) {
 		return (List<Reservation>)entityManager.createQuery(
-				"SELECT reservation FROM Reservation reservation WHERE reservation.userId LIKE :userId")
+				"SELECT reservation FROM Reservation reservation WHERE reservation.user.id LIKE :userId")
 				.setParameter("userId", userId)
 				.getResultList();
 	}

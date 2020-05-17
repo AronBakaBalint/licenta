@@ -11,7 +11,10 @@ public class ParkingPlaceToDtoConverter {
 	public ParkingPlaceDto convertParkingPlaceToDto(ParkingPlace parkingPlace) {
 		ParkingPlaceDto parkingPlaceDto = new ParkingPlaceDto();
 		parkingPlaceDto.setId(parkingPlace.getId());
-		parkingPlaceDto.setUserId(parkingPlace.getUserId());
+		try {
+			parkingPlaceDto.setUserId(parkingPlace.getUser().getId());
+		} catch(NullPointerException npe) {	}
+		
 		parkingPlaceDto.setOccupierCarPlate(parkingPlace.getOccupierCarPlate());
 		parkingPlaceDto.setStatus(parkingPlace.getStatus());
 		return parkingPlaceDto;
