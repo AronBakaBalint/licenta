@@ -1,5 +1,7 @@
 package aron.utcn.licenta.service.impl;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +44,11 @@ public class PersonManagementServiceImpl implements PersonManagementService {
 	public void addMoney(Integer userId, Double amount) {
 		Person person = personRepository.findById(userId);
 		person.addMoney(amount);
+	}
+
+	@Override
+	public List<Person> getAll() {
+		return personRepository.getAll();
 	}
 
 }

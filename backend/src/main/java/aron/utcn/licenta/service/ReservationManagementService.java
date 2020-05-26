@@ -7,9 +7,9 @@ public interface ReservationManagementService {
 
 	public Integer reserveParkingPlace(ReservationDto reservation);
 	
-	public void extendReservation(int parkingPlaceId);
+	public void extendReservation(int reservationId);
 	
-	public void cancelReservation(int parkingPlaceId);
+	public void cancelReservation(int reservationId);
 	
 	public Reservation findById(int reservationId);
 	

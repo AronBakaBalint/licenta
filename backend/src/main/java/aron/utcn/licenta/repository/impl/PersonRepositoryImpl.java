@@ -1,5 +1,6 @@
 package aron.utcn.licenta.repository.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -40,5 +41,11 @@ public class PersonRepositoryImpl implements PersonRepository {
 	@Override
 	public void save(Person person) {
 		entityManager.persist(person);
+	}
+
+
+	@Override
+	public List<Person> getAll() {
+		return entityManager.createQuery("SELECT p FROM Person p").getResultList();
 	}
 }
