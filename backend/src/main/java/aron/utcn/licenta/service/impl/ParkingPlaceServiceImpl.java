@@ -73,8 +73,9 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 
 	@Override
 	public List<UnconfirmedReservationDto> findAllReservations(int userId) {
-		List<Reservation> reservedPlaces = reservationRepository.findReservationsByUser(userId);
-		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto)
+		List<Reservation> reservations = reservationRepository.findReservationsByUser(userId);
+		reservations.forEach(r->System.out.println(r.getId()));
+		return reservations.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto)
 				.collect(Collectors.toList());
 	}
 
