@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ReservationRepositoryImpl implements ReservationRepository {
 
 	private final EntityManager entityManager;
-	
+
 	@Override
 	public Integer saveReservation(Reservation reservation) {
 		entityManager.persist(reservation);
@@ -25,22 +25,21 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
 	@Override
 	public Optional<Reservation> findById(int reservationId) {
-		Reservation reservation =  (Reservation)entityManager.createQuery("SELECT r FROM Reservation r left join fetch r.parkingPlace p WHERE r.id = :id")
-				.setParameter("id", reservationId)
-				.getResultList().get(0);
+		Reservation reservation = (Reservation) entityManager
+				.createQuery("SELECT r FROM Reservation r left join fetch r.parkingPlace p WHERE r.id = :id")
+				.setParameter("id", reservationId).getResultList().get(0);
 		return reservation == null ? Optional.empty() : Optional.ofNullable(reservation);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Optional<Reservation> findByLicensePlate(String licensePlate) {
-		List<Reservation> reservationList =  (List<Reservation>)entityManager.createQuery(
-				"SELECT reservation FROM Reservation reservation WHERE licensePlate LIKE :licensePlate")
-				.setParameter("licensePlate", licensePlate)
-				.getResultList();
+		List<Reservation> reservationList = (List<Reservation>) entityManager
+				.createQuery("SELECT reservation FROM Reservation reservation WHERE licensePlate LIKE :licensePlate")
+				.setParameter("licensePlate", licensePlate).getResultList();
 		Reservation reservation = null;
 		try {
-			reservation =  reservationList.get(reservationList.size()-1);
+			reservation = reservationList.get(reservationList.size() - 1);
 		} catch (IndexOutOfBoundsException ioube) {
 			return Optional.empty();
 		}
@@ -50,10 +49,9 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Reservation> findReservationsByUser(int userId) {
-		return (List<Reservation>)entityManager.createQuery(
-				"SELECT reservation FROM Reservation reservation WHERE reservation.user.id LIKE :userId")
-				.setParameter("userId", userId)
-				.getResultList();
+		return (List<Reservation>) entityManager
+				.createQuery("SELECT reservation FROM Reservation reservation WHERE reservation.user.id LIKE :userId")
+				.setParameter("userId", userId).getResultList();
 	}
 
 }

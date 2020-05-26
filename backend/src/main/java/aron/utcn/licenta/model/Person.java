@@ -31,6 +31,9 @@ public class Person {
 	
 	public void pay(double amount) {		
 		balance -= amount;
-	}
+	}	
 	
+	public void addMoney(double amount) {
+		balance += amount;
+	}
 }

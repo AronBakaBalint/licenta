@@ -95,7 +95,6 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 				displayOnLCD("reservation expired");
 			} else {
 				ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlace().getId());
-				System.out.println(parkingPlace.getId());
 				if (parkingPlace.isOccupied()) {
 					Person person = personRepository.findById(parkingPlace.getUser().getId());
 					double price = calculatePrice(parkingPlace);

@@ -4,13 +4,13 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 

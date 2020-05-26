@@ -37,8 +37,9 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		Reservation reservation = dtoToReservationConverter.convertDtoToReservation(reservationDto);
 		Optional<Reservation> optreservation = reservationRepository
 				.findByLicensePlate(reservationDto.getLicensePlate());
-		if (optreservation.isPresent() && (optreservation.get().getStatus().equals("reserved") || optreservation.get().getStatus().equals("occupied"))) {
-				return -1;
+		if (optreservation.isPresent() && (optreservation.get().getStatus().equals("reserved")
+				|| optreservation.get().getStatus().equals("occupied"))) {
+			return -1;
 		} else {
 			reservation.setStatus("reserved");
 			int reservationId = reservationRepository.saveReservation(reservation);
@@ -51,7 +52,6 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	private void reserve(int parkingPlaceId, String licensePlate, int userId) {
 		Person user = personRepository.findById(userId);
 		ParkingPlace parkingPlace = parkingPlaceRespository.findById(parkingPlaceId);
-		System.out.println(parkingPlace.getId());
 		parkingPlace.setReserved(licensePlate, user);
 	}
 

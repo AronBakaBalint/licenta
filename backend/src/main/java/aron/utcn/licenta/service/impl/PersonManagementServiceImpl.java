@@ -41,7 +41,7 @@ public class PersonManagementServiceImpl implements PersonManagementService {
 	@Transactional
 	public void addMoney(Integer userId, Double amount) {
 		Person person = personRepository.findById(userId);
-		person.setBalance(person.getBalance()+amount);
+		person.addMoney(amount);
 	}
 
 }

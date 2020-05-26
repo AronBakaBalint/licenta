@@ -5,13 +5,13 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Repository
 @RequiredArgsConstructor
 public class PersonRepositoryImpl implements PersonRepository {
 
