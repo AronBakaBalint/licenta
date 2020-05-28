@@ -112,7 +112,7 @@ public class ReservationTests {
 		int reservationId = reservationService.reserveParkingPlace(reservation);
 		reservationService.cancelReservation(reservationId);
 		String status = reservationService.findById(reservationId).getStatus();
-		assertEquals("canceled", status);
+		assertEquals("cancelled", status);
 		ParkingPlace parkingPlace = reservationService.findById(reservationId).getParkingPlace();
 		assertEquals("free", parkingPlaceService.findById(parkingPlace.getId()).getStatus());
 	}

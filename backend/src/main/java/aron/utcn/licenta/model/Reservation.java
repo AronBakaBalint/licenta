@@ -25,7 +25,7 @@ public class Reservation {
 	private String licensePlate;
 	
 	public void cancel() {
-		status = "canceled";
+		status = "cancelled";
 	}
 	
 	public void setOccupied() {
@@ -41,7 +41,7 @@ public class Reservation {
 	}
 	
 	public boolean isCancelled() {
-		return status.equals("canceled");
+		return status.equals("cancelled");
 	}
 	
 	public boolean isExpired() {
