@@ -33,7 +33,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.licenta_mobile.adapter.PendingReservationAdapter;
+import com.example.licenta_mobile.dialog.ExistingReservationDialog;
+import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog;
 import com.example.licenta_mobile.dialog.ReservationDialog;
+import com.example.licenta_mobile.dialog.ReservationInfoDialog;
 import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
@@ -61,22 +64,19 @@ public class ParkingActivity extends AppCompatActivity {
     private ReservationDialog reservationDialog;
     private NotificationHandler notificationHandler;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UserData.update();
-        setContentView(R.layout.activity_parking_place_selector);
-        reservationService = RestClient.getClient().create(ReservationService.class);
-        notificationHandler = new NotificationHandler(this);
-        displayParkingPlaceStatus();
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
+        onInit();
     }
 
     @Override
     public void onRestart(){
         super.onRestart();
+        onInit();
+    }
+
+    private void onInit(){
         UserData.update();
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
@@ -119,40 +119,14 @@ public class ParkingActivity extends AppCompatActivity {
         List<Button> parkingPlaces = new ArrayList<>();
 
         LinearLayout layout = findViewById(R.id.row1);
-        for(int i =0; i< layout.getChildCount(); i++){
-            View v =layout.getChildAt(i);
-            if(v instanceof Button){
-                v.setId(i+1);
-                parkingPlaces.add((Button) v);
-            }
-        }
-
+        buildRow(layout, 0, parkingPlaces);
         layout = findViewById(R.id.row2);
-        for(int i =0; i< layout.getChildCount(); i++){
-            View v =layout.getChildAt(i);
-            if(v instanceof Button){
-                v.setId(layout.getChildCount()+i+1);
-                parkingPlaces.add((Button) v);
-            }
-        }
-
+        buildRow(layout, 1, parkingPlaces);
         layout = findViewById(R.id.row3);
-        for(int i =0; i< layout.getChildCount(); i++){
-            View v =layout.getChildAt(i);
-            if(v instanceof Button){
-                v.setId(2*layout.getChildCount()+i+1);
-                parkingPlaces.add((Button) v);
-            }
-        }
-
+        buildRow(layout, 2, parkingPlaces);
         layout = findViewById(R.id.row4);
-        for(int i =0; i< layout.getChildCount(); i++){
-            View v =layout.getChildAt(i);
-            if(v instanceof Button){
-                v.setId(3*layout.getChildCount()+i+1);
-                parkingPlaces.add((Button) v);
-            }
-        }
+        buildRow(layout, 3, parkingPlaces);
+
         return parkingPlaces;
     }
 
@@ -175,27 +149,24 @@ public class ParkingActivity extends AppCompatActivity {
 
     public void startReservation(View view) {
         final int parkingPlaceId = view.getId();
-        String parkingPlaceName = ((Button) view).getText().toString();
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         final Double reservationCost = getReservationCost();
-        builder.setTitle("Reservation");
-        builder.setMessage("Reserve parking place "+parkingPlaceName+"?\nInital cost is "+ reservationCost +" LEI but you will get it back as you arrive to the parking lot");
+        String parkingPlaceName = ((Button) view).getText().toString();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Reservation");
+        builder.setMessage("Reserve parking place "+parkingPlaceName+"?\nInital cost is "+ reservationCost +" LEI but you will get it back as you arrive to the parking lot.");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
                 if(UserData.getCurrentSold() > reservationCost){
                     showReservationDialog(parkingPlaceId);
                 } else {
-                    showNotEnoughMoneyDialog();
+                    NotEnoughMoneyDialog.show(ParkingActivity.this);
                 }
                 dialog.dismiss();
             }
         });
-
         builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -204,15 +175,6 @@ public class ParkingActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    private void showNotEnoughMoneyDialog() {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-        builder1.setTitle("Not Enough Money");
-        builder1.setMessage("It seems you don't have enough money.\nGo to options -> profile and transfer some money");
-        builder1.setCancelable(true);
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
     }
 
     private void showReservationDialog(int parkingPlaceId){
@@ -257,9 +219,10 @@ public class ParkingActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     int reservationId = Integer.parseInt(response.body().getMessage());
                     if (reservationId == -1){
-                        showAlreadyExistingDialog();
+                        ExistingReservationDialog.show(ParkingActivity.this);
                     } else {
-                        showReservationInfoDialog(reservationId);
+                        ReservationInfoDialog.show(ParkingActivity.this);
+                        notificationHandler.startCountdownForNotification(reservationId);
                         UserData.update();
                     }
                 }
@@ -273,36 +236,6 @@ public class ParkingActivity extends AppCompatActivity {
         });
     }
 
-    private void showReservationInfoDialog(final int reservationId){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your reservation has been made. You can find the code which has to be shown at the entrance in the reservation history.")
-                .setCancelable(false)
-                .setTitle("Reservation Info")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                        startActivity(getIntent());
-                        notificationHandler.startCountdownForNotification(reservationId);
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
-    private void showAlreadyExistingDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("There is already a pending reservation for this license plate.\nFinish the existing reservation first in order to be able to make a new one")
-                .setCancelable(false)
-                .setTitle("Reservation Info")
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -314,17 +247,14 @@ public class ParkingActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if (id == R.id.profile) {
             viewProfile();
             return true;
-
         } else if (id == R.id.reservations) {
             viewReservations();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -372,5 +302,15 @@ public class ParkingActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("$lic$"+licensePlate.toUpperCase(), "true");
         editor.commit();
+    }
+
+    private void buildRow(LinearLayout layout, Integer row, List<Button> parkingPlaces){
+        for(int i =0; i< layout.getChildCount(); i++){
+            View v =layout.getChildAt(i);
+            if(v instanceof Button){
+                v.setId(row*layout.getChildCount()+i+1);
+                parkingPlaces.add((Button) v);
+            }
+        }
     }
 }

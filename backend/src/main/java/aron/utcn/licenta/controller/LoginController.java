@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.JwtTokenDto;
 import aron.utcn.licenta.dto.LoginDto;
+import aron.utcn.licenta.exception.UserNotFoundException;
 import aron.utcn.licenta.jwt.JwtResponse;
 import aron.utcn.licenta.jwt.JwtTokenUtil;
 import aron.utcn.licenta.model.Person;
@@ -32,9 +33,15 @@ public class LoginController {
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@PostMapping("/login")
-	public JwtTokenDto createAuthenticationToken(@RequestBody LoginDto authenticationRequest) throws Exception {
+	public JwtTokenDto createAuthenticationToken(@RequestBody LoginDto authenticationRequest) {
 
-		Person person = personManagementService.findByUsername(authenticationRequest.getUsername());
+		Person person;
+		try{
+			person = personManagementService.findByUsername(authenticationRequest.getUsername());
+		} catch(UserNotFoundException unfe) {
+			return new JwtTokenDto("false");
+		}
+		
 		if(!passwordEncoder.matches(authenticationRequest.getPassword(), person.getPassword())) {
 			return new JwtTokenDto("false");
 		}

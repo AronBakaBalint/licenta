@@ -24,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.example.licenta_mobile.NotificationHandler;
 import com.example.licenta_mobile.R;
+import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.model.UserData;
@@ -97,7 +98,6 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
             @Override
             public void onClick(View v) {
                 extendReservation(list.get(position).getReservationId());
-                notificationHandler.startCountdownForNotification(list.get(position).getReservationId());
             }
         });
 
@@ -182,7 +182,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         if (UserData.getCurrentSold() < extensionCost) {
-                            showNotEnoughMoneyDialog();
+                            NotEnoughMoneyDialog.show(context);
                         } else {
                             sendExtendReservationRequest(extensionCost, reservationId);
                         }
@@ -213,23 +213,16 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         return extensionCost;
     }
 
-    private void showNotEnoughMoneyDialog() {
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
-        builder1.setTitle("Not Enough Money");
-        builder1.setMessage("It seems you don't have enough money.\nGo to options -> profile and transfer some money");
-        builder1.setCancelable(true);
-        AlertDialog alert11 = builder1.create();
-        alert11.show();
-    }
-
-    private void sendExtendReservationRequest(final Double extensionCost, int reservationId) {
+    private void sendExtendReservationRequest(final Double extensionCost,final int reservationId) {
         Call<Void> call = reservationService.extendReservation("Bearer " + Token.getJwtToken(), reservationId);
         call.enqueue(new Callback<Void>() {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
+                    notificationHandler.startCountdownForNotification(reservationId);
                     UserData.setCurrentSold(UserData.getCurrentSold() - extensionCost);
+                    Toast.makeText(context, "Reservation extended", Toast.LENGTH_SHORT).show();
                 }
             }
 

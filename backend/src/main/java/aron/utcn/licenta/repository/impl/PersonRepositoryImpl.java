@@ -5,9 +5,9 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import aron.utcn.licenta.exception.UserNotFoundException;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class PersonRepositoryImpl implements PersonRepository {
 				.setParameter("username", username)
 				.getResultList().get(0));
 		} catch(IndexOutOfBoundsException e) {
-			throw new UsernameNotFoundException("User not found!");
+			throw new UserNotFoundException();
 		}
 		
 	}

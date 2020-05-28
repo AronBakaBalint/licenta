@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Base64;
 import android.util.JsonReader;
 import android.view.View;
@@ -34,14 +35,13 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         loginService = RestClient.getClient().create(LoginService.class);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     public void loginRequest(View view) {
-        EditText usernameET = findViewById(R.id.username);
-        EditText passwordET = findViewById(R.id.password);
-
-        String username = usernameET.getText().toString();
-        String password = passwordET.getText().toString();
+        String username = ((EditText)findViewById(R.id.username)).getText().toString();
+        String password = ((EditText)findViewById(R.id.password)).getText().toString();
 
         LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
         Call<JwtTokenDto> call = loginService.authenticate(loginRequestDto);
@@ -51,16 +51,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<JwtTokenDto> call, Response<JwtTokenDto> response) {
                 if (response.isSuccessful()) {
                     String responseBody = response.body().getToken();
-                    if("false".equals(responseBody)) {
-                        Toast.makeText(LoginActivity.this,"Incorrect Username or Password", Toast.LENGTH_LONG).show();
+                    if ("false".equals(responseBody)) {
+                        Toast.makeText(LoginActivity.this, "Incorrect Username or Password", Toast.LENGTH_LONG).show();
                     } else {
                         Token.setJwtToken(responseBody);
                         UserData.update();
                         Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
                         startActivity(intent);
                     }
-                } else {
-                    Toast.makeText(LoginActivity.this,"Incorrect Username or Password", Toast.LENGTH_LONG).show();
                 }
             }
 

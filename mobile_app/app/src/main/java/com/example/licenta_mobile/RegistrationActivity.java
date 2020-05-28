@@ -24,24 +24,21 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-
         registrationService = RestClient.getClient().create(RegistrationService.class);
     }
 
     public void confirmRegistration(View view){
-        EditText namet = findViewById(R.id.regname);
-        EditText usernamet = findViewById(R.id.regusername);
-        EditText emailt = findViewById(R.id.regemail);
-        EditText passwordt = findViewById(R.id.regpassword);
-        EditText password2t = findViewById(R.id.regpassword2);
+        String name = ((EditText)findViewById(R.id.regname)).getText().toString();
+        String username = ((EditText)findViewById(R.id.regusername)).getText().toString();
+        String email = ((EditText)findViewById(R.id.regemail)).getText().toString();
+        String password = ((EditText)findViewById(R.id.regpassword)).getText().toString();
+        String password2 = ((EditText)findViewById(R.id.regpassword2)).getText().toString();
 
-        String name = namet.getText().toString();
-        String username = usernamet.getText().toString();
-        String email = emailt.getText().toString();
-        String password = passwordt.getText().toString();
-        String password2 = password2t.getText().toString();
-
-        registerUser(name, username, password, email);
+        if(!password.equals(password2)){
+            Toast.makeText(this, "The two passwords do not match", Toast.LENGTH_LONG).show();
+        }else {
+            registerUser(name, username, password, email);
+        }
     }
 
     private void registerUser(String name, String username, String password, String email){
