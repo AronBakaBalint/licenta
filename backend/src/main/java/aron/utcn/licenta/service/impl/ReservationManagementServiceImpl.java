@@ -41,6 +41,9 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 				|| optreservation.get().getStatus().equals("occupied"))) {
 			return -1;
 		} else {
+			Person user = reservation.getUser();
+			String reservationCost = environment.getProperty("parking.reservation_cost");
+			user.pay(Double.parseDouble(reservationCost));
 			reservation.setStatus("reserved");
 			int reservationId = reservationRepository.saveReservation(reservation);
 			reserve(reservationDto.getParkingPlaceId(), reservationDto.getLicensePlate(), reservationDto.getUserId());

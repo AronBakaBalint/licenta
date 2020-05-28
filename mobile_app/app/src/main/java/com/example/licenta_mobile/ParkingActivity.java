@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -69,6 +70,8 @@ public class ParkingActivity extends AppCompatActivity {
         reservationService = RestClient.getClient().create(ReservationService.class);
         notificationHandler = new NotificationHandler(this);
         displayParkingPlaceStatus();
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
     }
 
     @Override
@@ -103,7 +106,6 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     private void setParkingPlaceColors(List<ParkingPlaceDto> parkingPlaces){
-        ViewGroup viewGroup = (ViewGroup) getWindow().getDecorView();
         List<Button> uiParkingPlaces = getAllParkingPlacesFromUI();
         for(int i=0;i < uiParkingPlaces.size(); i++){
             uiParkingPlaces.get(i).setBackgroundColor(statusToColor(parkingPlaces.get(i).getStatus()));
@@ -176,13 +178,18 @@ public class ParkingActivity extends AppCompatActivity {
         String parkingPlaceName = ((Button) view).getText().toString();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
+        final Double reservationCost = getReservationCost();
         builder.setTitle("Reservation");
-        builder.setMessage("Reserve parking place "+parkingPlaceName+"?");
+        builder.setMessage("Reserve parking place "+parkingPlaceName+"?\nInital cost is "+ reservationCost +" LEI but you will get it back as you arrive to the parking lot");
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                showReservationDialog(parkingPlaceId);
+                if(UserData.getCurrentSold() > reservationCost){
+                    showReservationDialog(parkingPlaceId);
+                } else {
+                    showNotEnoughMoneyDialog();
+                }
                 dialog.dismiss();
             }
         });
@@ -199,10 +206,31 @@ public class ParkingActivity extends AppCompatActivity {
         alert.show();
     }
 
+    private void showNotEnoughMoneyDialog() {
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+        builder1.setTitle("Not Enough Money");
+        builder1.setMessage("It seems you don't have enough money.\nGo to options -> profile and transfer some money");
+        builder1.setCancelable(true);
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
+    }
+
     private void showReservationDialog(int parkingPlaceId){
         List<String> licensePlates = getLicensePlateHistory();
         reservationDialog = new ReservationDialog(this, parkingPlaceId, licensePlates);
         reservationDialog.show();
+    }
+
+    private Double getReservationCost(){
+        Double reservationCost = -1.0;
+        Call<MessageDto> call = reservationService.getReservationCost("Bearer " + Token.getJwtToken());
+        try {
+            Response<MessageDto> response = call.execute();
+            reservationCost = Double.parseDouble(response.body().getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return reservationCost;
     }
 
     public void confirmReservation(View view) {
@@ -232,6 +260,7 @@ public class ParkingActivity extends AppCompatActivity {
                         showAlreadyExistingDialog();
                     } else {
                         showReservationInfoDialog(reservationId);
+                        UserData.update();
                     }
                 }
             }
@@ -287,7 +316,6 @@ public class ParkingActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        //sign out operation
         if (id == R.id.profile) {
             viewProfile();
             return true;

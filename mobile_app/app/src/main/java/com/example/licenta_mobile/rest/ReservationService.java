@@ -44,7 +44,11 @@ public interface ReservationService {
 
     @GET("/reservation/extension")
     @Headers({ "Content-Type: application/json" } )
-    Call<MessageDto> getExtensionPrice (@Header("Authorization") String auth);
+    Call<MessageDto> getExtansionCost(@Header("Authorization") String auth);
+
+    @GET("/reservation")
+    @Headers({ "Content-Type: application/json" } )
+    Call<MessageDto> getReservationCost(@Header("Authorization") String auth);
 
     @PUT("/reservation/{id}")
     @Headers({ "Content-Type: application/json" } )

@@ -4,17 +4,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Message;
+import android.os.StrictMode;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,11 +22,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.example.licenta_mobile.LoginActivity;
 import com.example.licenta_mobile.NotificationHandler;
-import com.example.licenta_mobile.ParkingActivity;
 import com.example.licenta_mobile.R;
-import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.model.UserData;
@@ -93,7 +87,6 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         Button extendBtn = view.findViewById(R.id.extendReservation);
         Button cancelBtn = view.findViewById(R.id.cancelReservation);
 
-        System.out.println(list.get(position).getStatus());
         if(list.get(position).getStatus().equals("canceled") || list.get(position).getStatus().equals("finished")){
             extendBtn.setVisibility(View.INVISIBLE);
             cancelBtn.setVisibility(View.INVISIBLE);
@@ -176,7 +169,8 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         builder.show();
     }
 
-    private void showExtensionDialog(final int reservationId, final double extensionCost) {
+    private void extendReservation(final int reservationId) {
+        final Double extensionCost = getExtensionCost();
         AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
         builder1.setMessage("Extend reservation for an extra " + extensionCost + " lei?");
         builder1.setTitle("Extend Reservation");
@@ -207,25 +201,16 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         alert11.show();
     }
 
-    private void extendReservation(final int reservationId) {
-        Call<MessageDto> call = reservationService.getExtensionPrice("Bearer " + Token.getJwtToken());
-        call.enqueue(new Callback<MessageDto>() {
-
-            @Override
-            public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
-                if (response.isSuccessful()) {
-                    String responseBody = response.body().getMessage();
-                    Float extensionCost = Float.parseFloat(responseBody);
-                    showExtensionDialog(reservationId, extensionCost);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageDto> call, Throwable t) {
-                System.out.println(t.getMessage());
-                call.cancel();
-            }
-        });
+    private Double getExtensionCost(){
+        Double extensionCost = -1.0;
+        Call<MessageDto> call = reservationService.getExtansionCost("Bearer " + Token.getJwtToken());
+        try {
+            Response<MessageDto> response = call.execute();
+            extensionCost = Double.parseDouble(response.body().getMessage());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return extensionCost;
     }
 
     private void showNotEnoughMoneyDialog() {

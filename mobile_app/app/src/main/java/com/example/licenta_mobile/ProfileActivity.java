@@ -19,6 +19,8 @@ import com.example.licenta_mobile.security.Token;
 
 import org.w3c.dom.Text;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import retrofit2.Call;
@@ -36,8 +38,12 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         userDataService = RestClient.getClient().create(UserDataService.class);
+        UserData.update();
         TextView currentSold = findViewById(R.id.current_sold);
-        currentSold.setText(UserData.getCurrentSold()+" LEI");
+        Double currentBalance = UserData.getCurrentSold();
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
+        currentSold.setText(df.format(currentBalance)+" LEI");
         TextView username = findViewById(R.id.profile_username);
         username.setText(UserData.getUserName());
         TextView email = findViewById(R.id.profile_email);
@@ -71,7 +77,9 @@ public class ProfileActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     TextView currentSold = findViewById(R.id.current_sold);
                     Double newAmount = Double.valueOf(UserData.getCurrentSold())+moneyTransferDto.getAmount();
-                    currentSold.setText(newAmount+" LEI");
+                    DecimalFormat df = new DecimalFormat("#.##");
+                    df.setRoundingMode(RoundingMode.CEILING);
+                    currentSold.setText(df.format(newAmount)+" LEI");
                     Toast.makeText(ProfileActivity.this, moneyTransferDto.getAmount()+" LEI added succesfully", Toast.LENGTH_SHORT).show();
                     UserData.update();
                 }

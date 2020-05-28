@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this,"Incorrect Username or Password", Toast.LENGTH_LONG).show();
                     } else {
                         Token.setJwtToken(responseBody);
+                        UserData.update();
                         Intent intent = new Intent(LoginActivity.this, ParkingActivity.class);
                         startActivity(intent);
                     }

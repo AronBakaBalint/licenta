@@ -1,7 +1,5 @@
 package aron.utcn.licenta.controller;
 
-import javax.persistence.PersistenceException;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +25,7 @@ public class RegistrationController {
 		person.setPassword(password);
 		try {
 			personManagementService.save(person);
-		} catch (PersistenceException e) {
+		} catch (Exception e) {
 			System.out.println("Username already exists");
 			return new MessageDto("error");
 		}

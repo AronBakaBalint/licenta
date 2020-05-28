@@ -113,6 +113,9 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 					}
 				} else {
 					openBarrier();
+					Person user = reservation.getUser();
+					String reservationCost = environment.getProperty("parking.reservation_cost");
+					user.addMoney(Double.parseDouble(reservationCost));
 					reservation.setOccupied();
 					parkingPlace.setOccupied();
 					parkingPlace.setArrivalTime(new Date());

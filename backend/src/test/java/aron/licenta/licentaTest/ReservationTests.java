@@ -98,7 +98,9 @@ public class ReservationTests {
 		reservation.setUserId(1);
 		int reservationId = reservationService.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
+		ParkingPlace parkingPlace = reservationService.findById(reservationId).getParkingPlace();
 		assertEquals("reserved", status);
+		assertEquals("reserved", parkingPlace.getStatus());
 	}
 	
 	@Test
@@ -116,7 +118,7 @@ public class ReservationTests {
 	}
 	
 	@Test
-	public void testReservationExtensionForIdenticalPlates() {
+	public void testReservationForIdenticalPlates() {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test3");
 		reservation.setParkingPlaceId(3);

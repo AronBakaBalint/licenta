@@ -45,9 +45,14 @@ public class ReservationController {
 		reservationManagementService.cancelReservation(reservationId);
 	}
 	
-	@GetMapping("reservation/extension")
+	@GetMapping("/reservation/extension")
 	public MessageDto getExtensionCost() {
 		return new MessageDto(environment.getProperty("parking.extension_cost"));
+	}
+	
+	@GetMapping("/reservation")
+	public MessageDto getReservationCost() {
+		return new MessageDto(environment.getProperty("parking.reservation_cost"));
 	}
 	
 }
