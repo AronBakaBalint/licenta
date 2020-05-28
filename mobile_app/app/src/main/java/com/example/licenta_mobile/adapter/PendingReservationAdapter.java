@@ -48,11 +48,9 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
     private ReservationService reservationService;
     private NotificationHandler notificationHandler;
     private Activity activity;
-    private Context context;
 
     public PendingReservationAdapter(List<UnconfirmedReservationDto> list, Context context, NotificationHandler notificationHandler, Activity activity) {
         this.list = list;
-        this.context = context;
         this.reservationService = RestClient.getClient().create(ReservationService.class);
         this.notificationHandler = notificationHandler;
         this.activity = activity;
@@ -77,7 +75,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
     public View getView(final int position, View convertView, ViewGroup parent) {
         View view = convertView;
         if (view == null) {
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.unconfirmed_reservations, null);
         }
 
@@ -88,7 +86,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         Button extendBtn = view.findViewById(R.id.extendReservation);
         Button cancelBtn = view.findViewById(R.id.cancelReservation);
 
-        if(list.get(position).getStatus().equals("canceled") || list.get(position).getStatus().equals("finished")){
+        if(list.get(position).getStatus().equals("cancelled") || list.get(position).getStatus().equals("finished")){
             extendBtn.setVisibility(View.INVISIBLE);
             cancelBtn.setVisibility(View.INVISIBLE);
         }
@@ -125,7 +123,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
-                    Toast.makeText(context, "Reservation canceled", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Reservation cancelled", Toast.LENGTH_SHORT).show();
                     list.remove(reservationDto);
                     notifyDataSetChanged();
                 }
@@ -171,7 +169,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
 
     private void extendReservation(final int reservationId) {
         final Double extensionCost = getExtensionCost();
-        AlertDialog.Builder builder1 = new AlertDialog.Builder(context);
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(activity);
         builder1.setMessage("Extend reservation for an extra " + extensionCost + " lei?");
         builder1.setTitle("Extend Reservation");
         builder1.setCancelable(true);
@@ -182,7 +180,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                         if (UserData.getCurrentSold() < extensionCost) {
-                            NotEnoughMoneyDialog.show(context);
+                            NotEnoughMoneyDialog.show(activity);
                         } else {
                             sendExtendReservationRequest(extensionCost, reservationId);
                         }
@@ -222,7 +220,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
                 if (response.isSuccessful()) {
                     notificationHandler.startCountdownForNotification(reservationId);
                     UserData.setCurrentSold(UserData.getCurrentSold() - extensionCost);
-                    Toast.makeText(context, "Reservation extended", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "Reservation extended", Toast.LENGTH_SHORT).show();
                 }
             }
 
