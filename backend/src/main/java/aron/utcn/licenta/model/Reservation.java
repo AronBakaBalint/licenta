@@ -36,6 +36,10 @@ public class Reservation {
 		status = "finished";
 	}
 	
+	public boolean isReserved() {
+		return status.equals("reserved");
+	}
+	
 	public boolean isFinished() {
 		return status.equals("finished");
 	}

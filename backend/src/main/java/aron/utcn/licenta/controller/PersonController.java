@@ -8,22 +8,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.MoneyTransferDto;
 import aron.utcn.licenta.dto.PersonDto;
-import aron.utcn.licenta.service.PersonManagementService;
+import aron.utcn.licenta.facade.PersonFacade;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class PersonController {
 
-	private final PersonManagementService personManagementService;
+	private final PersonFacade personFacade;
 	
 	@GetMapping("/users/{id}")
 	public PersonDto getDetails(@PathVariable Integer id) {
-		return personManagementService.findById(id);
+		return personFacade.findById(id);
 	}
 	
 	@PostMapping("/users/addMoney")
     public void transferMoney(@RequestBody MoneyTransferDto moneyTransferDto) {
-		personManagementService.addMoney(moneyTransferDto.getUserId(), moneyTransferDto.getAmount());
+		personFacade.addMoney(moneyTransferDto.getUserId(), moneyTransferDto.getAmount());
 	}
 }

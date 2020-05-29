@@ -2,46 +2,25 @@ package com.example.licenta_mobile;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.StrictMode;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.licenta_mobile.adapter.PendingReservationAdapter;
 import com.example.licenta_mobile.dialog.ExistingReservationDialog;
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog;
 import com.example.licenta_mobile.dialog.ReservationDialog;
 import com.example.licenta_mobile.dialog.ReservationInfoDialog;
-import com.example.licenta_mobile.dto.JwtTokenDto;
 import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.dto.ReservationDto;
-import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
@@ -50,13 +29,10 @@ import com.example.licenta_mobile.security.Token;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
 
 public class ParkingActivity extends AppCompatActivity {
 
@@ -265,11 +241,11 @@ public class ParkingActivity extends AppCompatActivity {
 
     private void viewReservations(){
         int userId = UserData.getUserId();
-        Call<List<UnconfirmedReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
-        call.enqueue(new Callback<List<UnconfirmedReservationDto>>() {
+        Call<List<ReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
+        call.enqueue(new Callback<List<ReservationDto>>() {
 
             @Override
-            public void onResponse(Call<List<UnconfirmedReservationDto>> call, Response<List<UnconfirmedReservationDto>> response) {
+            public void onResponse(Call<List<ReservationDto>> call, Response<List<ReservationDto>> response) {
                 if (response.isSuccessful()) {
                     Intent intent = new Intent(ParkingActivity.this, ActiveReservationsActivity.class);
                     startActivity(intent);
@@ -277,7 +253,7 @@ public class ParkingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<UnconfirmedReservationDto>> call, Throwable t) {
+            public void onFailure(Call<List<ReservationDto>> call, Throwable t) {
                 System.out.println(t.getMessage());
                 call.cancel();
             }

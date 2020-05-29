@@ -1,12 +1,7 @@
 package com.example.licenta_mobile.rest;
 
-import com.example.licenta_mobile.dto.MessageDto;
 import com.example.licenta_mobile.dto.MoneyTransferDto;
-import com.example.licenta_mobile.dto.RegistrationDto;
-import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
 import com.example.licenta_mobile.dto.UserDataDto;
-
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

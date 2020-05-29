@@ -9,7 +9,7 @@ public class ExistingReservationDialog {
 
     public static void show(Context context){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("There is already a pending reservation for this license plate.\nFinish the existing reservation first in order to be able to make a new one")
+        builder.setMessage("There is already a pending reservation for this license plate.\nFinish the existing reservation first in order to be able to make a new one.")
                 .setCancelable(false)
                 .setTitle("Reservation Info")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -1,13 +1,12 @@
 package aron.utcn.licenta.service.impl;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import aron.utcn.licenta.converter.DtoToReservationConverter;
-import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
@@ -25,18 +24,15 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	private final ParkingPlaceRepository parkingPlaceRespository;
 
-	private final DtoToReservationConverter dtoToReservationConverter;
-
 	private final PersonRepository personRepository;
 
 	private final Environment environment;
 
 	@Override
 	@Transactional
-	public Integer reserveParkingPlace(ReservationDto reservationDto) {
-		Reservation reservation = dtoToReservationConverter.convertDtoToReservation(reservationDto);
+	public Integer reserveParkingPlace(Reservation reservation) {
 		Optional<Reservation> optreservation = reservationRepository
-				.findByLicensePlate(reservationDto.getLicensePlate());
+				.findByLicensePlate(reservation.getLicensePlate());
 		if (optreservation.isPresent() && (optreservation.get().getStatus().equals("reserved")
 				|| optreservation.get().getStatus().equals("occupied"))) {
 			return -1;
@@ -46,7 +42,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 			user.pay(Double.parseDouble(reservationCost));
 			reservation.setStatus("reserved");
 			int reservationId = reservationRepository.saveReservation(reservation);
-			reserve(reservationDto.getParkingPlaceId(), reservationDto.getLicensePlate(), reservationDto.getUserId());
+			reserve(reservation.getParkingPlace().getId(), reservation.getLicensePlate(), reservation.getUser().getId());
 			return reservationId;
 		}
 	}
@@ -80,6 +76,16 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	public Reservation findById(int reservationId) {
 		return reservationRepository.findById(reservationId).get();
+	}
+
+	@Override
+	public List<Reservation> findReservationsByUser(int userId) {
+		return reservationRepository.findReservationsByUser(userId);
+	}
+
+	@Override
+	public String getReservationStatus(Integer reservationId) {
+		return reservationRepository.findById(reservationId).get().getStatus(); 
 	}
 
 }

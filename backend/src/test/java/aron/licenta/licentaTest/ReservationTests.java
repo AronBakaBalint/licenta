@@ -22,7 +22,7 @@ import aron.utcn.licenta.ParkingApplication;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.service.ParkingPlaceService;
+import aron.utcn.licenta.service.ParkingSpotManagementService;
 import aron.utcn.licenta.service.PersonManagementService;
 import aron.utcn.licenta.service.ReservationManagementService;
 
@@ -41,7 +41,7 @@ public class ReservationTests {
 	private ReservationManagementService reservationService;
 	
 	@Autowired
-	private ParkingPlaceService parkingPlaceService;
+	private ParkingSpotManagementService parkingPlaceService;
 	
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 	

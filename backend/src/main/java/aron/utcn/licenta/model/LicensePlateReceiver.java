@@ -7,7 +7,7 @@ import java.net.Socket;
 
 import org.springframework.stereotype.Component;
 
-import aron.utcn.licenta.service.ParkingPlaceService;
+import aron.utcn.licenta.service.ParkingSpotManagementService;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -18,7 +18,7 @@ public class LicensePlateReceiver implements Runnable {
 	
 	private static int port = 9876;
 	
-	private final ParkingPlaceService parkingPlaceService;
+	private final ParkingSpotManagementService parkingPlaceService;
 	
 	@Override
 	public void run() {

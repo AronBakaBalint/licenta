@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.os.StrictMode;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,7 @@ import com.example.licenta_mobile.NotificationHandler;
 import com.example.licenta_mobile.R;
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog;
 import com.example.licenta_mobile.dto.MessageDto;
-import com.example.licenta_mobile.dto.UnconfirmedReservationDto;
+import com.example.licenta_mobile.dto.ReservationDto;
 import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.ReservationService;
 import com.example.licenta_mobile.rest.RestClient;
@@ -44,12 +43,12 @@ import retrofit2.Response;
 
 public class PendingReservationAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<UnconfirmedReservationDto> list = new ArrayList<>();
+    private List<ReservationDto> list = new ArrayList<>();
     private ReservationService reservationService;
     private NotificationHandler notificationHandler;
     private Activity activity;
 
-    public PendingReservationAdapter(List<UnconfirmedReservationDto> list, Context context, NotificationHandler notificationHandler, Activity activity) {
+    public PendingReservationAdapter(List<ReservationDto> list, Context context, NotificationHandler notificationHandler, Activity activity) {
         this.list = list;
         this.reservationService = RestClient.getClient().create(ReservationService.class);
         this.notificationHandler = notificationHandler;
@@ -116,7 +115,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         return view;
     }
 
-    private void cancelReservation(final UnconfirmedReservationDto reservationDto) {
+    private void cancelReservation(final ReservationDto reservationDto) {
         Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getReservationId());
         call.enqueue(new Callback<Void>() {
 

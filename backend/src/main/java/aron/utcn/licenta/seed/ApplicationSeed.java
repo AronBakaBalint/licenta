@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.service.ParkingPlaceService;
+import aron.utcn.licenta.service.ParkingSpotManagementService;
 import aron.utcn.licenta.service.PersonManagementService;
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +20,7 @@ public class ApplicationSeed implements CommandLineRunner {
 
 	private final PersonManagementService personManagementService;
 	
-	private final ParkingPlaceService parkingPlaceService;
+	private final ParkingSpotManagementService parkingPlaceService;
 	
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

@@ -6,16 +6,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import aron.utcn.licenta.converter.ParkingPlaceToDtoConverter;
-import aron.utcn.licenta.converter.UnconfirmedReservationToDtoConverter;
-import aron.utcn.licenta.dto.ParkingPlaceDto;
-import aron.utcn.licenta.dto.UnconfirmedReservationDto;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
@@ -23,12 +18,12 @@ import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import aron.utcn.licenta.repository.PersonRepository;
 import aron.utcn.licenta.repository.ReservationRepository;
 import aron.utcn.licenta.service.ArduinoService;
-import aron.utcn.licenta.service.ParkingPlaceService;
+import aron.utcn.licenta.service.ParkingSpotManagementService;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ParkingPlaceServiceImpl implements ParkingPlaceService {
+public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementService {
 
 	private final Environment environment;
 
@@ -36,19 +31,13 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 
 	private final ParkingPlaceRepository parkingPlaceRepository;
 
-	private final ParkingPlaceToDtoConverter parkingPlaceToDtoConverter;
-
 	private final ReservationRepository reservationRepository;
 
 	private final PersonRepository personRepository;
 
-	private final UnconfirmedReservationToDtoConverter unconfirmedReservationToDtoConverter;
-
 	@Override
-	public List<ParkingPlaceDto> getAllParkingPlaces() {
-		List<ParkingPlace> parkingPLaces = parkingPlaceRepository.getAllParkingPlaces();
-		return parkingPLaces.stream().map(p -> parkingPlaceToDtoConverter.convertParkingPlaceToDto(p))
-				.collect(Collectors.toList());
+	public List<ParkingPlace> getAllParkingPlaces() {
+		return parkingPlaceRepository.getAllParkingPlaces();
 	}
 
 	@Override
@@ -58,24 +47,18 @@ public class ParkingPlaceServiceImpl implements ParkingPlaceService {
 	}
 
 	@Override
-	public ParkingPlaceDto findById(int id) {
-		return parkingPlaceToDtoConverter.convertParkingPlaceToDto(parkingPlaceRepository.findById(id));
+	public ParkingPlace findById(int id) {
+		return parkingPlaceRepository.findById(id);
 	}
 
 	@Override
-	public List<UnconfirmedReservationDto> findUnconfirmedReservations(int userId) {
-		List<Reservation> reservedPlaces = reservationRepository.findReservationsByUser(userId);
-		reservedPlaces = reservedPlaces.stream().filter(rp -> rp.getStatus().equals("reserved"))
-				.collect(Collectors.toList());
-		return reservedPlaces.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto)
-				.collect(Collectors.toList());
+	public List<Reservation> findUnconfirmedReservations(int userId) {
+		return reservationRepository.findReservationsByUser(userId);
 	}
 
 	@Override
-	public List<UnconfirmedReservationDto> findAllReservations(int userId) {
-		List<Reservation> reservations = reservationRepository.findReservationsByUser(userId);
-		return reservations.stream().map(unconfirmedReservationToDtoConverter::convertUnconfirmedReservationToDto)
-				.collect(Collectors.toList());
+	public List<Reservation> findAllReservations(int userId) {
+		return reservationRepository.findReservationsByUser(userId);
 	}
 
 	@Override

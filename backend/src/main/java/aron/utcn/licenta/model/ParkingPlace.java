@@ -46,4 +46,11 @@ public class ParkingPlace {
 		return status.equals("occupied");
 	}
 	
+	public boolean isFree() {
+		return status.equals("free");
+	}
+	
+	public boolean isReserved() {
+		return status.equals("reserved");
+	}
 }

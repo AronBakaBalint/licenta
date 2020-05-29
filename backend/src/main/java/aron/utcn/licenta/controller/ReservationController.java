@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.MessageDto;
 import aron.utcn.licenta.dto.ReservationDto;
-import aron.utcn.licenta.model.Reservation;
-import aron.utcn.licenta.service.ReservationManagementService;
+import aron.utcn.licenta.facade.ReservationFacade;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -21,28 +20,27 @@ public class ReservationController {
 
 	private final Environment environment;
 	
-	private final ReservationManagementService reservationManagementService;
+	private final ReservationFacade reservationFacade;
 	
 	@GetMapping("/reservation/{id}")
 	public MessageDto getReservationStatus(@PathVariable Integer id) {
-		Reservation reservation = reservationManagementService.findById(id);
-		return new MessageDto(reservation.getStatus());
+		return new MessageDto(reservationFacade.getReservationStatus(id));
 	}
 	
 	@PostMapping("/reservation")
 	public MessageDto makeReservation(@RequestBody ReservationDto reservation) {
-		int reservationId = reservationManagementService.reserveParkingPlace(reservation);
+		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		return new MessageDto(reservationId+"");
 	}
 	
 	@PutMapping("/reservation/{id}")
 	public void extendReservation(@PathVariable("id") Integer reservationId) {
-		reservationManagementService.extendReservation(reservationId);
+		reservationFacade.extendReservation(reservationId);
 	}
 	
 	@DeleteMapping("/reservation/{id}")
 	public void cancelReservation(@PathVariable("id") Integer reservationId) {
-		reservationManagementService.cancelReservation(reservationId);
+		reservationFacade.cancelReservation(reservationId);
 	}
 	
 	@GetMapping("/reservation/extension")

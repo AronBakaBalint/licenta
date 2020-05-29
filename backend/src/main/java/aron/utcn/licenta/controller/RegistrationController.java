@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.MessageDto;
+import aron.utcn.licenta.facade.PersonFacade;
 import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.service.PersonManagementService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class RegistrationController {
 
-	private final PersonManagementService personManagementService;
+	private final PersonFacade personFacade;
 	
 	private final PasswordEncoder passwordEncoder;
 	
@@ -24,7 +24,7 @@ public class RegistrationController {
 		password = passwordEncoder.encode(password);
 		person.setPassword(password);
 		try {
-			personManagementService.save(person);
+			personFacade.save(person);
 		} catch (Exception e) {
 			System.out.println("Username already exists");
 			return new MessageDto("error");

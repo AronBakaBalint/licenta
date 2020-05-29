@@ -7,28 +7,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.ParkingPlaceDto;
-import aron.utcn.licenta.dto.UnconfirmedReservationDto;
-import aron.utcn.licenta.service.ParkingPlaceService;
+import aron.utcn.licenta.dto.ReservationDto;
+import aron.utcn.licenta.facade.ParkingSpotFacade;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
 public class ParkingPlaceController {
 
-	private final ParkingPlaceService parkingPlaceService;
+	private final ParkingSpotFacade parkingSpotFacade;
 	
 	@GetMapping("/parking")
 	public List<ParkingPlaceDto> getAllParkingPlaces(){
-		return parkingPlaceService.getAllParkingPlaces();
+		return parkingSpotFacade.getAllParkingPlaces();
 	}
 	
 	@GetMapping("/parking/unoccupied/{id}")
-	public List<UnconfirmedReservationDto> getUnoccupiedPlaces(@PathVariable Integer id) {
-		return parkingPlaceService.findUnconfirmedReservations(id);
+	public List<ReservationDto> getUnoccupiedPlaces(@PathVariable Integer id) {
+		return parkingSpotFacade.findUnconfirmedReservations(id);
 	}
 	
 	@GetMapping("/parking/reserved/{id}")
-	public List<UnconfirmedReservationDto> getAllReservedPlaces(@PathVariable Integer id) {
-		return parkingPlaceService.findAllReservations(id);
+	public List<ReservationDto> getAllReservedPlaces(@PathVariable Integer id) {
+		return parkingSpotFacade.findAllReservations(id);
 	}
 }
