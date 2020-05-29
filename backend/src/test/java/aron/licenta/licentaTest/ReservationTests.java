@@ -20,6 +20,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import aron.utcn.licenta.ParkingApplication;
 import aron.utcn.licenta.dto.ReservationDto;
+import aron.utcn.licenta.facade.PersonFacade;
+import aron.utcn.licenta.facade.ReservationFacade;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.service.ParkingSpotManagementService;
@@ -35,7 +37,13 @@ import aron.utcn.licenta.service.ReservationManagementService;
 public class ReservationTests {
 	
 	@Autowired
+	private PersonFacade personFacade;
+	
+	@Autowired
 	private PersonManagementService personManagementService;
+	
+	@Autowired
+	private ReservationFacade reservationFacade;
 	
 	@Autowired
 	private ReservationManagementService reservationService;
@@ -84,9 +92,9 @@ public class ReservationTests {
 	@Test
 	public void testMoneyTransfer() {
 		double amount = 5.0;
-		double balanceBeforeTransaction = personManagementService.findById(1).getCurrentSold();
+		double balanceBeforeTransaction = personFacade.findById(1).getCurrentSold();
 		personManagementService.addMoney(1, amount);
-		double balanceAfterTransaction = personManagementService.findById(1).getCurrentSold();
+		double balanceAfterTransaction = personFacade.findById(1).getCurrentSold();
 		assert(balanceBeforeTransaction + amount == balanceAfterTransaction);
 	}
 	
@@ -96,7 +104,7 @@ public class ReservationTests {
 		reservation.setLicensePlate("test1");
 		reservation.setParkingPlaceId(1);
 		reservation.setUserId(1);
-		int reservationId = reservationService.reserveParkingPlace(reservation);
+		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
 		ParkingPlace parkingPlace = reservationService.findById(reservationId).getParkingPlace();
 		assertEquals("reserved", status);
@@ -109,7 +117,7 @@ public class ReservationTests {
 		reservation.setLicensePlate("test2");
 		reservation.setParkingPlaceId(2);
 		reservation.setUserId(1);
-		int reservationId = reservationService.reserveParkingPlace(reservation);
+		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		reservationService.cancelReservation(reservationId);
 		String status = reservationService.findById(reservationId).getStatus();
 		assertEquals("cancelled", status);
@@ -123,13 +131,13 @@ public class ReservationTests {
 		reservation.setLicensePlate("test3");
 		reservation.setParkingPlaceId(3);
 		reservation.setUserId(1);
-		reservationService.reserveParkingPlace(reservation);
+		reservationFacade.reserveParkingPlace(reservation);
 		
 		ReservationDto newreservation = new ReservationDto();
 		newreservation.setLicensePlate("test3");
 		newreservation.setParkingPlaceId(3);
 		newreservation.setUserId(1);
-		int reservationId = reservationService.reserveParkingPlace(reservation);
+		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		assertEquals(-1, reservationId);
 	}
 	
@@ -139,7 +147,7 @@ public class ReservationTests {
 		reservation.setLicensePlate("test4");
 		reservation.setParkingPlaceId(4);
 		reservation.setUserId(1);
-		reservationService.reserveParkingPlace(reservation);
+		reservationFacade.reserveParkingPlace(reservation);
 		assertEquals(1, parkingPlaceService.findAllReservations(1).size());
 	}
 	
@@ -154,7 +162,7 @@ public class ReservationTests {
 		reservation.setLicensePlate("test5");
 		reservation.setParkingPlaceId(4);
 		reservation.setUserId(1);
-		int reservationId = reservationService.reserveParkingPlace(reservation);
+		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
 		assertEquals("reserved", status);
 		
@@ -178,13 +186,14 @@ public class ReservationTests {
 		reservation.setLicensePlate("test6s");
 		reservation.setParkingPlaceId(4);
 		reservation.setUserId(1);
-		int reservationId = reservationService.reserveParkingPlace(reservation);
-		String status = reservationService.findById(reservationId).getStatus();
-		assertEquals("reserved", status);
 		
 		//add money for the user to be able to pay
 		personManagementService.addMoney(1, 12.0);
-		double balanceBeforePayment = personManagementService.findById(1).getCurrentSold();
+		double balanceBeforePayment = personFacade.findById(1).getCurrentSold();
+				
+		int reservationId = reservationFacade.reserveParkingPlace(reservation);
+		String status = reservationService.findById(reservationId).getStatus();
+		assertEquals("reserved", status);
 		
 		//when the car enters
 		parkingPlaceService.handleScannedCode("1");
@@ -192,14 +201,14 @@ public class ReservationTests {
 		assertEquals("occupied", status);
 		
 		// "simulate" the stay of the car in the parking lot
-		Thread.sleep(5000);
+		Thread.sleep(4000);
 		
 		//when the car leaves
 		parkingPlaceService.handleScannedCode("1");
 		status = reservationService.findById(reservationId).getStatus();
 		assertEquals("finished", status);
 		
-		double balanceAfterPayment = personManagementService.findById(1).getCurrentSold();
+		double balanceAfterPayment = personFacade.findById(1).getCurrentSold();
 		assert(balanceAfterPayment < balanceBeforePayment);
 	}
 
