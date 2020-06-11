@@ -1,22 +1,20 @@
 package com.example.licenta_mobile.security;
 
-import android.util.Base64;
-
+import com.auth0.android.jwt.Claim;
+import com.auth0.android.jwt.JWT;
 import com.example.licenta_mobile.model.UserData;
-
-import java.util.Arrays;
-
 
 public class Token {
     private static String jwtToken;
 
-    public static void setJwtToken(String token){
-        Integer userId = Integer.parseInt(token.substring(0, token.indexOf(";")));
-        jwtToken = token.substring(token.indexOf(";")+1);
-        UserData.setUserId(userId);
+    public static void setJwtToken(String token) {
+        JWT parsedJWT = new JWT(token);
+        Claim userId = parsedJWT.getClaim("jti");
+        UserData.setUserId(userId.asInt());
+        jwtToken = token;
     }
 
-    public static String getJwtToken(){
+    public static String getJwtToken() {
         return jwtToken;
     }
 

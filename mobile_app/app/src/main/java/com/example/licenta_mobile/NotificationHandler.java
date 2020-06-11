@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 
@@ -81,7 +82,7 @@ public class NotificationHandler {
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(activity.getApplicationContext(), "myNotification")
-                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setSmallIcon(R.drawable.ic_local_parking_black_24dp)
                 .setContentTitle("Reservation overdue")
                 .setContentText("Tap for more details")
                 .setContentIntent(pendingIntent)

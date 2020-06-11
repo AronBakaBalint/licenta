@@ -49,7 +49,7 @@ public class LoginController {
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		
-		return new JwtTokenDto(person.getId()+";"+ResponseEntity.ok(new JwtResponse(token)).getBody().getToken());
+		return new JwtTokenDto(ResponseEntity.ok(new JwtResponse(token)).getBody().getToken());
 	}
 
 }
