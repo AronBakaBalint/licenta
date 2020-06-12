@@ -1,5 +1,6 @@
 package aron.utcn.licenta.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,16 +43,17 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 			user.pay(Double.parseDouble(reservationCost));
 			reservation.setStatus("reserved");
 			int reservationId = reservationRepository.saveReservation(reservation);
-			reserve(reservation.getParkingPlace().getId(), reservation.getLicensePlate(), reservation.getUser().getId());
+			reserve(reservationId, reservation.getParkingPlace().getId(), reservation.getLicensePlate(), reservation.getUser().getId());
 			return reservationId;
 		}
 	}
 
 	@Transactional
-	private void reserve(int parkingPlaceId, String licensePlate, int userId) {
+	private void reserve(int reservationId, int parkingPlaceId, String licensePlate, int userId) {
 		Person user = personRepository.findById(userId);
 		ParkingPlace parkingPlace = parkingPlaceRespository.findById(parkingPlaceId);
 		parkingPlace.setReserved(licensePlate, user);
+		parkingPlace.setReservation(reservationRepository.findById(reservationId).get());
 	}
 
 	@Override

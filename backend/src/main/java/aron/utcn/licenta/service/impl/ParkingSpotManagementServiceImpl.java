@@ -107,12 +107,24 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 			displayOnLCD("no reservation found");
 		}
 	}
+	
+	@Override
+	@Transactional
+	public void clearUnoccupiedPlaces() {
+		List<ParkingPlace> parkingPlaces = parkingPlaceRepository.getAllParkingPlaces();
+		Date currentDate = new Date();
+		parkingPlaces.forEach(pp->{
+			if(pp.isReserved() && getTimeDiff(pp.getReservation().getReservationDate(), currentDate) > 30/**60*/ ) {
+				pp.getReservation().cancel();
+				pp.setFree();
+			}
+		});
+	}
 
 	private float calculatePrice(ParkingPlace parkingPlace) {
 		Date departureTime = new Date();
 		Date arrivalTime = parkingPlace.getArrivalTime();
-		long diffInMillies = Math.abs(departureTime.getTime() - arrivalTime.getTime());
-		long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+		float diff = getTimeDiff(departureTime, arrivalTime);
 		float pricePerHour = Float.parseFloat(environment.getProperty("parking.price_per_hour"));
 		return diff * pricePerHour / 3600;
 	}
@@ -124,5 +136,12 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 	private void openBarrier() {
 		arduinoService.activateBarrier();
 	}
+	
+	private float getTimeDiff(Date start, Date finish) {
+		long diffInMillies = Math.abs(start.getTime() - finish.getTime());
+		long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+		return diff;
+	}
+	
 
 }

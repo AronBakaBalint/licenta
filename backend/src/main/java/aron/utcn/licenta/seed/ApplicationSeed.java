@@ -1,5 +1,8 @@
 package aron.utcn.licenta.seed;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -26,6 +29,7 @@ public class ApplicationSeed implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		startTimer();
 		Person person = new Person();
 		person.setUsername("asd31");
 		person.setName("John Doe");
@@ -38,6 +42,19 @@ public class ApplicationSeed implements CommandLineRunner {
 			parkingPlaceService.save(p);
 		}
 		
+	}
+	
+	private void startTimer() {
+		Timer timer = new Timer ();
+		TimerTask hourlyTask = new TimerTask () {
+		    @Override
+		    public void run () {
+		    	parkingPlaceService.clearUnoccupiedPlaces();
+		    }
+		};
+
+		// schedule the task to run starting now and then every hour...
+		timer.schedule (hourlyTask, 0l, 1000*60/**60*/);
 	}
 	
 	

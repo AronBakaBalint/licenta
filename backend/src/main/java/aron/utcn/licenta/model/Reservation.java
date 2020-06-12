@@ -1,5 +1,7 @@
 package aron.utcn.licenta.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +25,7 @@ public class Reservation {
 	private Person user;
 	private String status;
 	private String licensePlate;
+	private Date reservationDate;
 	
 	public void cancel() {
 		status = "cancelled";

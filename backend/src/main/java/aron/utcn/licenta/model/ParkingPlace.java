@@ -22,6 +22,10 @@ public class ParkingPlace {
 	
 	@OneToOne
 	private Person user;
+	
+	@OneToOne
+	private Reservation reservation;
+	
 	private String status = "free";
 	private String occupierCarPlate;
 	private Date arrivalTime;
@@ -40,6 +44,7 @@ public class ParkingPlace {
 		status = "free";
 		occupierCarPlate = null;
 		user = null;
+		reservation = null;
 	}
 	
 	public boolean isOccupied() {

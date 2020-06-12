@@ -1,5 +1,7 @@
 package aron.utcn.licenta.converter;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.dto.ReservationDto;
@@ -21,6 +23,7 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		Reservation reservation = new Reservation();
 		reservation.setUser(personService.findById(dto.getUserId()));
 		reservation.setLicensePlate(dto.getLicensePlate());
+		reservation.setReservationDate(new Date());
 		reservation.setParkingPlace(parkingSpotService.findById(dto.getParkingPlaceId()));
 		return reservation;
 	}
