@@ -84,7 +84,7 @@ public class ParkingActivity extends AppCompatActivity {
     private void setParkingPlaceColors(List<ParkingPlaceDto> parkingPlaces){
         List<Button> uiParkingPlaces = getAllParkingPlacesFromUI();
         for(int i=0;i < uiParkingPlaces.size(); i++){
-            uiParkingPlaces.get(i).setBackgroundColor(statusToColor(parkingPlaces.get(i).getStatus()));
+            uiParkingPlaces.get(i).setBackgroundColor(parkingPlaces.get(i).getColor());
             if(!parkingPlaces.get(i).getStatus().equals("free")){
                 uiParkingPlaces.get(i).setClickable(false);
             }
@@ -104,23 +104,6 @@ public class ParkingActivity extends AppCompatActivity {
         buildRow(layout, 3, parkingPlaces);
 
         return parkingPlaces;
-    }
-
-    private int statusToColor(String status){
-        switch(status){
-            case "free": return getIntFromColor(0,255,0);
-            case "reserved": return getIntFromColor(255,255,0);
-            case "occupied": return getIntFromColor(255,0,0);
-        }
-        return 0;
-    }
-
-    private int getIntFromColor(int Red, int Green, int Blue){
-        Red = (Red << 16) & 0x00FF0000; //Shift red 16-bits and mask out other stuff
-        Green = (Green << 8) & 0x0000FF00; //Shift Green 8-bits and mask out other stuff
-        Blue = Blue & 0x000000FF; //Mask out anything not blue.
-
-        return 0xFF000000 | Red | Green | Blue; //0xFF000000 for 100% Alpha. Bitwise OR everything together.
     }
 
     public void startReservation(View view) {

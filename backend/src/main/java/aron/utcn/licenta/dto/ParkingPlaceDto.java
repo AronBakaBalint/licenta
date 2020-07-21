@@ -7,5 +7,6 @@ public class ParkingPlaceDto {
 	
 	private Integer id;
 	private String status;
+	private Integer color;
 	private String occupierCarPlate;
 }

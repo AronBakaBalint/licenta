@@ -3,6 +3,7 @@ package com.example.licenta_mobile.dto;
 public class ParkingPlaceDto {
 
     private Integer id;
+    private Integer color;
     private String status;
     private String occupierCarPlate;
 
@@ -28,5 +29,13 @@ public class ParkingPlaceDto {
 
     public void setOccupierCarPlate(String occupierCarPlate) {
         this.occupierCarPlate = occupierCarPlate;
+    }
+
+    public Integer getColor() {
+        return color;
+    }
+
+    public void setColor(Integer color) {
+        this.color = color;
     }
 }
