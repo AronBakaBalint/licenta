@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import aron.utcn.licenta.converter.PersonConverter;
-import aron.utcn.licenta.dto.PersonDto;
 import aron.utcn.licenta.exception.UserNotFoundException;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.repository.PersonRepository;
@@ -29,7 +27,6 @@ public class PersonManagementServiceImpl implements PersonManagementService {
 	@Transactional
 	public Person findById(int id) {
 		return personRepository.findById(id);
-		//return personToDtoConverter.convertPersonToDto(personRepository.findById(id));
 	}
 	
 	@Override

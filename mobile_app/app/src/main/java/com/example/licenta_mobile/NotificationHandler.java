@@ -69,6 +69,8 @@ public class NotificationHandler {
         });
     }
 
+    //source
+    //https://developer.android.com/training/notify-user/build-notification
     private void showNotification() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

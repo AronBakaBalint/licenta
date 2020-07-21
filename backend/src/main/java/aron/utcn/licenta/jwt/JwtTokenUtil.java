@@ -16,6 +16,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 
+//source
+//https://dzone.com/articles/spring-boot-security-json-web-tokenjwt-hello-world
 @Component
 @RequiredArgsConstructor
 public class JwtTokenUtil implements Serializable {

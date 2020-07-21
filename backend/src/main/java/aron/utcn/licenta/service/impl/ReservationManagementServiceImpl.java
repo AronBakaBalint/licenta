@@ -1,6 +1,5 @@
 package aron.utcn.licenta.service.impl;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +31,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	@Transactional
 	public Integer reserveParkingPlace(Reservation reservation) {
-		Optional<Reservation> optreservation = reservationRepository
-				.findByLicensePlate(reservation.getLicensePlate());
+		Optional<Reservation> optreservation = reservationRepository.findByLicensePlate(reservation.getLicensePlate());
 		if (optreservation.isPresent() && (optreservation.get().getStatus().equals("reserved")
 				|| optreservation.get().getStatus().equals("occupied"))) {
 			return -1;
@@ -43,7 +41,8 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 			user.pay(Double.parseDouble(reservationCost));
 			reservation.setStatus("reserved");
 			int reservationId = reservationRepository.saveReservation(reservation);
-			reserve(reservationId, reservation.getParkingPlace().getId(), reservation.getLicensePlate(), reservation.getUser().getId());
+			reserve(reservationId, reservation.getParkingPlace().getId(), reservation.getLicensePlate(),
+					reservation.getUser().getId());
 			return reservationId;
 		}
 	}
@@ -87,7 +86,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	@Override
 	public String getReservationStatus(Integer reservationId) {
-		return reservationRepository.findById(reservationId).get().getStatus(); 
+		return reservationRepository.findById(reservationId).get().getStatus();
 	}
 
 }

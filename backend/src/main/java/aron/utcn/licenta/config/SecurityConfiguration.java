@@ -19,6 +19,8 @@ import aron.utcn.licenta.jwt.JwtAuthenticationEntryPoint;
 import aron.utcn.licenta.jwt.JwtRequestFilter;
 
 
+//source
+//https://dzone.com/articles/spring-boot-security-json-web-tokenjwt-hello-world
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)

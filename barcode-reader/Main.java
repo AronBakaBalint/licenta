@@ -20,6 +20,8 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
+//source
+//https://github.com/vivekkairi/webcam-qr-barcode-scanner
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {

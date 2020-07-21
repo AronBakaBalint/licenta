@@ -18,6 +18,9 @@ public class ArduinoServiceImpl implements ArduinoService {
 	private static SerialPort serialPort;
 	private static OutputStream outputStream;
 	
+	
+	//source
+	//https://stackoverflow.com/questions/25502517/send-string-from-java-to-arduino-simple-example
 	static {
 		portList = CommPortIdentifier.getPortIdentifiers();
 		

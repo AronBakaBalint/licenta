@@ -51,6 +51,8 @@ void handleDeparture(String message){
       openBarrier();
 }
 
+//source
+//https://arduino.stackexchange.com/questions/1013/how-do-i-split-an-incoming-string
 String getValue(String data, char separator, int index)
 {
     int found = 0;

@@ -136,6 +136,8 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         });
     }
 
+    //source
+    //https://www.c-sharpcorner.com/article/how-to-generate-qr-code-in-android/
     private void showQRCodeDialog(String reservationId, View view) {
         Display display = activity.getWindowManager().getDefaultDisplay();
         Point size = new Point();
