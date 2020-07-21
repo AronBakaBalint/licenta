@@ -38,7 +38,6 @@ public class ParkingPlaceConverter implements BaseConverter<ParkingPlace, Parkin
     }
 	
 	private Integer getColorByStatus(String status) {
-		System.out.println("parkingspot."+status+".red");
 		int red = Integer.parseInt(environment.getProperty("parkingspot."+status+".red"));
 		int green = Integer.parseInt(environment.getProperty("parkingspot."+status+".green"));
 		int blue = Integer.parseInt(environment.getProperty("parkingspot."+status+".blue"));
