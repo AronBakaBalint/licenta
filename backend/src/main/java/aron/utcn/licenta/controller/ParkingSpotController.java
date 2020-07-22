@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-public class ParkingPlaceController {
+public class ParkingSpotController {
 
 	private final ParkingSpotFacade parkingSpotFacade;
 	
@@ -31,4 +31,5 @@ public class ParkingPlaceController {
 	public List<ReservationDto> getAllReservedPlaces(@PathVariable Integer id) {
 		return parkingSpotFacade.findAllReservations(id);
 	}
+	
 }

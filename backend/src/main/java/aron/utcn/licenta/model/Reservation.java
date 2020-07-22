@@ -39,6 +39,10 @@ public class Reservation {
 		status = "finished";
 	}
 	
+	public void setReserved() {
+		status = "reserved";
+	}
+	
 	public boolean isReserved() {
 		return status.equals("reserved");
 	}
@@ -49,6 +53,10 @@ public class Reservation {
 	
 	public boolean isCancelled() {
 		return status.equals("cancelled");
+	}
+	
+	public boolean isOccupied() {
+		return status.equals("occupied");
 	}
 	
 	public boolean isExpired() {

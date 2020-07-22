@@ -1,8 +1,5 @@
 package com.example.licenta_mobile;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,6 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.licenta_mobile.dialog.ExistingReservationDialog;
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog;
@@ -29,6 +29,8 @@ import com.example.licenta_mobile.security.Token;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,7 +59,7 @@ public class ParkingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
         notificationHandler = new NotificationHandler(this);
-        displayParkingPlaceStatus();
+        startAutoRefresh();
     }
 
     private void displayParkingPlaceStatus(){
@@ -79,6 +81,15 @@ public class ParkingActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    private void startAutoRefresh(){
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                displayParkingPlaceStatus();
+            }
+        }, 0, 1000);//put here time 1000 milliseconds=1 second
     }
 
     private void setParkingPlaceColors(List<ParkingPlaceDto> parkingPlaces){

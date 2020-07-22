@@ -34,6 +34,7 @@ public class ApplicationSeed implements CommandLineRunner {
 		person.setUsername("asd31");
 		person.setName("John Doe");
 		person.setEmail("asd31@gmail.com");
+		person.setBalance(50.0);
 		person.setPassword(passwordEncoder.encode("123"));
 		personManagementService.save(person);
 		
