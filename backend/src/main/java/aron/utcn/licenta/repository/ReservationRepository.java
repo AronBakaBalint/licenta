@@ -11,7 +11,7 @@ public interface ReservationRepository {
 	
 	public Optional<Reservation> findById(int reservationId);
 	
-	public Optional<Reservation> findByLicensePlate(String licensePlate);
+	public Optional<List<Reservation>> findByLicensePlate(String licensePlate);
 	
 	public List<Reservation> findReservationsByUser(int userId);
 

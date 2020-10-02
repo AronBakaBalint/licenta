@@ -20,16 +20,17 @@ import lombok.RequiredArgsConstructor;
 public class ParkingSpotFacadeImpl implements ParkingSpotFacade {
 
 	private final ParkingSpotManagementService parkingSpotService;
-	
+
 	private final ReservationManagementService reservationService;
-	
+
 	private final BaseConverter<ParkingPlace, ParkingPlaceDto> parkingSpotconverter;
-	
+
 	private final BaseConverter<Reservation, ReservationDto> reservationConverter;
-	
+
 	@Override
 	public List<ParkingPlaceDto> getAllParkingPlaces() {
-		return parkingSpotService.getAllParkingPlaces().stream().map(p -> parkingSpotconverter.convertToDto(p)).collect(Collectors.toList());
+		return parkingSpotService.getAllParkingPlaces().stream().map(parkingSpotconverter::convertToDto)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -39,14 +40,14 @@ public class ParkingSpotFacadeImpl implements ParkingSpotFacade {
 
 	@Override
 	public List<ReservationDto> findAllReservations(int userId) {
-		List<Reservation> reservations = reservationService.findReservationsByUser(userId); 
+		List<Reservation> reservations = reservationService.findReservationsByUser(userId);
 		return reservations.stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
 	}
 
 	@Override
 	public List<ReservationDto> findUnconfirmedReservations(int userId) {
-		List<Reservation> reservedPlaces = reservationService.findReservationsByUser(userId); 
-		reservedPlaces = reservedPlaces.stream().filter(rp -> rp.isReserved()).collect(Collectors.toList()); 
+		List<Reservation> reservedPlaces = reservationService.findReservationsByUser(userId);
+		reservedPlaces = reservedPlaces.stream().filter(Reservation::isReserved).collect(Collectors.toList());
 		return reservedPlaces.stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
 	}
 

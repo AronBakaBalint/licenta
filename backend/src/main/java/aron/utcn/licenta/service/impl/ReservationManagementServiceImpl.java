@@ -3,7 +3,6 @@ package aron.utcn.licenta.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,16 +26,14 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 
 	private final PersonRepository personRepository;
 	
-	private final ApplicationEventPublisher eventPublisher;
-
 	private final Environment environment;
 
 	@Override
 	@Transactional
 	public Integer reserveParkingPlace(Reservation reservation) {
-		Optional<Reservation> optreservation = reservationRepository.findByLicensePlate(reservation.getLicensePlate());
-		if (optreservation.isPresent() && (optreservation.get().isReserved()
-				|| optreservation.get().isOccupied())) {
+		Optional<List<Reservation>> reservations = reservationRepository.findByLicensePlate(reservation.getLicensePlate());
+		if (reservations.isPresent() && (reservations.get().get(0).isReserved()
+				|| reservations.get().get(0).isOccupied())) {
 			return -1;
 		} else {
 			Person user = reservation.getUser();

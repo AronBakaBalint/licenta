@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 
 import org.springframework.stereotype.Repository;
 
-import aron.utcn.licenta.exception.UserNotFoundException;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +24,13 @@ public class PersonRepositoryImpl implements PersonRepository {
 
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Optional<Person> findByUsername(String username) {
-		try{
-			return Optional.ofNullable((Person)entityManager.createQuery(
+		List<Person> personList = entityManager.createQuery(
 				"SELECT person FROM Person person WHERE person.username LIKE :username")
 				.setParameter("username", username)
-				.getResultList().get(0));
-		} catch(IndexOutOfBoundsException e) {
-			throw new UserNotFoundException();
-		}
-		
+				.getResultList();
+		return personList.isEmpty() ? Optional.empty() : Optional.of(personList.get(0));
 	}
 
 
@@ -45,6 +41,7 @@ public class PersonRepositoryImpl implements PersonRepository {
 
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Person> getAll() {
 		return entityManager.createQuery("SELECT p FROM Person p").getResultList();
 	}

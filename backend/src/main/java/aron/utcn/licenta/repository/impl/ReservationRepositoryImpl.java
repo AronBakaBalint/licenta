@@ -24,32 +24,27 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Optional<Reservation> findById(int reservationId) {
-		Reservation reservation = (Reservation) entityManager
+		List<Reservation> reservations = entityManager
 				.createQuery("SELECT r FROM Reservation r left join fetch r.parkingPlace p WHERE r.id = :id")
-				.setParameter("id", reservationId).getResultList().get(0);
-		return reservation == null ? Optional.empty() : Optional.ofNullable(reservation);
+				.setParameter("id", reservationId).getResultList();
+		return reservations.isEmpty() ? Optional.empty() : Optional.of(reservations.get(0));
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public Optional<Reservation> findByLicensePlate(String licensePlate) {
-		List<Reservation> reservationList = (List<Reservation>) entityManager
+	@SuppressWarnings("unchecked")
+	public Optional<List<Reservation>> findByLicensePlate(String licensePlate) {
+		List<Reservation> reservationList = entityManager
 				.createQuery("SELECT reservation FROM Reservation reservation WHERE licensePlate LIKE :licensePlate")
 				.setParameter("licensePlate", licensePlate).getResultList();
-		Reservation reservation = null;
-		try {
-			reservation = reservationList.get(reservationList.size() - 1);
-		} catch (IndexOutOfBoundsException ioube) {
-			return Optional.empty();
-		}
-		return reservation.getStatus().equals("finished") ? Optional.empty() : Optional.ofNullable(reservation);
+		return reservationList.isEmpty() ? Optional.empty() : Optional.of(reservationList);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Reservation> findReservationsByUser(int userId) {
-		return (List<Reservation>) entityManager
+		return entityManager
 				.createQuery("SELECT reservation FROM Reservation reservation WHERE reservation.user.id LIKE :userId")
 				.setParameter("userId", userId).getResultList();
 	}

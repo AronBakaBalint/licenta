@@ -17,6 +17,7 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 	private final EntityManager entityManager;
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<ParkingPlace> getAllParkingPlaces() {
 		return entityManager.createQuery("SELECT p FROM ParkingPlace p left join fetch p.user u order by p.id").getResultList();
 	}
