@@ -29,7 +29,7 @@ public class ParkingPlaceRepositoryImpl implements ParkingPlaceRepository {
 
 	@Override
 	public ParkingPlace findById(int id) {
-		return (ParkingPlace)entityManager.createQuery("SELECT p FROM ParkingPlace p left join fetch p.user u WHERE p.id = :id")
+		return (ParkingPlace) entityManager.createQuery("SELECT p FROM ParkingPlace p left join fetch p.user u WHERE p.id = :id")
 				.setParameter("id", id)
 				.getResultList().get(0);
 	}
