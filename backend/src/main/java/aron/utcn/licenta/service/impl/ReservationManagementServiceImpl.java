@@ -2,6 +2,7 @@ package aron.utcn.licenta.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import aron.utcn.licenta.model.ParkingPlace;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
+import aron.utcn.licenta.model.SimpleDate;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import aron.utcn.licenta.repository.PersonRepository;
 import aron.utcn.licenta.repository.ReservationRepository;
@@ -25,15 +27,16 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	private final ParkingPlaceRepository parkingPlaceRespository;
 
 	private final PersonRepository personRepository;
-	
+
 	private final Environment environment;
 
 	@Override
 	@Transactional
 	public Integer reserveParkingPlace(Reservation reservation) {
-		Optional<List<Reservation>> reservations = reservationRepository.findByLicensePlate(reservation.getLicensePlate());
-		if (reservations.isPresent() && (reservations.get().get(0).isReserved()
-				|| reservations.get().get(0).isOccupied())) {
+		Optional<List<Reservation>> reservations = reservationRepository
+				.findByLicensePlate(reservation.getLicensePlate());
+		if (reservations.isPresent()
+				&& (reservations.get().get(0).isReserved() || reservations.get().get(0).isOccupied())) {
 			return -1;
 		} else {
 			Person user = reservation.getUser();
@@ -87,6 +90,14 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	public String getReservationStatus(Integer reservationId) {
 		return reservationRepository.findById(reservationId).get().getStatus();
+	}
+
+	@Override
+	public List<Reservation> getAllActiveReservations(Integer parkingSpotId, SimpleDate reservationDate) {
+		return reservationRepository.getAllReservations().stream()
+				.filter(reservation -> reservation.getParkingPlace().getId() == parkingSpotId)
+				.filter(reservation -> reservation.hasDate(reservationDate))
+				.collect(Collectors.toList());
 	}
 
 }

@@ -55,7 +55,7 @@ public class ActiveReservationsActivity extends AppCompatActivity {
 
     private void buildView(List<ReservationDto> pendingReservations){
         NotificationHandler notificationHandler = new NotificationHandler(this);
-        PendingReservationAdapter adapter = new PendingReservationAdapter(pendingReservations, this, notificationHandler, this);
+        PendingReservationAdapter adapter = new PendingReservationAdapter(pendingReservations, notificationHandler, this);
         ListView lView = findViewById(R.id.pendingReservationList);
         lView.setAdapter(adapter);
     }

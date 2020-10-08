@@ -13,6 +13,8 @@ public interface ReservationRepository {
 	
 	public Optional<List<Reservation>> findByLicensePlate(String licensePlate);
 	
+	public List<Reservation> getAllReservations();
+	
 	public List<Reservation> findReservationsByUser(int userId);
 
 }

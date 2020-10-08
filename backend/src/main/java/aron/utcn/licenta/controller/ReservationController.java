@@ -1,5 +1,7 @@
 package aron.utcn.licenta.controller;
 
+import java.util.List;
+
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import aron.utcn.licenta.dto.MessageDto;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ReservationFacade;
+import aron.utcn.licenta.model.SimpleDate;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -41,6 +44,11 @@ public class ReservationController {
 	@DeleteMapping("/reservation/{id}")
 	public void cancelReservation(@PathVariable("id") Integer reservationId) {
 		reservationFacade.cancelReservation(reservationId);
+	}
+	
+	@GetMapping("/reservation/date/{id}")
+	public List<ReservationDto> getAllActiveReservations(@PathVariable Integer id, @RequestBody SimpleDate reservationDate) {
+		return reservationFacade.getAllActiveReservations(id, reservationDate);
 	}
 	
 	@GetMapping("/reservation/extension")

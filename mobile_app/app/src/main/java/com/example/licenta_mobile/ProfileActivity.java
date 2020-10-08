@@ -1,27 +1,21 @@
 package com.example.licenta_mobile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.licenta_mobile.dialog.MoneyTransferDialog;
-import com.example.licenta_mobile.dialog.ReservationDialog;
 import com.example.licenta_mobile.dto.MoneyTransferDto;
-import com.example.licenta_mobile.dto.ParkingPlaceDto;
 import com.example.licenta_mobile.model.UserData;
 import com.example.licenta_mobile.rest.RestClient;
 import com.example.licenta_mobile.rest.UserDataService;
 import com.example.licenta_mobile.security.Token;
 
-import org.w3c.dom.Text;
-
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;

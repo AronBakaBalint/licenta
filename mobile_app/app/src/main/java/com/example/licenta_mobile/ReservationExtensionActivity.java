@@ -40,7 +40,7 @@ public class ReservationExtensionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void handleUnconfirmedReservations(){
+    private void handleUnconfirmedReservations() {
         int userId = UserData.getUserId();
         Call<List<ReservationDto>> call = reservationService.getUnoccupiedPlaces("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<List<ReservationDto>>() {
@@ -61,9 +61,9 @@ public class ReservationExtensionActivity extends AppCompatActivity {
         });
     }
 
-    private void buildView(List<ReservationDto> pendingReservations){
+    private void buildView(List<ReservationDto> pendingReservations) {
         NotificationHandler notificationHandler = new NotificationHandler(this);
-        PendingReservationAdapter adapter = new PendingReservationAdapter(pendingReservations, this, notificationHandler, this);
+        PendingReservationAdapter adapter = new PendingReservationAdapter(pendingReservations, notificationHandler, this);
         ListView lView = findViewById(R.id.pendingReservationList);
         lView.setAdapter(adapter);
     }

@@ -49,4 +49,10 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 				.setParameter("userId", userId).getResultList();
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public List<Reservation> getAllReservations() {
+		return entityManager.createQuery("SELECT r FROM Reservation r").getResultList();
+	}
+
 }

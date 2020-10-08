@@ -48,7 +48,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
     private NotificationHandler notificationHandler;
     private Activity activity;
 
-    public PendingReservationAdapter(List<ReservationDto> list, Context context, NotificationHandler notificationHandler, Activity activity) {
+    public PendingReservationAdapter(List<ReservationDto> list, NotificationHandler notificationHandler, Activity activity) {
         this.list = list;
         this.reservationService = RestClient.getClient().create(ReservationService.class);
         this.notificationHandler = notificationHandler;
@@ -202,7 +202,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
 
     private Double getExtensionCost(){
         Double extensionCost = -1.0;
-        Call<MessageDto> call = reservationService.getExtansionCost("Bearer " + Token.getJwtToken());
+        Call<MessageDto> call = reservationService.getExtensionCost("Bearer " + Token.getJwtToken());
         try {
             Response<MessageDto> response = call.execute();
             extensionCost = Double.parseDouble(response.body().getMessage());

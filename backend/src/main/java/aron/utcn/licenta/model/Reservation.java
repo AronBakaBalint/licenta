@@ -1,5 +1,7 @@
 package aron.utcn.licenta.model;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -25,7 +27,9 @@ public class Reservation {
 	private Person user;
 	private String status;
 	private String licensePlate;
+	private Date reservationMakingDate;
 	private Date reservationDate;
+	private Integer duration;
 	
 	public void cancel() {
 		status = "cancelled";
@@ -61,5 +65,15 @@ public class Reservation {
 	
 	public boolean isExpired() {
 		return isCancelled() || isFinished();
+	}
+	
+	public boolean hasDate(SimpleDate date) {
+		LocalDate localDate = reservationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		if(date.getDay() != localDate.getDayOfMonth()) {
+			return false;
+		} else if(date.getMonth() != localDate.getMonthValue()) {
+			return false;
+		}
+		return date.getYear() == localDate.getYear();
 	}
 }

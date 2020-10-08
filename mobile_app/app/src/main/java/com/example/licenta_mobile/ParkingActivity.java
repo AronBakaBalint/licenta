@@ -148,8 +148,7 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     private void showReservationDialog(int parkingPlaceId){
-        List<String> licensePlates = getLicensePlateHistory();
-        reservationDialog = new ReservationDialog(this, parkingPlaceId, licensePlates);
+        reservationDialog = new ReservationDialog(this, parkingPlaceId);
         reservationDialog.show();
     }
 
@@ -167,18 +166,12 @@ public class ParkingActivity extends AppCompatActivity {
 
     public void confirmReservation(View view) {
         String introducedLicensePlate = reservationDialog.getIntroducedLicensePlate().getText().toString();
-        String selectedLicensePlate = reservationDialog.getSelectedLicensePlate().getSelectedItem().toString();
         Integer parkingPlaceId = reservationDialog.getParkingPlaceId();
         ReservationDto reservationDto = new ReservationDto();
         reservationDto.setParkingPlaceId(parkingPlaceId);
         reservationDto.setUserId(UserData.getUserId());
+        reservationDto.setLicensePlate(introducedLicensePlate);
 
-        if(selectedLicensePlate.equals("No Item Selected")){
-            reservationDto.setLicensePlate(introducedLicensePlate);
-            handleNewLicensePlate(introducedLicensePlate);
-        } else {
-            reservationDto.setLicensePlate(selectedLicensePlate);
-        }
         reservationDialog.dismiss();
 
         Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
@@ -252,26 +245,6 @@ public class ParkingActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
-    }
-
-    private List<String> getLicensePlateHistory(){
-        List<String> licensePlates = new ArrayList<>();
-        licensePlates.add("No Item Selected");
-        SharedPreferences sharedPreferences = getSharedPreferences("licensePlates", MODE_PRIVATE);
-        Map<String, ?> allEntries = sharedPreferences.getAll();
-        for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
-            if(entry.getKey().contains("$lic$")){
-                licensePlates.add(entry.getKey().replace("$lic$", ""));
-            }
-        }
-        return licensePlates;
-    }
-
-    private void handleNewLicensePlate(String licensePlate){
-        SharedPreferences sharedPreferences = getSharedPreferences("licensePlates", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("$lic$"+licensePlate.toUpperCase(), "true");
-        editor.commit();
     }
 
     private void buildRow(LinearLayout layout, Integer row, List<Button> parkingPlaces){

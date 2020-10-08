@@ -1,5 +1,8 @@
 package com.example.licenta_mobile.dto;
 
+import java.util.Date;
+import java.util.List;
+
 public class ReservationDto {
 
     private int id;
@@ -7,6 +10,15 @@ public class ReservationDto {
     private String licensePlate;
     private Integer userId;
     private String status;
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Integer getUserId() {
         return userId;
@@ -47,4 +59,5 @@ public class ReservationDto {
     public void setStatus(String status) {
         this.status = status;
     }
+
 }
