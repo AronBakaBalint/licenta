@@ -2,6 +2,7 @@ package com.example.licenta_mobile.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,11 @@ import java.util.List;
 public class ReservationSetupAdapter extends BaseAdapter implements ListAdapter {
 
     private List<String> hoursList = new ArrayList<>();
+    private List<Integer> occupiedHours = new ArrayList<>();
     private Activity activity;
 
-    public ReservationSetupAdapter(List<String> hoursList, Activity activity) {
+    public ReservationSetupAdapter(List<String> hoursList, List<Integer> occupiedHours, Activity activity) {
+        this.occupiedHours = occupiedHours;
         this.hoursList = hoursList;
         this.activity = activity;
     }
@@ -50,7 +53,20 @@ public class ReservationSetupAdapter extends BaseAdapter implements ListAdapter 
 
         Button hourBtn = view.findViewById(R.id.hourBtn);
         hourBtn.setText(hoursList.get(position));
+        if(isCorrespondingHourOccupied(hoursList.get(position))){
+            hourBtn.setClickable(false);
+        } else {
+        }
         return view;
+    }
+
+    private boolean isCorrespondingHourOccupied(String btnHour){
+        for(Integer i : occupiedHours) {
+            if(Integer.parseInt(btnHour.substring(0, 2)) == i){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

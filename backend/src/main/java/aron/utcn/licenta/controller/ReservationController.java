@@ -46,9 +46,10 @@ public class ReservationController {
 		reservationFacade.cancelReservation(reservationId);
 	}
 	
-	@GetMapping("/reservation/date/{id}")
+	@PostMapping("/reservation/date/{id}")
 	public List<ReservationDto> getAllActiveReservations(@PathVariable Integer id, @RequestBody SimpleDate reservationDate) {
-		return reservationFacade.getAllActiveReservations(id, reservationDate);
+		List<ReservationDto> response = reservationFacade.getAllActiveReservations(id, reservationDate);
+		return response;
 	}
 	
 	@GetMapping("/reservation/extension")

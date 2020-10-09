@@ -97,7 +97,7 @@ public class ParkingActivity extends AppCompatActivity {
         for(int i=0;i < uiParkingPlaces.size(); i++){
             uiParkingPlaces.get(i).setBackgroundColor(parkingPlaces.get(i).getColor());
             if(!parkingPlaces.get(i).getStatus().equals("free")){
-                uiParkingPlaces.get(i).setClickable(false);
+                //uiParkingPlaces.get(i).setClickable(false);
             }
         }
     }

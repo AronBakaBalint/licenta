@@ -19,10 +19,17 @@ import com.example.licenta_mobile.R;
 import com.example.licenta_mobile.adapter.ReservationSetupAdapter;
 import com.example.licenta_mobile.dto.ReservationDto;
 import com.example.licenta_mobile.model.SimpleDate;
+import com.example.licenta_mobile.rest.ReservationService;
+import com.example.licenta_mobile.rest.RestClient;
+import com.example.licenta_mobile.security.Token;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class ReservationDialog extends Dialog {
 
@@ -30,6 +37,7 @@ public class ReservationDialog extends Dialog {
     private EditText introducedLicensePlate;
     private SimpleDate selectedDate;
     private Activity activity;
+    private ReservationService service = null;
 
     public ReservationDialog(Activity activity, int parkingPlaceId) {
         super(activity);
@@ -53,12 +61,14 @@ public class ReservationDialog extends Dialog {
         this.introducedLicensePlate = introducedLicensePlate;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.reservation_dialog);
         introducedLicensePlate = findViewById(R.id.licensePlateEditor);
+        service = RestClient.getClient().create(ReservationService.class);
         DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker1);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -68,14 +78,39 @@ public class ReservationDialog extends Dialog {
                 selectedDate = new SimpleDate(dayOfMonth, month, year);
             }
         });
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        selectedDate = new SimpleDate(day, month+1, year);
         ListView listView = findViewById(R.id.hourList);
-        listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), activity));
+        List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
+        listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));
     }
 
-    private List<String> get24HoursList(){
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private List<Integer> getReservationSchedule(int parkingPlaceId, SimpleDate reservationDate) {
+        List<Integer> reservationList = new ArrayList<>();
+        Call<List<ReservationDto>> callSync = service.getAllActiveReservations("Bearer " + Token.getJwtToken(), parkingPlaceId, selectedDate);
+
+        try {
+            Response<List<ReservationDto>> response = callSync.execute();
+            List<ReservationDto> apiResponse = response.body();
+            apiResponse.forEach(r->{
+                r.getDuration().forEach(d->reservationList.add(d));
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return reservationList;
+    }
+
+    private List<String> get24HoursList() {
         List<String> list = new ArrayList<>();
-        for(int i = 0;i <= 23; i++) {
-            list.add( i < 10 ? "0" + i + ":00" : i + ":00");
+        for (int i = 0; i <= 23; i++) {
+            list.add(i < 10 ? "0" + i + ":00" : i + ":00");
         }
         return list;
     }

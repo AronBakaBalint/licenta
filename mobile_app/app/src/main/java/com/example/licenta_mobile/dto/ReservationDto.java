@@ -1,5 +1,7 @@
 package com.example.licenta_mobile.dto;
 
+import com.example.licenta_mobile.model.SimpleDate;
+
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +12,24 @@ public class ReservationDto {
     private String licensePlate;
     private Integer userId;
     private String status;
+    private SimpleDate startTime;
+    private List<Integer> duration;
 
+    public SimpleDate getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(SimpleDate startTime) {
+        this.startTime = startTime;
+    }
+
+    public List<Integer> getDuration() {
+        return duration;
+    }
+
+    public void setDuration(List<Integer> duration) {
+        this.duration = duration;
+    }
 
     public int getId() {
         return id;
