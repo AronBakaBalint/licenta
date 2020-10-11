@@ -94,7 +94,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         extendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                extendReservation(list.get(position).getReservationId());
+                extendReservation(list.get(position).getId());
             }
         });
 
@@ -108,7 +108,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         qrCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showQRCodeDialog(list.get(position).getReservationId() + "", qrCodeBtn);
+                showQRCodeDialog(list.get(position).getId() + "", qrCodeBtn);
             }
         });
 
@@ -116,7 +116,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
     }
 
     private void cancelReservation(final ReservationDto reservationDto) {
-        Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getReservationId());
+        Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getId());
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
