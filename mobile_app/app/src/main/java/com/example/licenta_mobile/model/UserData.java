@@ -51,7 +51,6 @@ public class UserData {
     public static void update() {
         Call<UserDataDto> call = userDataService.getUserDetails("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<UserDataDto>() {
-
             @Override
             public void onResponse(Call<UserDataDto> call, Response<UserDataDto> response) {
                 if (response.isSuccessful()) {

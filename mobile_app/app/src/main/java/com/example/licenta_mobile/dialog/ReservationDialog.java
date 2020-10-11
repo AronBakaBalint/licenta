@@ -2,19 +2,12 @@ package com.example.licenta_mobile.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TimePicker;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.licenta_mobile.R;
 import com.example.licenta_mobile.adapter.ReservationSetupAdapter;
@@ -63,7 +56,6 @@ public class ReservationDialog extends Dialog {
         this.introducedLicensePlate = introducedLicensePlate;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,10 +71,7 @@ public class ReservationDialog extends Dialog {
         datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                selectedDate = new SimpleDate(dayOfMonth, month+1, year);
-                List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
-                listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));
-                listView.setSelection(12);
+                refreshTimeTable(year, month, dayOfMonth);
             }
         });
         Date date = new Date();
@@ -91,6 +80,10 @@ public class ReservationDialog extends Dialog {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
+        refreshTimeTable(year, month, day);
+    }
+
+    private void refreshTimeTable(int year, int month, int day){
         selectedDate = new SimpleDate(day, month + 1, year);
         List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
         listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));

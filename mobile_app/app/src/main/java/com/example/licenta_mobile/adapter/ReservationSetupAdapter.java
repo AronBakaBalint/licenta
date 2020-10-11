@@ -11,15 +11,14 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 
 import com.example.licenta_mobile.R;
-import com.example.licenta_mobile.dto.ReservationDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReservationSetupAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<String> hoursList = new ArrayList<>();
-    private List<Integer> occupiedHours = new ArrayList<>();
+    private List<String> hoursList;
+    private List<Integer> occupiedHours;
     private Activity activity;
 
     public ReservationSetupAdapter(List<String> hoursList, List<Integer> occupiedHours, Activity activity) {

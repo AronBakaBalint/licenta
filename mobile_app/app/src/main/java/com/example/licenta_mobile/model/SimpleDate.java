@@ -1,7 +1,5 @@
 package com.example.licenta_mobile.model;
 
-import android.content.Intent;
-
 public class SimpleDate {
 
     private Integer day;

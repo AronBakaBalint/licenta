@@ -1,11 +1,11 @@
 package com.example.licenta_mobile;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.licenta_mobile.adapter.PendingReservationAdapter;
 import com.example.licenta_mobile.dto.ReservationDto;
@@ -44,7 +44,6 @@ public class ReservationExtensionActivity extends AppCompatActivity {
         int userId = UserData.getUserId();
         Call<List<ReservationDto>> call = reservationService.getUnoccupiedPlaces("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<List<ReservationDto>>() {
-
             @Override
             public void onResponse(Call<List<ReservationDto>> call, Response<List<ReservationDto>> response) {
                 if (response.isSuccessful()) {

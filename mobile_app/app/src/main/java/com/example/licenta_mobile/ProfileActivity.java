@@ -37,44 +37,43 @@ public class ProfileActivity extends AppCompatActivity {
         Double currentBalance = UserData.getCurrentSold();
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
-        currentSold.setText(df.format(currentBalance)+" LEI");
+        currentSold.setText(df.format(currentBalance) + " LEI");
         TextView username = findViewById(R.id.profile_username);
         username.setText(UserData.getUserName());
         TextView email = findViewById(R.id.profile_email);
         email.setText(UserData.getEmail());
     }
 
-    public void addMoney(View view){
+    public void addMoney(View view) {
         showAddMoneyDialog();
     }
 
-    public void confirmTransfer(View view){
+    public void confirmTransfer(View view) {
         try {
             Double introducedAmount = Double.parseDouble(moneyTransferDialog.getIntroducedAmount().getText().toString());
             MoneyTransferDto moneyTransferDto = new MoneyTransferDto();
             moneyTransferDto.setUserId(UserData.getUserId());
             moneyTransferDto.setAmount(introducedAmount);
             transfer(moneyTransferDto);
-        }catch(Exception npe){
+        } catch (Exception npe) {
             System.out.println("No value introduced");
         } finally {
             moneyTransferDialog.cancel();
         }
     }
 
-    private void transfer(final MoneyTransferDto moneyTransferDto){
-        Call<Void> call = userDataService.transferMoney("Bearer "+ Token.getJwtToken(), moneyTransferDto);
-        call.enqueue(new Callback<Void>(){
-
+    private void transfer(final MoneyTransferDto moneyTransferDto) {
+        Call<Void> call = userDataService.transferMoney("Bearer " + Token.getJwtToken(), moneyTransferDto);
+        call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
                     TextView currentSold = findViewById(R.id.current_sold);
-                    Double newAmount = Double.valueOf(UserData.getCurrentSold())+moneyTransferDto.getAmount();
+                    Double newAmount = Double.valueOf(UserData.getCurrentSold()) + moneyTransferDto.getAmount();
                     DecimalFormat df = new DecimalFormat("#.##");
                     df.setRoundingMode(RoundingMode.CEILING);
-                    currentSold.setText(df.format(newAmount)+" LEI");
-                    Toast.makeText(ProfileActivity.this, moneyTransferDto.getAmount()+" LEI added succesfully", Toast.LENGTH_SHORT).show();
+                    currentSold.setText(df.format(newAmount) + " LEI");
+                    Toast.makeText(ProfileActivity.this, moneyTransferDto.getAmount() + " LEI added succesfully", Toast.LENGTH_SHORT).show();
                     UserData.update();
                 }
             }
@@ -87,8 +86,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void showAddMoneyDialog(){
-        moneyTransferDialog  = new MoneyTransferDialog(this);
+    private void showAddMoneyDialog() {
+        moneyTransferDialog = new MoneyTransferDialog(this);
         moneyTransferDialog.show();
     }
 }

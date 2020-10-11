@@ -43,7 +43,7 @@ import retrofit2.Response;
 
 public class PendingReservationAdapter extends BaseAdapter implements ListAdapter {
 
-    private List<ReservationDto> list = new ArrayList<>();
+    private List<ReservationDto> list;
     private ReservationService reservationService;
     private NotificationHandler notificationHandler;
     private Activity activity;
@@ -85,7 +85,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         Button extendBtn = view.findViewById(R.id.extendReservation);
         Button cancelBtn = view.findViewById(R.id.cancelReservation);
 
-        if(list.get(position).getStatus().equals("cancelled") || list.get(position).getStatus().equals("finished")){
+        if (list.get(position).getStatus().equals("cancelled") || list.get(position).getStatus().equals("finished")) {
             extendBtn.setVisibility(View.INVISIBLE);
             cancelBtn.setVisibility(View.INVISIBLE);
         }
@@ -108,7 +108,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         qrCodeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showQRCodeDialog(list.get(position).getReservationId()+"", qrCodeBtn);
+                showQRCodeDialog(list.get(position).getReservationId() + "", qrCodeBtn);
             }
         });
 
@@ -118,7 +118,6 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
     private void cancelReservation(final ReservationDto reservationDto) {
         Call<Void> call = reservationService.cancelReservation("Bearer " + Token.getJwtToken(), reservationDto.getReservationId());
         call.enqueue(new Callback<Void>() {
-
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {
@@ -200,7 +199,7 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         alert11.show();
     }
 
-    private Double getExtensionCost(){
+    private Double getExtensionCost() {
         Double extensionCost = -1.0;
         Call<MessageDto> call = reservationService.getExtensionCost("Bearer " + Token.getJwtToken());
         try {
@@ -212,10 +211,9 @@ public class PendingReservationAdapter extends BaseAdapter implements ListAdapte
         return extensionCost;
     }
 
-    private void sendExtendReservationRequest(final Double extensionCost,final int reservationId) {
+    private void sendExtendReservationRequest(final Double extensionCost, final int reservationId) {
         Call<Void> call = reservationService.extendReservation("Bearer " + Token.getJwtToken(), reservationId);
         call.enqueue(new Callback<Void>() {
-
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful()) {

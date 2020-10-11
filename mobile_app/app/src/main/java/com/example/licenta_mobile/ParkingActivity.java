@@ -2,13 +2,11 @@ package com.example.licenta_mobile;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -29,7 +27,6 @@ import com.example.licenta_mobile.security.Token;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,12 +47,12 @@ public class ParkingActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRestart(){
+    public void onRestart() {
         super.onRestart();
         onInit();
     }
 
-    private void onInit(){
+    private void onInit() {
         UserData.update();
         setContentView(R.layout.activity_parking_place_selector);
         reservationService = RestClient.getClient().create(ReservationService.class);
@@ -63,10 +60,10 @@ public class ParkingActivity extends AppCompatActivity {
         startAutoRefresh();
     }
 
-    private void displayParkingPlaceStatus(){
+    private void displayParkingPlaceStatus() {
 
-        Call<List<ParkingPlaceDto>> call = reservationService.getAllParkingPlaces("Bearer "+Token.getJwtToken());
-        call.enqueue(new Callback<List<ParkingPlaceDto>>(){
+        Call<List<ParkingPlaceDto>> call = reservationService.getAllParkingPlaces("Bearer " + Token.getJwtToken());
+        call.enqueue(new Callback<List<ParkingPlaceDto>>() {
 
             @Override
             public void onResponse(Call<List<ParkingPlaceDto>> call, Response<List<ParkingPlaceDto>> response) {
@@ -84,7 +81,7 @@ public class ParkingActivity extends AppCompatActivity {
         });
     }
 
-    private void startAutoRefresh(){
+    private void startAutoRefresh() {
         new Timer().scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -93,14 +90,14 @@ public class ParkingActivity extends AppCompatActivity {
         }, 0, 1000);//put here time 1000 milliseconds=1 second
     }
 
-    private void setParkingPlaceColors(List<ParkingPlaceDto> parkingPlaces){
+    private void setParkingPlaceColors(List<ParkingPlaceDto> parkingPlaces) {
         List<Button> uiParkingPlaces = getAllParkingPlacesFromUI();
-        for(int i=0;i < uiParkingPlaces.size(); i++){
+        for (int i = 0; i < uiParkingPlaces.size(); i++) {
             uiParkingPlaces.get(i).setBackgroundColor(parkingPlaces.get(i).getColor());
         }
     }
 
-    private List<Button> getAllParkingPlacesFromUI(){
+    private List<Button> getAllParkingPlacesFromUI() {
         List<Button> parkingPlaces = new ArrayList<>();
 
         LinearLayout layout = findViewById(R.id.row1);
@@ -122,11 +119,10 @@ public class ParkingActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Reservation");
-        builder.setMessage("Reserve parking place "+parkingPlaceName+"?\nInital cost is "+ reservationCost +" LEI but you will get it back as you arrive to the parking lot.");
+        builder.setMessage("Reserve parking place " + parkingPlaceName + "?\nInital cost is " + reservationCost + " LEI but you will get it back as you arrive to the parking lot.");
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
             public void onClick(DialogInterface dialog, int which) {
-                if(UserData.getCurrentSold() > reservationCost){
+                if (UserData.getCurrentSold() > reservationCost) {
                     showReservationDialog(parkingPlaceId);
                 } else {
                     NotEnoughMoneyDialog.show(ParkingActivity.this);
@@ -145,12 +141,12 @@ public class ParkingActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private void showReservationDialog(int parkingPlaceId){
+    private void showReservationDialog(int parkingPlaceId) {
         reservationDialog = new ReservationDialog(this, parkingPlaceId);
         reservationDialog.show();
     }
 
-    private Double getReservationCost(){
+    private Double getReservationCost() {
         Double reservationCost = -1.0;
         Call<MessageDto> call = reservationService.getReservationCost("Bearer " + Token.getJwtToken());
         try {
@@ -172,14 +168,14 @@ public class ParkingActivity extends AppCompatActivity {
 
         reservationDialog.dismiss();
 
-        Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer "+Token.getJwtToken() ,reservationDto);
-        call.enqueue(new Callback<MessageDto>(){
+        Call<MessageDto> call = reservationService.reserveParkingPlace("Bearer " + Token.getJwtToken(), reservationDto);
+        call.enqueue(new Callback<MessageDto>() {
 
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
                     int reservationId = Integer.parseInt(response.body().getMessage());
-                    if (reservationId == -1){
+                    if (reservationId == -1) {
                         ExistingReservationDialog.show(ParkingActivity.this);
                     } else {
                         ReservationInfoDialog.show(ParkingActivity.this);
@@ -219,16 +215,15 @@ public class ParkingActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void viewProfile(){
+    private void viewProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 
-    private void viewReservations(){
+    private void viewReservations() {
         int userId = UserData.getUserId();
         Call<List<ReservationDto>> call = reservationService.getAllReservedPlaces("Bearer " + Token.getJwtToken(), userId);
         call.enqueue(new Callback<List<ReservationDto>>() {
-
             @Override
             public void onResponse(Call<List<ReservationDto>> call, Response<List<ReservationDto>> response) {
                 if (response.isSuccessful()) {
@@ -245,11 +240,11 @@ public class ParkingActivity extends AppCompatActivity {
         });
     }
 
-    private void buildRow(LinearLayout layout, Integer row, List<Button> parkingPlaces){
-        for(int i =0; i< layout.getChildCount(); i++){
-            View v =layout.getChildAt(i);
-            if(v instanceof Button){
-                v.setId(row*layout.getChildCount()+i+1);
+    private void buildRow(LinearLayout layout, Integer row, List<Button> parkingPlaces) {
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View v = layout.getChildAt(i);
+            if (v instanceof Button) {
+                v.setId(row * layout.getChildCount() + i + 1);
                 parkingPlaces.add((Button) v);
             }
         }

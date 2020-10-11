@@ -4,13 +4,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.example.licenta_mobile.R;
-
-import java.util.List;
 
 public class MoneyTransferDialog extends Dialog {
 

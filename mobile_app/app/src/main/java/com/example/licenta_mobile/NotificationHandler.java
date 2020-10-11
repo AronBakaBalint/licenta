@@ -5,7 +5,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 
@@ -51,7 +50,6 @@ public class NotificationHandler {
     private void checkArrived(final int reservationId) {
         Call<MessageDto> call = reservationService.getReservationStatus("Bearer " + Token.getJwtToken(), reservationId);
         call.enqueue(new Callback<MessageDto>() {
-
             @Override
             public void onResponse(Call<MessageDto> call, Response<MessageDto> response) {
                 if (response.isSuccessful()) {
