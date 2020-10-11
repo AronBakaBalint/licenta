@@ -65,6 +65,15 @@ public class ApplicationSeed implements CommandLineRunner {
 		reservation.setStartTime(new SimpleDate(day, month+1, year));
 		reservation.setDuration(List.of(13, 14, 15));
 		reservationFacade.reserveParkingPlace(reservation);
+		
+		reservation = new ReservationDto();
+		reservation.setLicensePlate("CJ97BBA");
+		reservation.setUserId(1);
+		reservation.setParkingPlaceId(1);
+		cal.setTime(date);
+		reservation.setStartTime(new SimpleDate(day+1, month+1, year));
+		reservation.setDuration(List.of(10, 11));
+		reservationFacade.reserveParkingPlace(reservation);
 	}
 	
 	private void startTimer() {

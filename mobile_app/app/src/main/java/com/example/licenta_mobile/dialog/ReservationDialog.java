@@ -70,11 +70,7 @@ public class ReservationDialog extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.reservation_dialog);
         listView = findViewById(R.id.hourList);
-        getWindow()
-                .setLayout(
-                        ViewGroup.LayoutParams.FILL_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
+        getWindow().setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         introducedLicensePlate = findViewById(R.id.licensePlateEditor);
         service = RestClient.getClient().create(ReservationService.class);
         DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker1);
@@ -86,6 +82,7 @@ public class ReservationDialog extends Dialog {
                 selectedDate = new SimpleDate(dayOfMonth, month+1, year);
                 List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
                 listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));
+                listView.setSelection(12);
             }
         });
         Date date = new Date();
@@ -97,6 +94,7 @@ public class ReservationDialog extends Dialog {
         selectedDate = new SimpleDate(day, month + 1, year);
         List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
         listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));
+        listView.setSelection(12);
     }
 
     private List<Integer> getReservationSchedule(int parkingPlaceId, SimpleDate reservationDate) {
