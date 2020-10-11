@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -38,6 +39,7 @@ public class ReservationDialog extends Dialog {
     private SimpleDate selectedDate;
     private Activity activity;
     private ReservationService service = null;
+    private ListView listView;
 
     public ReservationDialog(Activity activity, int parkingPlaceId) {
         super(activity);
@@ -67,6 +69,12 @@ public class ReservationDialog extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.reservation_dialog);
+        listView = findViewById(R.id.hourList);
+        getWindow()
+                .setLayout(
+                        ViewGroup.LayoutParams.FILL_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
         introducedLicensePlate = findViewById(R.id.licensePlateEditor);
         service = RestClient.getClient().create(ReservationService.class);
         DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker1);
@@ -75,7 +83,9 @@ public class ReservationDialog extends Dialog {
         datePicker.init(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker datePicker, int year, int month, int dayOfMonth) {
-                selectedDate = new SimpleDate(dayOfMonth, month, year);
+                selectedDate = new SimpleDate(dayOfMonth, month+1, year);
+                List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
+                listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));
             }
         });
         Date date = new Date();
@@ -84,13 +94,11 @@ public class ReservationDialog extends Dialog {
         int year = cal.get(Calendar.YEAR);
         int month = cal.get(Calendar.MONTH);
         int day = cal.get(Calendar.DAY_OF_MONTH);
-        selectedDate = new SimpleDate(day, month+1, year);
-        ListView listView = findViewById(R.id.hourList);
+        selectedDate = new SimpleDate(day, month + 1, year);
         List<Integer> occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate);
         listView.setAdapter(new ReservationSetupAdapter(get24HoursList(), occupiedHours, activity));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private List<Integer> getReservationSchedule(int parkingPlaceId, SimpleDate reservationDate) {
         List<Integer> reservationList = new ArrayList<>();
         Call<List<ReservationDto>> callSync = service.getAllActiveReservations("Bearer " + Token.getJwtToken(), parkingPlaceId, selectedDate);
@@ -98,9 +106,11 @@ public class ReservationDialog extends Dialog {
         try {
             Response<List<ReservationDto>> response = callSync.execute();
             List<ReservationDto> apiResponse = response.body();
-            apiResponse.forEach(r->{
-                r.getDuration().forEach(d->reservationList.add(d));
-            });
+            for (ReservationDto reservation : apiResponse) {
+                for (Integer d : reservation.getDuration()) {
+                    reservationList.add(d);
+                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }

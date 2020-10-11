@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -96,9 +97,6 @@ public class ParkingActivity extends AppCompatActivity {
         List<Button> uiParkingPlaces = getAllParkingPlacesFromUI();
         for(int i=0;i < uiParkingPlaces.size(); i++){
             uiParkingPlaces.get(i).setBackgroundColor(parkingPlaces.get(i).getColor());
-            if(!parkingPlaces.get(i).getStatus().equals("free")){
-                //uiParkingPlaces.get(i).setClickable(false);
-            }
         }
     }
 

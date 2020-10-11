@@ -38,7 +38,7 @@ public class ApplicationSeed implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		startTimer();
+		//startTimer();
 		Person person = new Person();
 		person.setUsername("asd31");
 		person.setName("John Doe");

@@ -68,8 +68,6 @@ public class Reservation {
 	}
 	
 	public boolean hasDate(SimpleDate date) {
-		System.out.println(date);
-		System.out.println(reservationDate);
 		LocalDate localDate = reservationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		if(date.getDay() != localDate.getDayOfMonth()) {
 			return false;

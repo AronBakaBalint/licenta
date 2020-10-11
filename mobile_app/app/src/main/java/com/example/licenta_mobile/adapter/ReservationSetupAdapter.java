@@ -55,7 +55,9 @@ public class ReservationSetupAdapter extends BaseAdapter implements ListAdapter 
         hourBtn.setText(hoursList.get(position));
         if(isCorrespondingHourOccupied(hoursList.get(position))){
             hourBtn.setClickable(false);
+            hourBtn.setBackgroundColor(Color.RED);
         } else {
+            hourBtn.setBackgroundColor(Color.GREEN);
         }
         return view;
     }
