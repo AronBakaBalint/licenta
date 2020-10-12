@@ -9,15 +9,15 @@ import retrofit2.Callback
 import retrofit2.Response
 
 object UserData {
-    @JvmStatic var userId: Int? = null
+    @JvmStatic var userId: Int = 0
     @JvmStatic var userName: String? = null
-    @JvmStatic var currentSold: Double? = null
+    @JvmStatic var currentSold: Double = 0.0
     @JvmStatic var email: String? = null
-    @JvmStatic val userDataService = RestClient.getClient().create(UserDataService::class.java)
+    @JvmStatic val userDataService = RestClient.client!!.create(UserDataService::class.java)!!
 
     @JvmStatic
     fun update() {
-        val call = userDataService.getUserDetails("Bearer " + Token.getJwtToken(), userId)
+        val call = userDataService.getUserDetails("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<UserDataDto> {
             override fun onResponse(call: Call<UserDataDto>, response: Response<UserDataDto>) {
                 if (response.isSuccessful) {

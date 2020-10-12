@@ -89,5 +89,4 @@ public class ApplicationSeed implements CommandLineRunner {
 		timer.schedule (hourlyTask, 0l, 1000*60/**60*/);
 	}
 	
-	
 }

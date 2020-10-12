@@ -1,6 +1,6 @@
 package com.example.licenta_mobile.dto
 
 class MoneyTransferDto {
-    var userId: Integer? = null
-    var amount: Double? = null
+    var userId: Int = 0
+    var amount: Double = 0.0
 }

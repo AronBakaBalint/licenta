@@ -1,0 +1,57 @@
+package com.example.licenta_mobile
+
+import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.example.licenta_mobile.dto.MessageDto
+import com.example.licenta_mobile.dto.RegistrationDto
+import com.example.licenta_mobile.rest.RegistrationService
+import com.example.licenta_mobile.rest.RestClient.client
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+class RegistrationActivity : AppCompatActivity() {
+    private var registrationService: RegistrationService? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_registration)
+        registrationService = client!!.create(RegistrationService::class.java)
+    }
+
+    fun confirmRegistration(view: View?) {
+        val name = (findViewById<View>(R.id.regname) as EditText).text.toString()
+        val username = (findViewById<View>(R.id.regusername) as EditText).text.toString()
+        val email = (findViewById<View>(R.id.regemail) as EditText).text.toString()
+        val password = (findViewById<View>(R.id.regpassword) as EditText).text.toString()
+        val password2 = (findViewById<View>(R.id.regpassword2) as EditText).text.toString()
+        if (password != password2) {
+            Toast.makeText(this, "The two passwords do not match", Toast.LENGTH_LONG).show()
+        } else {
+            registerUser(name, username, password, email)
+        }
+    }
+
+    private fun registerUser(name: String, username: String, password: String, email: String) {
+        val registrationDto = RegistrationDto(name, username, email, password)
+        val call = registrationService!!.register(registrationDto)
+        call.enqueue(object : Callback<MessageDto> {
+            override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()!!.message
+                    if ("ok" == responseBody) {
+                        Toast.makeText(this@RegistrationActivity, "Registration successful!", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MessageDto>, t: Throwable) {
+                println(t.message)
+                call.cancel()
+            }
+        })
+    }
+}
