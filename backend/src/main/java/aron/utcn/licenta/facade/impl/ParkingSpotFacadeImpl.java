@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.converter.BaseConverter;
-import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.ParkingSpotDto;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ParkingSpotFacade;
 import aron.utcn.licenta.model.ParkingPlace;
@@ -23,18 +23,18 @@ public class ParkingSpotFacadeImpl implements ParkingSpotFacade {
 
 	private final ReservationManagementService reservationService;
 
-	private final BaseConverter<ParkingPlace, ParkingPlaceDto> parkingSpotconverter;
+	private final BaseConverter<ParkingPlace, ParkingSpotDto> parkingSpotconverter;
 
 	private final BaseConverter<Reservation, ReservationDto> reservationConverter;
 
 	@Override
-	public List<ParkingPlaceDto> getAllParkingPlaces() {
+	public List<ParkingSpotDto> getAllParkingPlaces() {
 		return parkingSpotService.getAllParkingPlaces().stream().map(parkingSpotconverter::convertToDto)
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public ParkingPlaceDto findById(int id) {
+	public ParkingSpotDto findById(int id) {
 		return parkingSpotconverter.convertToDto(parkingSpotService.findById(id));
 	}
 

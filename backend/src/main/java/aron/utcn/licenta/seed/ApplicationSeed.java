@@ -52,27 +52,24 @@ public class ApplicationSeed implements CommandLineRunner {
 			parkingPlaceService.save(p);
 		}
 		
+		createReservation("CJ25BBA", 1, 1, List.of(13, 14, 15), 0);
+		createReservation("CJ97BBA", 1, 1, List.of(10, 11), 1);
+		
+	}
+	
+	private void createReservation(String licensePlate, Integer userId, Integer parkingSpotId, List<Integer> duration, Integer dayOffset) {
 		ReservationDto reservation = new ReservationDto();
-		reservation.setLicensePlate("CJ25BBA");
-		reservation.setUserId(1);
-		reservation.setParkingPlaceId(1);
+		reservation.setLicensePlate(licensePlate);
+		reservation.setUserId(userId);
+		reservation.setParkingSpotId(parkingSpotId);
 		Date date = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH);
 		int day = cal.get(Calendar.DAY_OF_MONTH);
-		reservation.setStartTime(new SimpleDate(day, month+1, year));
-		reservation.setDuration(List.of(13, 14, 15));
-		reservationFacade.reserveParkingPlace(reservation);
-		
-		reservation = new ReservationDto();
-		reservation.setLicensePlate("CJ97BBA");
-		reservation.setUserId(1);
-		reservation.setParkingPlaceId(1);
-		cal.setTime(date);
-		reservation.setStartTime(new SimpleDate(day+1, month+1, year));
-		reservation.setDuration(List.of(10, 11));
+		reservation.setStartTime(new SimpleDate(day+dayOffset, month+1, year));
+		reservation.setDuration(duration);
 		reservationFacade.reserveParkingPlace(reservation);
 	}
 	

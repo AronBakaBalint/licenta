@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.ParkingSpotDto;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ParkingSpotFacade;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class ParkingSpotController {
 	private final ParkingSpotFacade parkingSpotFacade;
 	
 	@GetMapping("/parking")
-	public List<ParkingPlaceDto> getAllParkingPlaces(){
+	public List<ParkingSpotDto> getAllParkingPlaces(){
 		return parkingSpotFacade.getAllParkingPlaces();
 	}
 	

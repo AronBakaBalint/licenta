@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Button
 import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.ListView
@@ -23,6 +24,7 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
     private var selectedDate: SimpleDate? = null
     private var service: ReservationService? = null
     private var listView: ListView? = null
+    private var selectedHours : MutableList<Button>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,9 +48,10 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
     }
 
     private fun refreshTimeTable(year: Int, month: Int, day: Int) {
+        selectedHours = ArrayList()
         selectedDate = SimpleDate(day, month + 1, year)
         val occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate!!)
-        listView!!.adapter = ReservationSetupAdapter(get24HoursList(), occupiedHours, activity)
+        listView!!.adapter = ReservationSetupAdapter(get24HoursList(), occupiedHours, selectedHours as ArrayList<Button>, activity)
         listView!!.setSelection(12)
     }
 

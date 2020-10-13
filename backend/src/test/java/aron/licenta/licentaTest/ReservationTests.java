@@ -102,7 +102,7 @@ public class ReservationTests {
 	public void testReservation() {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test1");
-		reservation.setParkingPlaceId(1);
+		reservation.setParkingSpotId(1);
 		reservation.setUserId(1);
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
@@ -115,7 +115,7 @@ public class ReservationTests {
 	public void testReservationCancellation() {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test2");
-		reservation.setParkingPlaceId(2);
+		reservation.setParkingSpotId(2);
 		reservation.setUserId(1);
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		reservationService.cancelReservation(reservationId);
@@ -129,13 +129,13 @@ public class ReservationTests {
 	public void testReservationForIdenticalPlates() {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test3");
-		reservation.setParkingPlaceId(3);
+		reservation.setParkingSpotId(3);
 		reservation.setUserId(1);
 		reservationFacade.reserveParkingPlace(reservation);
 		
 		ReservationDto newreservation = new ReservationDto();
 		newreservation.setLicensePlate("test3");
-		newreservation.setParkingPlaceId(3);
+		newreservation.setParkingSpotId(3);
 		newreservation.setUserId(1);
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		assertEquals(-1, reservationId);
@@ -145,7 +145,7 @@ public class ReservationTests {
 	public void testFindAllReservations() {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test4");
-		reservation.setParkingPlaceId(4);
+		reservation.setParkingSpotId(4);
 		reservation.setUserId(1);
 		reservationFacade.reserveParkingPlace(reservation);
 		assertEquals(1, parkingPlaceService.findAllReservations(1).size());
@@ -160,7 +160,7 @@ public class ReservationTests {
 	public void testArrivalAndDepartureNotEnoughMoney() {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test5");
-		reservation.setParkingPlaceId(4);
+		reservation.setParkingSpotId(4);
 		reservation.setUserId(1);
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
@@ -184,7 +184,7 @@ public class ReservationTests {
 	public void testArrivalAndDepartureEnoughMoney() throws InterruptedException {
 		ReservationDto reservation = new ReservationDto();
 		reservation.setLicensePlate("test6s");
-		reservation.setParkingPlaceId(4);
+		reservation.setParkingSpotId(4);
 		reservation.setUserId(1);
 		
 		//add money for the user to be able to pay

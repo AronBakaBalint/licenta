@@ -2,14 +2,14 @@ package aron.utcn.licenta.facade;
 
 import java.util.List;
 
-import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.ParkingSpotDto;
 import aron.utcn.licenta.dto.ReservationDto;
 
 public interface ParkingSpotFacade {
 
-	public List<ParkingPlaceDto> getAllParkingPlaces();
+	public List<ParkingSpotDto> getAllParkingPlaces();
 	
-	public ParkingPlaceDto findById(int id);
+	public ParkingSpotDto findById(int id);
 	
 	public List<ReservationDto> findAllReservations(int userId);
 	

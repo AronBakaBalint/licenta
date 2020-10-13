@@ -9,7 +9,7 @@ import lombok.Data;
 public class ReservationDto {
 
 	private Integer id;
-	private Integer parkingPlaceId;
+	private Integer parkingSpotId;
 	private Integer userId;
 	private String licensePlate;
 	private String status;

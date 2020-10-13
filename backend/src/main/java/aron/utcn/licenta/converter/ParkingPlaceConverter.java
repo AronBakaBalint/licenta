@@ -3,25 +3,25 @@ package aron.utcn.licenta.converter;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import aron.utcn.licenta.dto.ParkingPlaceDto;
+import aron.utcn.licenta.dto.ParkingSpotDto;
 import aron.utcn.licenta.model.ParkingPlace;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ParkingPlaceConverter implements BaseConverter<ParkingPlace, ParkingPlaceDto>{
+public class ParkingPlaceConverter implements BaseConverter<ParkingPlace, ParkingSpotDto>{
 
 	private final Environment environment;
 	
 	@Override
-	public ParkingPlace convertToEntity(ParkingPlaceDto dto) {
+	public ParkingPlace convertToEntity(ParkingSpotDto dto) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ParkingPlaceDto convertToDto(ParkingPlace entity) {
-		ParkingPlaceDto parkingPlaceDto = new ParkingPlaceDto();
+	public ParkingSpotDto convertToDto(ParkingPlace entity) {
+		ParkingSpotDto parkingPlaceDto = new ParkingSpotDto();
 		parkingPlaceDto.setId(entity.getId());
 		parkingPlaceDto.setOccupierCarPlate(entity.getOccupierCarPlate());
 		parkingPlaceDto.setColor(getColorByStatus(entity.getStatus()));

@@ -12,7 +12,7 @@ import android.widget.Button
 import android.widget.ListAdapter
 import com.example.licenta_mobile.R
 
-class ReservationSetupAdapter(private val hoursList: List<String>, private val occupiedHours: List<Int>, private val activity: Activity) : BaseAdapter(), ListAdapter {
+class ReservationSetupAdapter(private val hoursList: List<String>, private val occupiedHours: List<Int>, private val selectedHours: MutableList<Button>, private val activity: Activity) : BaseAdapter(), ListAdapter {
 
     override fun getCount(): Int {
         return hoursList.size
@@ -33,6 +33,8 @@ class ReservationSetupAdapter(private val hoursList: List<String>, private val o
         val view = inflater.inflate(R.layout.occupied_hours, null)
         val hourBtn = view.findViewById<Button>(R.id.hourBtn)
 
+        hourBtn.setOnClickListener {v -> handleHourPressed(v as Button) }
+
         hourBtn.text = hoursList[position]
         if (isCorrespondingHourOccupied(hoursList[position])) {
             hourBtn.isClickable = false
@@ -41,6 +43,25 @@ class ReservationSetupAdapter(private val hoursList: List<String>, private val o
             hourBtn.setBackgroundColor(Color.GREEN)
         }
         return view
+    }
+
+    private fun handleHourPressed(b : Button){
+        if(selectedHours.contains(b)){
+            handleDeselectedHour(b)
+        } else {
+            handleSelectedHour(b)
+        }
+        println(selectedHours)
+    }
+
+    private fun handleSelectedHour(b : Button){
+        selectedHours.add(b)
+        b.setBackgroundColor(Color.YELLOW)
+    }
+
+    private fun handleDeselectedHour(b : Button){
+        selectedHours.remove(b)
+        b.setBackgroundColor(Color.GREEN)
     }
 
     private fun isCorrespondingHourOccupied(btnHour: String): Boolean {
