@@ -32,6 +32,7 @@ public class ReservationController {
 	
 	@PostMapping("/reservation")
 	public MessageDto makeReservation(@RequestBody ReservationDto reservation) {
+		System.out.println(reservation);
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		return new MessageDto(reservationId+"");
 	}

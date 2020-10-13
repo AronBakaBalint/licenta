@@ -97,20 +97,20 @@ class ParkingActivity : AppCompatActivity() {
 
     fun startReservation(view: View) {
         val parkingPlaceId = view.id
-        val reservationCost = reservationCost
+        val reservationCost = getReservationCost()
         val parkingPlaceName = (view as Button).text.toString()
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Reservation")
-        builder.setMessage("Reserve parking place $parkingPlaceName?\nInital cost is $reservationCost LEI but you will get it back as you arrive to the parking lot.")
-        builder.setPositiveButton("YES") { dialog, which ->
-            if (currentSold!! > reservationCost) {
+        builder.setMessage("Reserve parking place $parkingPlaceName?\nInitial cost is $reservationCost LEI but you will get it back as you arrive to the parking lot.")
+        builder.setPositiveButton("YES") { dialog, _ ->
+            if (currentSold > reservationCost) {
                 showReservationDialog(parkingPlaceId)
             } else {
                 NotEnoughMoneyDialog.show(this@ParkingActivity)
             }
             dialog.dismiss()
         }
-        builder.setNegativeButton("NO") { dialog, which -> dialog.dismiss() }
+        builder.setNegativeButton("NO") { dialog, _ -> dialog.dismiss() }
         val alert = builder.create()
         alert.show()
     }
@@ -120,28 +120,31 @@ class ParkingActivity : AppCompatActivity() {
         reservationDialog!!.show()
     }
 
-    private val reservationCost: Double
-        private get() {
-            var reservationCost = -1.0
-            val call = reservationService!!.getReservationCost("Bearer " + Token.jwtToken)
-            try {
-                val response = call!!.execute()
-                reservationCost = response.body()!!.message.toDouble()
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-            }
-            return reservationCost
+    private fun getReservationCost(): Double {
+        var reservationCost = -1.0
+        val call = reservationService!!.getReservationCost("Bearer " + Token.jwtToken)
+        try {
+            val response = call!!.execute()
+            reservationCost = response.body()!!.message.toDouble()
+        } catch (ex: Exception) {
+            ex.printStackTrace()
         }
+        return reservationCost
+    }
+
 
     fun confirmReservation(view: View?) {
         val introducedLicensePlate = reservationDialog!!.introducedLicensePlate!!.text.toString()
         val parkingPlaceId = reservationDialog!!.parkingPlaceId
+        val selectedDate = reservationDialog!!.selectedDate
         val reservationDto = ReservationDto()
-        reservationDto.parkingPlaceId = parkingPlaceId
-        reservationDto.userId = userId!!
+        reservationDto.duration = reservationDialog!!.getIntSelectedHours()
+        reservationDto.parkingSpotId = parkingPlaceId
+        reservationDto.userId = userId
         reservationDto.licensePlate = introducedLicensePlate
+        reservationDto.startTime = selectedDate!!
         reservationDialog!!.dismiss()
-        val call = reservationService!!.reserveParkingPlace("Bearer " + Token.jwtToken, reservationDto)
+        val call = reservationService!!.reserveParkingSpot("Bearer " + Token.jwtToken, reservationDto)
         call.enqueue(object : Callback<MessageDto> {
             override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
                 if (response.isSuccessful) {
@@ -189,7 +192,7 @@ class ParkingActivity : AppCompatActivity() {
     }
 
     private fun viewReservations() {
-        val userId = userId!!
+        val userId = userId
         val call: Call<MutableList<ReservationDto>> = reservationService!!.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {

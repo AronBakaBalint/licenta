@@ -14,7 +14,7 @@ interface ReservationService {
 
     @POST("/reservation")
     @Headers("Content-Type: application/json")
-    fun reserveParkingPlace(@Header("Authorization") auth: String?, @Body reservationDto: ReservationDto): Call<MessageDto>
+    fun reserveParkingSpot(@Header("Authorization") auth: String?, @Body reservationDto: ReservationDto): Call<MessageDto>
 
     @GET("/reservation/{id}")
     @Headers("Content-Type: application/json")

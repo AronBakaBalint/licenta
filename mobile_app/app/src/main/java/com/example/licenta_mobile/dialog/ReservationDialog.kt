@@ -3,6 +3,8 @@ package com.example.licenta_mobile.dialog
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -17,14 +19,15 @@ import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
 import java.util.*
+import kotlin.collections.ArrayList
 
 class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int) : Dialog(activity) {
 
     var introducedLicensePlate: EditText? = null
-    private var selectedDate: SimpleDate? = null
+    var selectedDate: SimpleDate? = null
     private var service: ReservationService? = null
     private var listView: ListView? = null
-    private var selectedHours : MutableList<Button>? = null
+    var selectedHours : MutableList<Button>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +35,20 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
         setContentView(R.layout.reservation_dialog)
         listView = findViewById(R.id.hourList)
         window!!.setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val confirmButton : Button = findViewById(R.id.button3)
+        confirmButton.isClickable = false
         introducedLicensePlate = findViewById(R.id.licensePlateEditor)
+        introducedLicensePlate!!.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                confirmButton.isClickable = !introducedLicensePlate!!.text.isBlank()
+            }
+        })
         service = client!!.create(ReservationService::class.java)
         val datePicker = findViewById<View>(R.id.datePicker1) as DatePicker
         val calendar = Calendar.getInstance()
@@ -78,5 +94,13 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
             list.add(if (i < 10) "0$i:00" else "$i:00")
         }
         return list
+    }
+
+    fun getIntSelectedHours() : MutableList<Int> {
+        var intHoursList : MutableList<Int> = ArrayList()
+        for(s : Button in selectedHours!!){
+            intHoursList.add(s.text!!.toString().replace(":00", "").toInt())
+        }
+        return intHoursList
     }
 }

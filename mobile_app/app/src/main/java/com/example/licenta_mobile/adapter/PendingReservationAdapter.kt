@@ -39,7 +39,7 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>?, 
     }
 
     override fun getItemId(pos: Int): Long {
-        return list!![pos].parkingPlaceId.toLong()
+        return list!![pos].parkingSpotId.toLong()
     }
 
     @SuppressLint("DefaultLocale")

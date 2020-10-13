@@ -51,7 +51,6 @@ class ReservationSetupAdapter(private val hoursList: List<String>, private val o
         } else {
             handleSelectedHour(b)
         }
-        println(selectedHours)
     }
 
     private fun handleSelectedHour(b : Button){
