@@ -29,9 +29,11 @@ import retrofit2.Response
 import java.util.*
 
 class ParkingActivity : AppCompatActivity() {
-    private var reservationService: ReservationService? = null
-    private var reservationDialog: ReservationDialog? = null
-    private var notificationHandler: NotificationHandler? = null
+
+    private lateinit var reservationDialog: ReservationDialog
+    private lateinit var notificationHandler: NotificationHandler
+    private val reservationService = client!!.create(ReservationService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         onInit()
@@ -45,13 +47,12 @@ class ParkingActivity : AppCompatActivity() {
     private fun onInit() {
         update()
         setContentView(R.layout.activity_parking_place_selector)
-        reservationService = client!!.create(ReservationService::class.java)
         notificationHandler = NotificationHandler(this)
         startAutoRefresh()
     }
 
     private fun displayParkingPlaceStatus() {
-        val call = reservationService!!.getAllParkingPlaces("Bearer " + Token.jwtToken)
+        val call = reservationService.getAllParkingPlaces("Bearer " + Token.jwtToken)
         call.enqueue(object : Callback<List<ParkingPlaceDto>> {
             override fun onResponse(call: Call<List<ParkingPlaceDto>>, response: Response<List<ParkingPlaceDto>>) {
                 if (response.isSuccessful) {
@@ -117,14 +118,14 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun showReservationDialog(parkingPlaceId: Int) {
         reservationDialog = ReservationDialog(this, parkingPlaceId)
-        reservationDialog!!.show()
+        reservationDialog.show()
     }
 
     private fun getReservationCost(): Double {
         var reservationCost = -1.0
-        val call = reservationService!!.getReservationCost("Bearer " + Token.jwtToken)
+        val call = reservationService.getReservationCost("Bearer " + Token.jwtToken)
         try {
-            val response = call!!.execute()
+            val response = call.execute()
             reservationCost = response.body()!!.message.toDouble()
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -134,17 +135,17 @@ class ParkingActivity : AppCompatActivity() {
 
 
     fun confirmReservation(view: View?) {
-        val introducedLicensePlate = reservationDialog!!.introducedLicensePlate!!.text.toString()
-        val parkingPlaceId = reservationDialog!!.parkingPlaceId
-        val selectedDate = reservationDialog!!.selectedDate
+        val introducedLicensePlate = reservationDialog.introducedLicensePlate.text.toString()
+        val parkingPlaceId = reservationDialog.parkingPlaceId
+        val selectedDate = reservationDialog.selectedDate
         val reservationDto = ReservationDto()
-        reservationDto.duration = reservationDialog!!.getIntSelectedHours()
+        reservationDto.duration = reservationDialog.getIntSelectedHours()
         reservationDto.parkingSpotId = parkingPlaceId
         reservationDto.userId = userId
         reservationDto.licensePlate = introducedLicensePlate
-        reservationDto.startTime = selectedDate!!
-        reservationDialog!!.dismiss()
-        val call = reservationService!!.reserveParkingSpot("Bearer " + Token.jwtToken, reservationDto)
+        reservationDto.startTime = selectedDate
+        reservationDialog.dismiss()
+        val call = reservationService.reserveParkingSpot("Bearer " + Token.jwtToken, reservationDto)
         call.enqueue(object : Callback<MessageDto> {
             override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
                 if (response.isSuccessful) {
@@ -153,7 +154,7 @@ class ParkingActivity : AppCompatActivity() {
                         ExistingReservationDialog.show(this@ParkingActivity)
                     } else {
                         ReservationInfoDialog.show(this@ParkingActivity)
-                        notificationHandler!!.startCountdownForNotification(reservationId)
+                        notificationHandler.startCountdownForNotification(reservationId)
                         update()
                     }
                 }
@@ -193,7 +194,7 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun viewReservations() {
         val userId = userId
-        val call: Call<MutableList<ReservationDto>> = reservationService!!.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
+        val call: Call<MutableList<ReservationDto>> = reservationService.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {

@@ -8,7 +8,8 @@ import retrofit2.http.Headers
 import retrofit2.http.POST
 
 interface RegistrationService {
+
     @POST("/register")
     @Headers("Content-Type: application/json")
-    fun register(@Body registrationDto: RegistrationDto?): Call<MessageDto>
+    fun register(@Body registrationDto: RegistrationDto): Call<MessageDto>
 }

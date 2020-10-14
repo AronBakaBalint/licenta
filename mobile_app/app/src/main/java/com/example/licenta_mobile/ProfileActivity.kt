@@ -21,12 +21,13 @@ import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class ProfileActivity : AppCompatActivity() {
-    private var moneyTransferDialog: MoneyTransferDialog? = null
-    private var userDataService: UserDataService? = null
+
+    private lateinit var moneyTransferDialog: MoneyTransferDialog
+    private val userDataService = client!!.create(UserDataService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        userDataService = client!!.create(UserDataService::class.java)
         update()
         val currentSold = findViewById<TextView>(R.id.current_sold)
         val currentBalance = UserData.currentSold
@@ -45,7 +46,7 @@ class ProfileActivity : AppCompatActivity() {
 
     fun confirmTransfer(view: View?) {
         try {
-            val introducedAmount = moneyTransferDialog!!.introducedAmount!!.text.toString().toDouble()
+            val introducedAmount = moneyTransferDialog.introducedAmount.text.toString().toDouble()
             val moneyTransferDto = MoneyTransferDto()
             moneyTransferDto.userId = userId
             moneyTransferDto.amount = introducedAmount
@@ -53,17 +54,17 @@ class ProfileActivity : AppCompatActivity() {
         } catch (npe: Exception) {
             println("No value introduced")
         } finally {
-            moneyTransferDialog!!.cancel()
+            moneyTransferDialog.cancel()
         }
     }
 
     private fun transfer(moneyTransferDto: MoneyTransferDto) {
-        val call = userDataService!!.transferMoney("Bearer " + Token.jwtToken, moneyTransferDto)
-        call!!.enqueue(object : Callback<Void?> {
+        val call = userDataService.transferMoney("Bearer " + Token.jwtToken, moneyTransferDto)
+        call.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
                     val currentSold = findViewById<TextView>(R.id.current_sold)
-                    val newAmount = java.lang.Double.valueOf(UserData.currentSold!!) + moneyTransferDto.amount!!
+                    val newAmount = java.lang.Double.valueOf(UserData.currentSold) + moneyTransferDto.amount
                     val df = DecimalFormat("#.##")
                     df.roundingMode = RoundingMode.CEILING
                     currentSold.text = df.format(newAmount) + " LEI"
@@ -81,6 +82,6 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun showAddMoneyDialog() {
         moneyTransferDialog = MoneyTransferDialog(this)
-        moneyTransferDialog!!.show()
+        moneyTransferDialog.show()
     }
 }

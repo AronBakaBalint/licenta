@@ -4,6 +4,7 @@ import com.auth0.android.jwt.JWT
 import com.example.licenta_mobile.model.UserData
 
 object Token {
+
     var jwtToken: String? = null
         set(token) {
             val parsedJWT = JWT(token!!)

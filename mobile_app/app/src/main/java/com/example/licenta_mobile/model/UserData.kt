@@ -10,9 +10,9 @@ import retrofit2.Response
 
 object UserData {
     @JvmStatic var userId: Int = 0
-    @JvmStatic var userName: String? = null
     @JvmStatic var currentSold: Double = 0.0
-    @JvmStatic var email: String? = null
+    @JvmStatic lateinit var userName: String
+    @JvmStatic lateinit var email: String
     @JvmStatic val userDataService = RestClient.client!!.create(UserDataService::class.java)!!
 
     @JvmStatic

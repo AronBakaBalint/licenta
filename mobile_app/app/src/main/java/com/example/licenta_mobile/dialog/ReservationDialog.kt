@@ -23,11 +23,11 @@ import kotlin.collections.ArrayList
 
 class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int) : Dialog(activity) {
 
-    var introducedLicensePlate: EditText? = null
-    var selectedDate: SimpleDate? = null
-    private var service: ReservationService? = null
-    private var listView: ListView? = null
-    var selectedHours : MutableList<Button>? = null
+    lateinit var introducedLicensePlate: EditText
+    lateinit var selectedDate: SimpleDate
+    private lateinit var listView: ListView
+    private lateinit var selectedHours : MutableList<Button>
+    private val service: ReservationService = client!!.create(ReservationService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +38,7 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
         val confirmButton : Button = findViewById(R.id.button3)
         confirmButton.isClickable = false
         introducedLicensePlate = findViewById(R.id.licensePlateEditor)
-        introducedLicensePlate!!.addTextChangedListener(object : TextWatcher {
+        introducedLicensePlate.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -46,10 +46,9 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                confirmButton.isClickable = !introducedLicensePlate!!.text.isBlank()
+                confirmButton.isClickable = !introducedLicensePlate.text.isBlank()
             }
         })
-        service = client!!.create(ReservationService::class.java)
         val datePicker = findViewById<View>(R.id.datePicker1) as DatePicker
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
@@ -66,19 +65,19 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
     private fun refreshTimeTable(year: Int, month: Int, day: Int) {
         selectedHours = ArrayList()
         selectedDate = SimpleDate(day, month + 1, year)
-        val occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate!!)
-        listView!!.adapter = ReservationSetupAdapter(get24HoursList(), occupiedHours, selectedHours as ArrayList<Button>, activity)
-        listView!!.setSelection(12)
+        val occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate)
+        listView.adapter = ReservationSetupAdapter(get24HoursList(), occupiedHours, selectedHours as ArrayList<Button>, activity)
+        listView.setSelection(12)
     }
 
     private fun getReservationSchedule(parkingPlaceId: Int, reservationDate: SimpleDate): List<Int> {
         val reservationList: MutableList<Int> = ArrayList()
-        val callSync = service!!.getAllActiveReservations("Bearer " + Token.jwtToken, parkingPlaceId, reservationDate)
+        val callSync = service.getAllActiveReservations("Bearer " + Token.jwtToken, parkingPlaceId, reservationDate)
         try {
-            val response = callSync!!.execute()
-            val apiResponse = response.body()
-            for (reservation in apiResponse!!) {
-                for (d in reservation!!.duration) {
+            val response = callSync.execute()
+            val apiResponse = response.body()!!
+            for (reservation in apiResponse) {
+                for (d in reservation.duration) {
                     reservationList.add(d)
                 }
             }
@@ -97,9 +96,9 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
     }
 
     fun getIntSelectedHours() : MutableList<Int> {
-        var intHoursList : MutableList<Int> = ArrayList()
-        for(s : Button in selectedHours!!){
-            intHoursList.add(s.text!!.toString().replace(":00", "").toInt())
+        val intHoursList : MutableList<Int> = ArrayList()
+        for(b : Button in selectedHours){
+            intHoursList.add(b.text.toString().replace(":00", "").toInt())
         }
         return intHoursList
     }

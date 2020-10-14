@@ -16,24 +16,23 @@ import retrofit2.Response
 
 class ActiveReservationsActivity : AppCompatActivity() {
 
-    private var reservationService: ReservationService? = null
+    private val reservationService = client!!.create(ReservationService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservations)
-        reservationService = client!!.create(ReservationService::class.java)
         val viewTitle = findViewById<TextView>(R.id.reservationTitle)
-        viewTitle.text = "Reservation History"
+        viewTitle.text = getString(R.string.reservationHistory)
         handleReservations()
     }
 
     private fun handleReservations() {
-        val userId = userId!!
-        val call = reservationService!!.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
+        val userId = userId
+        val call = reservationService.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {
-                    val unconfirmedReservations = response.body()
+                    val unconfirmedReservations = response.body()!!
                     buildView(unconfirmedReservations)
                 }
             }
@@ -45,7 +44,7 @@ class ActiveReservationsActivity : AppCompatActivity() {
         })
     }
 
-    private fun buildView(pendingReservations: MutableList<ReservationDto>?) {
+    private fun buildView(pendingReservations: MutableList<ReservationDto>) {
         val notificationHandler = NotificationHandler(this)
         val adapter = PendingReservationAdapter(pendingReservations, notificationHandler, this)
         val lView = findViewById<ListView>(R.id.pendingReservationList)

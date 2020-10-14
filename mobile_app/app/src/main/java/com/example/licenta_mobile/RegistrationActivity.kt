@@ -14,11 +14,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RegistrationActivity : AppCompatActivity() {
-    private var registrationService: RegistrationService? = null
+    
+    private val registrationService = client!!.create(RegistrationService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
-        registrationService = client!!.create(RegistrationService::class.java)
     }
 
     fun confirmRegistration(view: View?) {
@@ -36,7 +37,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     private fun registerUser(name: String, username: String, password: String, email: String) {
         val registrationDto = RegistrationDto(name, username, email, password)
-        val call = registrationService!!.register(registrationDto)
+        val call = registrationService.register(registrationDto)
         call.enqueue(object : Callback<MessageDto> {
             override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
                 if (response.isSuccessful) {

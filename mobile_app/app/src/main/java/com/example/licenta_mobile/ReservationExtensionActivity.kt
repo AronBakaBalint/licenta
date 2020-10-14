@@ -16,11 +16,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ReservationExtensionActivity : AppCompatActivity() {
-    private var reservationService: ReservationService? = null
+
+    private val reservationService = client!!.create(ReservationService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservations)
-        reservationService = client!!.create(ReservationService::class.java)
         val viewTitle = findViewById<TextView>(R.id.reservationTitle)
         viewTitle.text = getString(R.string.pendingReservations)
         handleUnconfirmedReservations()
@@ -32,24 +33,24 @@ class ReservationExtensionActivity : AppCompatActivity() {
     }
 
     private fun handleUnconfirmedReservations() {
-        val userId = userId!!
-        val call = reservationService!!.getUnoccupiedPlaces("Bearer " + Token.jwtToken, userId)
-        call.enqueue(object : Callback<MutableList<ReservationDto>?> {
-            override fun onResponse(call: Call<MutableList<ReservationDto>?>, response: Response<MutableList<ReservationDto>?>) {
+        val userId = userId
+        val call = reservationService.getUnoccupiedPlaces("Bearer " + Token.jwtToken, userId)
+        call.enqueue(object : Callback<MutableList<ReservationDto>> {
+            override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {
-                    val unconfirmedReservations = response.body()
+                    val unconfirmedReservations = response.body()!!
                     buildView(unconfirmedReservations)
                 }
             }
 
-            override fun onFailure(call: Call<MutableList<ReservationDto>?>, t: Throwable) {
+            override fun onFailure(call: Call<MutableList<ReservationDto>>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }
         })
     }
 
-    private fun buildView(pendingReservations: MutableList<ReservationDto>?) {
+    private fun buildView(pendingReservations: MutableList<ReservationDto>) {
         val notificationHandler = NotificationHandler(this)
         val adapter = PendingReservationAdapter(pendingReservations, notificationHandler, this)
         val lView = findViewById<ListView>(R.id.pendingReservationList)

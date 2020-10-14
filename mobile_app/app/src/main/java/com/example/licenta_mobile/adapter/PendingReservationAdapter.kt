@@ -26,26 +26,26 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PendingReservationAdapter(private val list: MutableList<ReservationDto>?, private val notificationHandler: NotificationHandler, private val activity: Activity) : BaseAdapter(), ListAdapter {
+class PendingReservationAdapter(private val list: MutableList<ReservationDto>, private val notificationHandler: NotificationHandler, private val activity: Activity) : BaseAdapter(), ListAdapter {
 
     private val reservationService: ReservationService = RestClient.client!!.create(ReservationService::class.java)
 
     override fun getCount(): Int {
-        return list!!.size
+        return list.size
     }
 
     override fun getItem(pos: Int): Any {
-        return list!![pos]
+        return list[pos]
     }
 
     override fun getItemId(pos: Int): Long {
-        return list!![pos].parkingSpotId.toLong()
+        return list[pos].parkingSpotId.toLong()
     }
 
     @SuppressLint("DefaultLocale")
     override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
         val licensePlate = convertView.findViewById<TextView>(R.id.licensePlate)
-        licensePlate.text = list!![position].licensePlate.toUpperCase()
+        licensePlate.text = list[position].licensePlate.toUpperCase()
 
         //Handle buttons and add onClickListeners
         val extendBtn = convertView.findViewById<Button>(R.id.extendReservation)
@@ -63,11 +63,11 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>?, 
 
     private fun cancelReservation(reservationDto: ReservationDto) {
         val call = reservationService.cancelReservation("Bearer " + Token.jwtToken, reservationDto.id)
-        call!!.enqueue(object : Callback<Void?> {
+        call.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
                     Toast.makeText(activity, "Reservation cancelled", Toast.LENGTH_SHORT).show()
-                    list!!.remove(reservationDto)
+                    list.remove(reservationDto)
                     notifyDataSetChanged()
                 }
             }
@@ -116,7 +116,7 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>?, 
                 "Yes"
         ) { dialog, _ ->
             dialog.cancel()
-            if (currentSold!! < extensionCost) {
+            if (currentSold < extensionCost) {
                 NotEnoughMoneyDialog.show(activity)
             } else {
                 sendExtendReservationRequest(extensionCost, reservationId)
@@ -133,7 +133,7 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>?, 
         var extensionCost = -1.0
         val call = reservationService.getExtensionCost("Bearer " + Token.jwtToken)
         try {
-            val response = call!!.execute()
+            val response = call.execute()
             extensionCost = response.body()!!.message.toDouble()
         } catch (ex: Exception) {
             ex.printStackTrace()
@@ -143,11 +143,11 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>?, 
 
     private fun sendExtendReservationRequest(extensionCost: Double, reservationId: Int) {
         val call = reservationService.extendReservation("Bearer " + Token.jwtToken, reservationId)
-        call!!.enqueue(object : Callback<Void?> {
+        call.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
                     notificationHandler.startCountdownForNotification(reservationId)
-                    currentSold = currentSold!! - extensionCost
+                    currentSold -= extensionCost
                     Toast.makeText(activity, "Reservation extended", Toast.LENGTH_SHORT).show()
                 }
             }

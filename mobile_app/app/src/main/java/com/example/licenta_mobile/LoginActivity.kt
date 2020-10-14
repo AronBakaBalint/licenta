@@ -18,11 +18,12 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
-    private var loginService: LoginService? = null
+
+    private val loginService = client!!.create(LoginService::class.java)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        loginService = client!!.create(LoginService::class.java)
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
     }
@@ -31,8 +32,8 @@ class LoginActivity : AppCompatActivity() {
         val username = (findViewById<View>(R.id.username) as EditText).text.toString()
         val password = (findViewById<View>(R.id.password) as EditText).text.toString()
         val loginRequestDto = LoginRequestDto(username, password)
-        val call = loginService!!.authenticate(loginRequestDto)
-        call!!.enqueue(object : Callback<JwtTokenDto> {
+        val call = loginService.authenticate(loginRequestDto)
+        call.enqueue(object : Callback<JwtTokenDto> {
             override fun onResponse(call: Call<JwtTokenDto>, response: Response<JwtTokenDto>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!.token

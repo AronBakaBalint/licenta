@@ -11,7 +11,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.licenta_mobile.dto.MessageDto
 import com.example.licenta_mobile.rest.ReservationService
-import com.example.licenta_mobile.rest.RestClient
+import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
@@ -19,7 +19,7 @@ import retrofit2.Response
 
 class NotificationHandler(private val activity: Activity) {
 
-    private val reservationService: ReservationService = RestClient.client!!.create(ReservationService::class.java)
+    private val reservationService = client!!.create(ReservationService::class.java)
 
     fun startCountdownForNotification(parkingPlaceId: Int) {
         startCountDown(parkingPlaceId)
