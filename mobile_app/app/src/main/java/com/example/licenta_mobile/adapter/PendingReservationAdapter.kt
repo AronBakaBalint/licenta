@@ -15,7 +15,7 @@ import android.widget.*
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.appcompat.app.AlertDialog
-import com.example.licenta_mobile.NotificationHandler
+import com.example.licenta_mobile.NotificationScheduler
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog
 import com.example.licenta_mobile.dto.ReservationDto
@@ -29,7 +29,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PendingReservationAdapter(private val list: MutableList<ReservationDto>, private val notificationHandler: NotificationHandler, private val activity: Activity) : BaseAdapter(), ListAdapter {
+class PendingReservationAdapter(private val list: MutableList<ReservationDto>, private val activity: Activity) : BaseAdapter(), ListAdapter {
 
     private val reservationService: ReservationService = RestClient.client!!.create(ReservationService::class.java)
 
@@ -160,7 +160,6 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>, p
         call.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
-                    notificationHandler.startCountdownForNotification(reservationId)
                     currentSold -= extensionCost
                     Toast.makeText(activity, "Reservation extended", Toast.LENGTH_SHORT).show()
                 }

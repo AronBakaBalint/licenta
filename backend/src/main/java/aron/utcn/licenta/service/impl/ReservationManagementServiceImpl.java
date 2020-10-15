@@ -97,6 +97,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		return reservationRepository.getAllReservations().stream()
 				.filter(reservation -> reservation.getParkingPlace().getId() == parkingSpotId)
 				.filter(reservation -> reservation.hasDate(reservationDate))
+				.filter(reservation -> !reservation.isCancelled())
 				.collect(Collectors.toList());
 	}
 

@@ -13,7 +13,6 @@ import com.example.licenta_mobile.dialog.ExistingReservationDialog
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog
 import com.example.licenta_mobile.dialog.ReservationDialog
 import com.example.licenta_mobile.dialog.ReservationInfoDialog
-import com.example.licenta_mobile.dto.MessageDto
 import com.example.licenta_mobile.dto.ParkingPlaceDto
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.UserData.currentSold
@@ -26,12 +25,12 @@ import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
 
 class ParkingActivity : AppCompatActivity() {
 
     private lateinit var reservationDialog: ReservationDialog
-    private lateinit var notificationHandler: NotificationHandler
     private val reservationService = client!!.create(ReservationService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +46,6 @@ class ParkingActivity : AppCompatActivity() {
     private fun onInit() {
         update()
         setContentView(R.layout.activity_parking_place_selector)
-        notificationHandler = NotificationHandler(this)
         startAutoRefresh()
     }
 
@@ -133,7 +131,6 @@ class ParkingActivity : AppCompatActivity() {
         return reservationCost
     }
 
-
     fun confirmReservation(view: View?) {
         val introducedLicensePlate = reservationDialog.introducedLicensePlate.text.toString()
         val parkingPlaceId = reservationDialog.parkingPlaceId
@@ -154,7 +151,9 @@ class ParkingActivity : AppCompatActivity() {
                         ExistingReservationDialog.show(this@ParkingActivity)
                     } else {
                         ReservationInfoDialog.show(this@ParkingActivity)
-                        notificationHandler.startCountdownForNotification(reservationId)
+                        val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH")
+                        val date = dateFormatter.parse("${selectedDate.year}-${selectedDate.month}-${selectedDate.day} ${getReservationStartHour(reservationDialog.getIntSelectedHours())}")
+                        scheduleNotification(reservationId, date)
                         update()
                     }
                 }
@@ -165,6 +164,16 @@ class ParkingActivity : AppCompatActivity() {
                 call.cancel()
             }
         })
+    }
+
+    private fun getReservationStartHour(hoursList: List<Int>): Int {
+        return hoursList.minOrNull()!!
+    }
+
+    private fun scheduleNotification(reservationId: Int, date: Date?) {
+        if (date != null) {
+            NotificationScheduler.builder(this, reservationId, date).start()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

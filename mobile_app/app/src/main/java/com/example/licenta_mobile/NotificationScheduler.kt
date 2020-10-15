@@ -15,18 +15,18 @@ import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
 
-class NotificationHandler(private val activity: Activity) {
+object NotificationScheduler {
 
+    private lateinit var activity: Activity
+    private var reservationId = -1
+    private lateinit var reservationStartTime: Date
     private val reservationService = client!!.create(ReservationService::class.java)
 
-    fun startCountdownForNotification(parkingPlaceId: Int) {
-        startCountDown(parkingPlaceId)
-    }
-
-    private fun startCountDown(reservationId: Int) {
-        val handler = Handler()
-        handler.postDelayed({ checkArrived(reservationId) }, 10000)
+    @JvmStatic
+    fun start() {
+        println("started $reservationStartTime")
     }
 
     private fun checkArrived(reservationId: Int) {
@@ -45,6 +45,14 @@ class NotificationHandler(private val activity: Activity) {
                 call.cancel()
             }
         })
+    }
+
+    @JvmStatic
+    fun builder(activity: Activity, reservationId: Int, reservationStartTime: Date): NotificationScheduler {
+        this.activity = activity
+        this.reservationId = reservationId
+        this.reservationStartTime = reservationStartTime
+        return this
     }
 
     //source

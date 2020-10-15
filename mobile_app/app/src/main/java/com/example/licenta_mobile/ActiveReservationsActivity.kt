@@ -45,8 +45,7 @@ class ActiveReservationsActivity : AppCompatActivity() {
     }
 
     private fun buildView(pendingReservations: MutableList<ReservationDto>) {
-        val notificationHandler = NotificationHandler(this)
-        val adapter = PendingReservationAdapter(pendingReservations, notificationHandler, this)
+        val adapter = PendingReservationAdapter(pendingReservations, this)
         val lView = findViewById<ListView>(R.id.pendingReservationList)
         lView.adapter = adapter
     }
