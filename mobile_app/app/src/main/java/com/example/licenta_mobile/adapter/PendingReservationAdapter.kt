@@ -3,9 +3,11 @@ package com.example.licenta_mobile.adapter
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -26,6 +28,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class PendingReservationAdapter(private val list: MutableList<ReservationDto>, private val notificationHandler: NotificationHandler, private val activity: Activity) : BaseAdapter(), ListAdapter {
 
     private val reservationService: ReservationService = RestClient.client!!.create(ReservationService::class.java)
@@ -42,32 +45,39 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>, p
         return list[pos].parkingSpotId.toLong()
     }
 
-    @SuppressLint("DefaultLocale")
-    override fun getView(position: Int, convertView: View, parent: ViewGroup): View {
-        val licensePlate = convertView.findViewById<TextView>(R.id.licensePlate)
+    @SuppressLint("DefaultLocale", "InflateParams")
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        var view = convertView
+        if (view == null) {
+            val inflater = activity.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            view = inflater.inflate(R.layout.unconfirmed_reservations, null)
+        }
+
+        val licensePlate = view!!.findViewById<TextView>(R.id.licensePlate)
         licensePlate.text = list[position].licensePlate.toUpperCase()
 
         //Handle buttons and add onClickListeners
-        val extendBtn = convertView.findViewById<Button>(R.id.extendReservation)
-        val cancelBtn = convertView.findViewById<Button>(R.id.cancelReservation)
+        val extendBtn = view.findViewById<Button>(R.id.extendReservation)
+        val cancelBtn = view.findViewById<Button>(R.id.cancelReservation)
         if (list[position].status == "cancelled" || list[position].status == "finished") {
-            extendBtn.visibility = View.INVISIBLE
-            cancelBtn.visibility = View.INVISIBLE
+            hide(extendBtn)
+            hide(cancelBtn)
         }
-        val qrCodeBtn = convertView.findViewById<Button>(R.id.viewQR)
+        val qrCodeBtn = view.findViewById<Button>(R.id.viewQR)
         extendBtn.setOnClickListener { extendReservation(list[position].id) }
-        cancelBtn.setOnClickListener { cancelReservation(list[position]) }
-        qrCodeBtn.setOnClickListener { showQRCodeDialog(list[position].id.toString() + "", qrCodeBtn) }
-        return convertView
+        cancelBtn.setOnClickListener { cancelReservation(list[position], cancelBtn, extendBtn) }
+        qrCodeBtn.setOnClickListener { showQRCodeDialog(list[position].id.toString(), qrCodeBtn) }
+        return view
     }
 
-    private fun cancelReservation(reservationDto: ReservationDto) {
+    private fun cancelReservation(reservationDto: ReservationDto, cancelButton: Button, extendButton: Button) {
         val call = reservationService.cancelReservation("Bearer " + Token.jwtToken, reservationDto.id)
         call.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
                     Toast.makeText(activity, "Reservation cancelled", Toast.LENGTH_SHORT).show()
-                    list.remove(reservationDto)
+                    hide(cancelButton)
+                    hide(extendButton)
                     notifyDataSetChanged()
                 }
             }
@@ -79,15 +89,19 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>, p
         })
     }
 
+    private fun hide(view: View?){
+        view!!.visibility = View.INVISIBLE
+    }
+
     //source
     //https://www.c-sharpcorner.com/article/how-to-generate-qr-code-in-android/
-    private fun showQRCodeDialog(reservationId: String, view: View) {
+    private fun showQRCodeDialog(reservationId: String, view: View?) {
         val display = activity.windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
         val width = (size.x * 0.95).toInt()
         val qrgEncoder = QRGEncoder(reservationId, null, QRGContents.Type.TEXT, width)
-        val builder = Dialog(view.context)
+        val builder = Dialog(view!!.context)
         builder.requestWindowFeature(Window.FEATURE_NO_TITLE)
         builder.window!!.setBackgroundDrawable(
                 ColorDrawable(Color.TRANSPARENT))
