@@ -37,8 +37,8 @@ public class ReservationFacadeImpl implements ReservationFacade {
 	}
 
 	@Override
-	public String getReservationStatus(Integer reservationId) {
-		return reservationService.getReservationStatus(reservationId);
+	public Boolean isReservationPending(Integer reservationId) {
+		return reservationService.isReservationPending(reservationId);
 	}
 
 	@Override

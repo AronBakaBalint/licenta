@@ -22,16 +22,10 @@ object RestClient {
     val client: Retrofit?
         get() {
             if (retrofit == null) {
-
-                val gson = GsonBuilder()
-                        .setLenient()
-                        .create()
-
-
                 retrofit = Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(unsafeOkHttpClient().build())
-                        .addConverterFactory(GsonConverterFactory.create(gson))
+                        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
                         .build()
             }
             return retrofit

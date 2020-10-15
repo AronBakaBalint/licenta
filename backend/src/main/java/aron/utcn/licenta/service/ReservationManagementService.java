@@ -19,6 +19,6 @@ public interface ReservationManagementService {
 	
 	public List<Reservation> findReservationsByUser(int userId);
 	
-	public String getReservationStatus(Integer reservationId);
+	public Boolean isReservationPending(Integer reservationId);
 	
 }

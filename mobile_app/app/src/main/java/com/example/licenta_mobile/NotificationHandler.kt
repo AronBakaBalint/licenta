@@ -30,17 +30,17 @@ class NotificationHandler(private val activity: Activity) {
     }
 
     private fun checkArrived(reservationId: Int) {
-        val call = reservationService.getReservationStatus("Bearer " + Token.jwtToken, reservationId)
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
+        val call = reservationService.isReservationPending("Bearer " + Token.jwtToken, reservationId)
+        call.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
                 if (response.isSuccessful) {
-                    if (response.body()!! == "reserved") {
+                    if (response.body()!!) {
                         showNotification()
                     }
                 }
             }
 
-            override fun onFailure(call: Call<String>, t: Throwable) {
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }

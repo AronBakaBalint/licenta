@@ -25,8 +25,8 @@ public class ReservationController {
 	private final ReservationFacade reservationFacade;
 	
 	@GetMapping("/reservation/{id}")
-	public String getReservationStatus(@PathVariable Integer id) {
-		return reservationFacade.getReservationStatus(id);
+	public Boolean isReservationPending(@PathVariable Integer id) {
+		return reservationFacade.isReservationPending(id);
 	}
 	
 	@PostMapping("/reservation")

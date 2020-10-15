@@ -88,8 +88,8 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	}
 
 	@Override
-	public String getReservationStatus(Integer reservationId) {
-		return reservationRepository.findById(reservationId).get().getStatus();
+	public Boolean isReservationPending(Integer reservationId) {
+		return reservationRepository.findById(reservationId).get().isReserved();
 	}
 
 	@Override

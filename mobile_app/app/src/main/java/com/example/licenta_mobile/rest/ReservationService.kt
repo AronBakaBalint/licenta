@@ -19,7 +19,7 @@ interface ReservationService {
 
     @GET("/reservation/{id}")
     @Headers("Content-Type: application/json")
-    fun getReservationStatus(@Header("Authorization") auth: String, @Path("id") id: Int): Call<String>
+    fun isReservationPending(@Header("Authorization") auth: String, @Path("id") id: Int): Call<Boolean>
 
     @DELETE("/reservation/{id}")
     @Headers("Content-Type: application/json")

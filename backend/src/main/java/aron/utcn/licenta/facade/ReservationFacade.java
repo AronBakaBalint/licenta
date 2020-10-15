@@ -15,5 +15,5 @@ public interface ReservationFacade {
 
 	public void cancelReservation(Integer reservationId);
 	
-	public String getReservationStatus(Integer reservationId);
+	public Boolean isReservationPending(Integer reservationId);
 }

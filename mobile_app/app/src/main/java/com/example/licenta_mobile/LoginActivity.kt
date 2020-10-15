@@ -50,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<String>, t: Throwable) {
-                t.printStackTrace()
                 Toast.makeText(this@LoginActivity, "Connection Error! Please try again later!", Toast.LENGTH_LONG).show()
                 call.cancel()
             }
