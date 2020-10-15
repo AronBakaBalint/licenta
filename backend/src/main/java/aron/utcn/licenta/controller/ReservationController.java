@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import aron.utcn.licenta.dto.MessageDto;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ReservationFacade;
 import aron.utcn.licenta.model.SimpleDate;
@@ -26,14 +25,13 @@ public class ReservationController {
 	private final ReservationFacade reservationFacade;
 	
 	@GetMapping("/reservation/{id}")
-	public MessageDto getReservationStatus(@PathVariable Integer id) {
-		return new MessageDto(reservationFacade.getReservationStatus(id));
+	public String getReservationStatus(@PathVariable Integer id) {
+		return reservationFacade.getReservationStatus(id);
 	}
 	
 	@PostMapping("/reservation")
-	public MessageDto makeReservation(@RequestBody ReservationDto reservation) {
-		int reservationId = reservationFacade.reserveParkingPlace(reservation);
-		return new MessageDto(reservationId+"");
+	public Integer makeReservation(@RequestBody ReservationDto reservation) {
+		return reservationFacade.reserveParkingPlace(reservation);
 	}
 	
 	@PutMapping("/reservation/{id}")
@@ -53,13 +51,13 @@ public class ReservationController {
 	}
 	
 	@GetMapping("/reservation/extension")
-	public MessageDto getExtensionCost() {
-		return new MessageDto(environment.getProperty("parking.extension_cost"));
+	public Double getExtensionCost() {
+		return Double.parseDouble(environment.getProperty("parking.extension_cost"));
 	}
 	
 	@GetMapping("/reservation")
-	public MessageDto getReservationCost() {
-		return new MessageDto(environment.getProperty("parking.reservation_cost"));
+	public Double getReservationCost() {
+		return Double.parseDouble(environment.getProperty("parking.reservation_cost"));
 	}
 	
 }

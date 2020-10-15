@@ -3,6 +3,7 @@ package com.example.licenta_mobile
 import android.content.Intent
 import android.os.Bundle
 import android.os.StrictMode
+import android.util.JsonReader
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -33,10 +34,10 @@ class LoginActivity : AppCompatActivity() {
         val password = (findViewById<View>(R.id.password) as EditText).text.toString()
         val loginRequestDto = LoginRequestDto(username, password)
         val call = loginService.authenticate(loginRequestDto)
-        call.enqueue(object : Callback<JwtTokenDto> {
-            override fun onResponse(call: Call<JwtTokenDto>, response: Response<JwtTokenDto>) {
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()!!.token
+                    val responseBody = response.body()!!
                     if ("false" == responseBody) {
                         Toast.makeText(this@LoginActivity, "Incorrect Username or Password", Toast.LENGTH_LONG).show()
                     } else {
@@ -48,7 +49,8 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<JwtTokenDto>, t: Throwable) {
+            override fun onFailure(call: Call<String>, t: Throwable) {
+                t.printStackTrace()
                 Toast.makeText(this@LoginActivity, "Connection Error! Please try again later!", Toast.LENGTH_LONG).show()
                 call.cancel()
             }

@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Handler
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.licenta_mobile.dto.MessageDto
 import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
@@ -32,16 +31,16 @@ class NotificationHandler(private val activity: Activity) {
 
     private fun checkArrived(reservationId: Int) {
         val call = reservationService.getReservationStatus("Bearer " + Token.jwtToken, reservationId)
-        call.enqueue(object : Callback<MessageDto> {
-            override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
+        call.enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
-                    if (response.body()!!.message == "reserved") {
+                    if (response.body()!! == "reserved") {
                         showNotification()
                     }
                 }
             }
 
-            override fun onFailure(call: Call<MessageDto>, t: Throwable) {
+            override fun onFailure(call: Call<String>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }

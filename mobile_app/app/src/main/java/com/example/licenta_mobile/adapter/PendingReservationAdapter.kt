@@ -148,7 +148,7 @@ class PendingReservationAdapter(private val list: MutableList<ReservationDto>, p
         val call = reservationService.getExtensionCost("Bearer " + Token.jwtToken)
         try {
             val response = call.execute()
-            extensionCost = response.body()!!.message.toDouble()
+            extensionCost = response.body()!!
         } catch (ex: Exception) {
             ex.printStackTrace()
         }

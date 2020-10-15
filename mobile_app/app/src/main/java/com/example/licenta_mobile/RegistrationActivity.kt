@@ -38,18 +38,20 @@ class RegistrationActivity : AppCompatActivity() {
     private fun registerUser(name: String, username: String, password: String, email: String) {
         val registrationDto = RegistrationDto(name, username, email, password)
         val call = registrationService.register(registrationDto)
-        call.enqueue(object : Callback<MessageDto> {
-            override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
+        call.enqueue(object : Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()!!.message
-                    if ("ok" == responseBody) {
+                    val responseBody = response.body()!!
+                    if (0 == responseBody) {
                         Toast.makeText(this@RegistrationActivity, "Registration successful!", Toast.LENGTH_SHORT).show()
                         finish()
+                    } else {
+                        Toast.makeText(this@RegistrationActivity, "Username already exists!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
 
-            override fun onFailure(call: Call<MessageDto>, t: Throwable) {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }

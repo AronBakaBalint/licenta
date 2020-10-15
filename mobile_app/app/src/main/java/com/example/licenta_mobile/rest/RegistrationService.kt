@@ -11,5 +11,5 @@ interface RegistrationService {
 
     @POST("/register")
     @Headers("Content-Type: application/json")
-    fun register(@Body registrationDto: RegistrationDto): Call<MessageDto>
+    fun register(@Body registrationDto: RegistrationDto): Call<Int>
 }

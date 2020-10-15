@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import aron.utcn.licenta.dto.JwtTokenDto;
 import aron.utcn.licenta.dto.LoginDto;
 import aron.utcn.licenta.exception.UserNotFoundException;
 import aron.utcn.licenta.jwt.JwtResponse;
@@ -33,23 +32,23 @@ public class LoginController {
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@PostMapping("/login")
-	public JwtTokenDto createAuthenticationToken(@RequestBody LoginDto authenticationRequest) {
+	public String createAuthenticationToken(@RequestBody LoginDto authenticationRequest) {
 
 		Person person;
 		try{
 			person = personManagementService.findByUsername(authenticationRequest.getUsername());
 		} catch(UserNotFoundException unfe) {
-			return new JwtTokenDto("false");
+			return "false";
 		}
 		
 		if(!passwordEncoder.matches(authenticationRequest.getPassword(), person.getPassword())) {
-			return new JwtTokenDto("false");
+			return "false";
 		}
 		
 		final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
 		final String token = jwtTokenUtil.generateToken(userDetails);
 		
-		return new JwtTokenDto(ResponseEntity.ok(new JwtResponse(token)).getBody().getToken());
+		return ResponseEntity.ok(new JwtResponse(token)).getBody().getToken();
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.example.licenta_mobile.rest
 
 import android.annotation.SuppressLint
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,6 +12,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
+
 object RestClient {
 
     private const val BASE_URL = "https://192.168.0.102:8443"
@@ -20,10 +22,16 @@ object RestClient {
     val client: Retrofit?
         get() {
             if (retrofit == null) {
+
+                val gson = GsonBuilder()
+                        .setLenient()
+                        .create()
+
+
                 retrofit = Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(unsafeOkHttpClient().build())
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .build()
             }
             return retrofit

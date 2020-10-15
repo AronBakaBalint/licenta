@@ -126,7 +126,7 @@ class ParkingActivity : AppCompatActivity() {
         val call = reservationService.getReservationCost("Bearer " + Token.jwtToken)
         try {
             val response = call.execute()
-            reservationCost = response.body()!!.message.toDouble()
+            reservationCost = response.body()!!
         } catch (ex: Exception) {
             ex.printStackTrace()
         }
@@ -146,10 +146,10 @@ class ParkingActivity : AppCompatActivity() {
         reservationDto.startTime = selectedDate
         reservationDialog.dismiss()
         val call = reservationService.reserveParkingSpot("Bearer " + Token.jwtToken, reservationDto)
-        call.enqueue(object : Callback<MessageDto> {
-            override fun onResponse(call: Call<MessageDto>, response: Response<MessageDto>) {
+        call.enqueue(object : Callback<Int> {
+            override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 if (response.isSuccessful) {
-                    val reservationId = response.body()!!.message.toInt()
+                    val reservationId = response.body()!!
                     if (reservationId == -1) {
                         ExistingReservationDialog.show(this@ParkingActivity)
                     } else {
@@ -160,7 +160,7 @@ class ParkingActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onFailure(call: Call<MessageDto>, t: Throwable) {
+            override fun onFailure(call: Call<Int>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }

@@ -15,11 +15,11 @@ interface ReservationService {
 
     @POST("/reservation")
     @Headers("Content-Type: application/json")
-    fun reserveParkingSpot(@Header("Authorization") auth: String, @Body reservationDto: ReservationDto): Call<MessageDto>
+    fun reserveParkingSpot(@Header("Authorization") auth: String, @Body reservationDto: ReservationDto): Call<Int>
 
     @GET("/reservation/{id}")
     @Headers("Content-Type: application/json")
-    fun getReservationStatus(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MessageDto>
+    fun getReservationStatus(@Header("Authorization") auth: String, @Path("id") id: Int): Call<String>
 
     @DELETE("/reservation/{id}")
     @Headers("Content-Type: application/json")
@@ -35,11 +35,11 @@ interface ReservationService {
 
     @GET("/reservation/extension")
     @Headers("Content-Type: application/json")
-    fun getExtensionCost(@Header("Authorization") auth: String): Call<MessageDto>
+    fun getExtensionCost(@Header("Authorization") auth: String): Call<Double>
 
     @GET("/reservation")
     @Headers("Content-Type: application/json")
-    fun getReservationCost(@Header("Authorization") auth: String): Call<MessageDto>
+    fun getReservationCost(@Header("Authorization") auth: String): Call<Double>
 
     @POST("/reservation/date/{id}")
     @Headers("Content-Type: application/json")

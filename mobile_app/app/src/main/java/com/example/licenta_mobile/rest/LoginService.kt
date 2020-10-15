@@ -11,5 +11,5 @@ interface LoginService {
 
     @POST("/login")
     @Headers("Content-Type: application/json")
-    fun authenticate(@Body loginRequestDto: LoginRequestDto): Call<JwtTokenDto>
+    fun authenticate(@Body loginRequestDto: LoginRequestDto): Call<String>
 }
