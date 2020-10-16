@@ -96,32 +96,22 @@ class ParkingActivity : AppCompatActivity() {
 
     fun startReservation(view: View) {
         val parkingPlaceId = view.id
-        val reservationCost = getReservationCost()
-        val parkingPlaceName = (view as Button).text.toString()
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Reservation")
-        builder.setMessage("Reserve parking place $parkingPlaceName?\nInitial cost is $reservationCost LEI but you will get it back as you arrive to the parking lot.")
-        builder.setPositiveButton("YES") { dialog, _ ->
-            if (currentSold > reservationCost) {
-                showReservationDialog(parkingPlaceId)
-            } else {
-                NotEnoughMoneyDialog.show(this@ParkingActivity)
-            }
-            dialog.dismiss()
+        val pricePerHour = getPriceperHour()
+        if (currentSold > pricePerHour) {
+            showReservationDialog(parkingPlaceId, pricePerHour)
+        } else {
+            NotEnoughMoneyDialog.show(this@ParkingActivity)
         }
-        builder.setNegativeButton("NO") { dialog, _ -> dialog.dismiss() }
-        val alert = builder.create()
-        alert.show()
     }
 
-    private fun showReservationDialog(parkingPlaceId: Int) {
-        reservationDialog = ReservationDialog(this, parkingPlaceId)
+    private fun showReservationDialog(parkingPlaceId: Int, pricePerHour: Double ) {
+        reservationDialog = ReservationDialog(this, parkingPlaceId, pricePerHour)
         reservationDialog.show()
     }
 
-    private fun getReservationCost(): Double {
+    private fun getPriceperHour(): Double {
         var reservationCost = -1.0
-        val call = reservationService.getReservationCost("Bearer " + Token.jwtToken)
+        val call = reservationService.getPricePerHour("Bearer " + Token.jwtToken)
         try {
             val response = call.execute()
             reservationCost = response.body()!!

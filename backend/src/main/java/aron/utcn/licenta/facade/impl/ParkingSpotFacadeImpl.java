@@ -9,7 +9,7 @@ import aron.utcn.licenta.converter.BaseConverter;
 import aron.utcn.licenta.dto.ParkingSpotDto;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ParkingSpotFacade;
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Reservation;
 import aron.utcn.licenta.service.ParkingSpotManagementService;
 import aron.utcn.licenta.service.ReservationManagementService;
@@ -23,7 +23,7 @@ public class ParkingSpotFacadeImpl implements ParkingSpotFacade {
 
 	private final ReservationManagementService reservationService;
 
-	private final BaseConverter<ParkingPlace, ParkingSpotDto> parkingSpotconverter;
+	private final BaseConverter<ParkingSpot, ParkingSpotDto> parkingSpotconverter;
 
 	private final BaseConverter<Reservation, ReservationDto> reservationConverter;
 

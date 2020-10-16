@@ -21,7 +21,7 @@ public class Reservation {
 	private Integer id;
 	
 	@OneToOne
-	private ParkingPlace parkingPlace;
+	private ParkingSpot parkingSpot;
 	
 	@OneToOne
 	private Person user;
@@ -65,6 +65,10 @@ public class Reservation {
 	
 	public boolean isExpired() {
 		return isCancelled() || isFinished();
+	}
+	
+	public Integer getParkingSpotId() {
+		return parkingSpot.getId();
 	}
 	
 	public boolean hasDate(SimpleDate date) {

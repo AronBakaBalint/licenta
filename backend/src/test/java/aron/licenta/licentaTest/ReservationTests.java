@@ -22,7 +22,7 @@ import aron.utcn.licenta.ParkingApplication;
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.PersonFacade;
 import aron.utcn.licenta.facade.ReservationFacade;
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.service.ParkingSpotManagementService;
 import aron.utcn.licenta.service.PersonManagementService;
@@ -106,7 +106,7 @@ public class ReservationTests {
 		reservation.setUserId(1);
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
-		ParkingPlace parkingPlace = reservationService.findById(reservationId).getParkingPlace();
+		ParkingSpot parkingPlace = reservationService.findById(reservationId).getParkingSpot();
 		assertEquals("reserved", status);
 		assertEquals("reserved", parkingPlace.getStatus());
 	}
@@ -121,7 +121,7 @@ public class ReservationTests {
 		reservationService.cancelReservation(reservationId);
 		String status = reservationService.findById(reservationId).getStatus();
 		assertEquals("cancelled", status);
-		ParkingPlace parkingPlace = reservationService.findById(reservationId).getParkingPlace();
+		ParkingSpot parkingPlace = reservationService.findById(reservationId).getParkingSpot();
 		assertEquals("free", parkingPlaceService.findById(parkingPlace.getId()).getStatus());
 	}
 	

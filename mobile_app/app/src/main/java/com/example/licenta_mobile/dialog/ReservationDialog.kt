@@ -2,31 +2,33 @@ package com.example.licenta_mobile.dialog
 
 import android.app.Activity
 import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.EditText
-import android.widget.ListView
+import android.widget.*
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.adapter.ReservationSetupAdapter
+import com.example.licenta_mobile.lambda.PriceUpdater
 import com.example.licenta_mobile.model.SimpleDate
+import com.example.licenta_mobile.model.UserData
+import com.example.licenta_mobile.model.UserData.currentSold
 import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int) : Dialog(activity) {
+class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int, private val pricePerHour: Double) : Dialog(activity) {
 
     lateinit var introducedLicensePlate: EditText
     lateinit var selectedDate: SimpleDate
     private lateinit var listView: ListView
-    private lateinit var selectedHours : MutableList<Button>
+    private lateinit var selectedHours: MutableList<Button>
+    private lateinit var confirmButton: Button
     private val service: ReservationService = client!!.create(ReservationService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,7 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
         setContentView(R.layout.reservation_dialog)
         listView = findViewById(R.id.hourList)
         window!!.setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-        val confirmButton : Button = findViewById(R.id.button3)
+        confirmButton = findViewById(R.id.button3)
         confirmButton.isClickable = false
         introducedLicensePlate = findViewById(R.id.licensePlateEditor)
         introducedLicensePlate.addTextChangedListener(object : TextWatcher {
@@ -66,7 +68,19 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
         selectedHours = ArrayList()
         selectedDate = SimpleDate(day, month + 1, year)
         val occupiedHours = getReservationSchedule(parkingPlaceId, selectedDate)
-        listView.adapter = ReservationSetupAdapter(get24HoursList(), occupiedHours, selectedHours as ArrayList<Button>, activity)
+        val priceUpdater: () -> Unit = {
+            val displayedPrice = findViewById<TextView>(R.id.amountToPay)
+            val priceToPay = pricePerHour * selectedHours.size
+            if(priceToPay > currentSold){
+                displayedPrice.setTextColor(Color.RED)
+                confirmButton.isClickable = false
+            } else {
+                displayedPrice.setTextColor(Color.rgb(0, 175, 32))
+                confirmButton.isClickable = true
+            }
+            displayedPrice.text = "$priceToPay LEI"
+        }
+        listView.adapter = ReservationSetupAdapter(get24HoursList(), occupiedHours, selectedHours as ArrayList<Button>, activity, priceUpdater)
         listView.setSelection(12)
     }
 
@@ -95,9 +109,9 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int)
         return list
     }
 
-    fun getIntSelectedHours() : MutableList<Int> {
-        val intHoursList : MutableList<Int> = ArrayList()
-        for(b : Button in selectedHours){
+    fun getIntSelectedHours(): MutableList<Int> {
+        val intHoursList: MutableList<Int> = ArrayList()
+        for (b: Button in selectedHours) {
             intHoursList.add(b.text.toString().replace(":00", "").toInt())
         }
         return intHoursList

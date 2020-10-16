@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ReservationFacade;
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.SimpleDate;
 import aron.utcn.licenta.service.ParkingSpotManagementService;
@@ -43,12 +43,12 @@ public class ApplicationSeed implements CommandLineRunner {
 		person.setUsername("asd31");
 		person.setName("John Doe");
 		person.setEmail("asd31@gmail.com");
-		person.setBalance(50.0);
+		person.setBalance(14.0);
 		person.setPassword(passwordEncoder.encode("123"));
 		personManagementService.save(person);
 		
 		for(int i=1;i<=24; i++) {
-			ParkingPlace p = new ParkingPlace();
+			ParkingSpot p = new ParkingSpot();
 			parkingPlaceService.save(p);
 		}
 		

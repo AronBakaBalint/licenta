@@ -56,8 +56,8 @@ public class ReservationController {
 	}
 	
 	@GetMapping("/reservation")
-	public Double getReservationCost() {
-		return Double.parseDouble(environment.getProperty("parking.reservation_cost"));
+	public Double getPricePerHour() {
+		return Double.parseDouble(environment.getProperty("parking.price_per_hour"));
 	}
 	
 }

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @NoArgsConstructor
-public class ParkingPlace {
+public class ParkingSpot {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

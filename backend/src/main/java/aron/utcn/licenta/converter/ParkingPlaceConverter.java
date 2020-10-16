@@ -4,23 +4,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.dto.ParkingSpotDto;
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class ParkingPlaceConverter implements BaseConverter<ParkingPlace, ParkingSpotDto>{
+public class ParkingPlaceConverter implements BaseConverter<ParkingSpot, ParkingSpotDto>{
 
 	private final Environment environment;
 	
 	@Override
-	public ParkingPlace convertToEntity(ParkingSpotDto dto) {
+	public ParkingSpot convertToEntity(ParkingSpotDto dto) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ParkingSpotDto convertToDto(ParkingPlace entity) {
+	public ParkingSpotDto convertToDto(ParkingSpot entity) {
 		ParkingSpotDto parkingPlaceDto = new ParkingSpotDto();
 		parkingPlaceDto.setId(entity.getId());
 		parkingPlaceDto.setOccupierCarPlate(entity.getOccupierCarPlate());

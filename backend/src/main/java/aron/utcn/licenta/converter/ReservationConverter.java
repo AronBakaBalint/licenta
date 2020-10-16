@@ -31,7 +31,7 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		reservation.setUser(personService.findById(dto.getUserId()));
 		reservation.setLicensePlate(dto.getLicensePlate());
 		reservation.setReservationDate(new Date());
-		reservation.setParkingPlace(parkingSpotService.findById(dto.getParkingSpotId()));
+		reservation.setParkingSpot(parkingSpotService.findById(dto.getParkingSpotId()));
 		
 		SimpleDate date = dto.getStartTime(); 
 		Date reservationDate;
@@ -51,7 +51,7 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		reservationDto.setStatus(entity.getStatus());
 		reservationDto.setId(entity.getId());
 		reservationDto.setLicensePlate(entity.getLicensePlate());
-		reservationDto.setParkingSpotId(entity.getParkingPlace().getId());
+		reservationDto.setParkingSpotId(entity.getParkingSpotId());
 		reservationDto.setDuration(generateHours(entity.getReservationDate().getHours(), entity.getDuration()));
 		LocalDate localDate = entity.getReservationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		reservationDto.setStartTime(new SimpleDate(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear()));

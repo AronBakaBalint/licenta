@@ -2,13 +2,14 @@ package aron.utcn.licenta.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import static java.util.function.Predicate.not;
 import java.util.stream.Collectors;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
 import aron.utcn.licenta.model.SimpleDate;
@@ -40,11 +41,11 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 			return -1;
 		} else {
 			Person user = reservation.getUser();
-			String reservationCost = environment.getProperty("parking.reservation_cost");
-			user.pay(Double.parseDouble(reservationCost));
+			Double pricePerHour = Double.parseDouble(environment.getProperty("parking.price_per_hour"));
+			user.pay(pricePerHour * reservation.getDuration());
 			reservation.setReserved();
 			int reservationId = reservationRepository.saveReservation(reservation);
-			reserve(reservationId, reservation.getParkingPlace().getId(), reservation.getLicensePlate(),
+			reserve(reservationId, reservation.getParkingSpotId(), reservation.getLicensePlate(),
 					reservation.getUser().getId());
 			return reservationId;
 		}
@@ -53,7 +54,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Transactional
 	private void reserve(int reservationId, int parkingPlaceId, String licensePlate, int userId) {
 		Person user = personRepository.findById(userId);
-		ParkingPlace parkingPlace = parkingPlaceRespository.findById(parkingPlaceId);
+		ParkingSpot parkingPlace = parkingPlaceRespository.findById(parkingPlaceId);
 		parkingPlace.setReserved(licensePlate, user);
 		parkingPlace.setReservation(reservationRepository.findById(reservationId).get());
 	}
@@ -63,7 +64,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	public void cancelReservation(int reservationId) {
 		Reservation reservation = reservationRepository.findById(reservationId).get();
 		reservation.cancel();
-		ParkingPlace parkingPlace = parkingPlaceRespository.findById(reservation.getParkingPlace().getId());
+		ParkingSpot parkingPlace = parkingPlaceRespository.findById(reservation.getParkingSpotId());
 		parkingPlace.setFree();
 	}
 
@@ -73,7 +74,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		Double extensionCost = Double.parseDouble(environment.getProperty("parking.extension_cost"));
 		Reservation reservation = reservationRepository.findById(reservationId).get();
 		Person person = personRepository
-				.findById(parkingPlaceRespository.findById(reservation.getParkingPlace().getId()).getUser().getId());
+				.findById(parkingPlaceRespository.findById(reservation.getParkingSpotId()).getUser().getId());
 		person.pay(extensionCost);
 	}
 
@@ -95,9 +96,9 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	public List<Reservation> getAllActiveReservations(Integer parkingSpotId, SimpleDate reservationDate) {
 		return reservationRepository.getAllReservations().stream()
-				.filter(reservation -> reservation.getParkingPlace().getId() == parkingSpotId)
+				.filter(reservation -> reservation.getParkingSpotId() == parkingSpotId)
 				.filter(reservation -> reservation.hasDate(reservationDate))
-				.filter(reservation -> !reservation.isCancelled())
+				.filter(not(Reservation::isCancelled))
 				.collect(Collectors.toList());
 	}
 

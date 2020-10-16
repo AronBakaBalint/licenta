@@ -39,7 +39,7 @@ interface ReservationService {
 
     @GET("/reservation")
     @Headers("Content-Type: application/json")
-    fun getReservationCost(@Header("Authorization") auth: String): Call<Double>
+    fun getPricePerHour(@Header("Authorization") auth: String): Call<Double>
 
     @POST("/reservation/date/{id}")
     @Headers("Content-Type: application/json")

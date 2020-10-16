@@ -11,7 +11,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
@@ -36,18 +36,18 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 	private final PersonRepository personRepository;
 
 	@Override
-	public List<ParkingPlace> getAllParkingPlaces() {
+	public List<ParkingSpot> getAllParkingPlaces() {
 		return parkingPlaceRepository.getAllParkingPlaces();
 	}
 
 	@Override
 	@Transactional
-	public void save(ParkingPlace parkingPlace) {
+	public void save(ParkingSpot parkingPlace) {
 		parkingPlaceRepository.save(parkingPlace);
 	}
 
 	@Override
-	public ParkingPlace findById(int id) {
+	public ParkingSpot findById(int id) {
 		return parkingPlaceRepository.findById(id);
 	}
 
@@ -77,7 +77,7 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 			if (reservation.isExpired()) {
 				displayOnLCD("reservation expired");
 			} else {
-				ParkingPlace parkingPlace = parkingPlaceRepository.findById(reservation.getParkingPlace().getId());
+				ParkingSpot parkingPlace = parkingPlaceRepository.findById(reservation.getParkingSpotId());
 				if (parkingPlace.isOccupied()) {
 					Person person = personRepository.findById(parkingPlace.getUser().getId());
 					double price = calculatePrice(parkingPlace);
@@ -111,7 +111,7 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 	@Override
 	@Transactional
 	public void clearUnoccupiedPlaces() {
-		List<ParkingPlace> parkingPlaces = parkingPlaceRepository.getAllParkingPlaces();
+		List<ParkingSpot> parkingPlaces = parkingPlaceRepository.getAllParkingPlaces();
 		Date currentDate = new Date();
 		parkingPlaces.forEach(pp->{
 			if(pp.isReserved() && getTimeDiff(pp.getReservation().getReservationDate(), currentDate) > 30/**60*/ ) {
@@ -121,7 +121,7 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 		});
 	}
 
-	private float calculatePrice(ParkingPlace parkingPlace) {
+	private float calculatePrice(ParkingSpot parkingPlace) {
 		Date departureTime = new Date();
 		Date arrivalTime = parkingPlace.getArrivalTime();
 		float diff = getTimeDiff(departureTime, arrivalTime);

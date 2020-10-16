@@ -2,15 +2,15 @@ package aron.utcn.licenta.repository;
 
 import java.util.List;
 
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 
 public interface ParkingPlaceRepository {
 
-	public List<ParkingPlace> getAllParkingPlaces();
+	public List<ParkingSpot> getAllParkingPlaces();
 	
-	public void save(ParkingPlace parkingPlace);
+	public void save(ParkingSpot parkingPlace);
 	
-	public ParkingPlace findById(int id);
+	public ParkingSpot findById(int id);
 	
 	public void free(int parkingPlaceId);
 }

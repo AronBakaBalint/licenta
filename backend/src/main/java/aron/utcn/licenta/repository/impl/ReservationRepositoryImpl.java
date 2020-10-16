@@ -27,7 +27,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	@SuppressWarnings("unchecked")
 	public Optional<Reservation> findById(int reservationId) {
 		List<Reservation> reservations = entityManager
-				.createQuery("SELECT r FROM Reservation r left join fetch r.parkingPlace p WHERE r.id = :id")
+				.createQuery("SELECT r FROM Reservation r left join fetch r.parkingSpot p WHERE r.id = :id")
 				.setParameter("id", reservationId).getResultList();
 		return reservations.isEmpty() ? Optional.empty() : Optional.of(reservations.get(0));
 	}

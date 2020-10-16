@@ -2,16 +2,16 @@ package aron.utcn.licenta.service;
 
 import java.util.List;
 
-import aron.utcn.licenta.model.ParkingPlace;
+import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Reservation;
 
 public interface ParkingSpotManagementService {
 
-	public List<ParkingPlace> getAllParkingPlaces();
+	public List<ParkingSpot> getAllParkingPlaces();
 	
-	public void save(ParkingPlace parkingPlace);
+	public void save(ParkingSpot parkingPlace);
 	
-	public ParkingPlace findById(int id);
+	public ParkingSpot findById(int id);
 	
 	public List<Reservation> findAllReservations(int userId);
 	
