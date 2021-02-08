@@ -48,7 +48,7 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int,
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                confirmButton.isClickable = !introducedLicensePlate.text.isBlank()
+                confirmButton.isClickable = introducedLicensePlate.text.isNotBlank()
             }
         })
         val datePicker = findViewById<View>(R.id.datePicker1) as DatePicker
