@@ -2,4 +2,7 @@
     <string name="app_name">Cluj Parking</string>
     <string name="pendingReservations">Pending Reservations</string>
     <string name="reservationHistory">Reservation History</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
 </resources>
