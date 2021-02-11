@@ -14,6 +14,7 @@ import com.example.licenta_mobile.model.UserData.update
 import com.example.licenta_mobile.rest.LoginService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -24,14 +25,14 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        setContentView(R.layout.fragment_login)
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
     }
 
     fun loginRequest(view: View?) {
-        val username = (findViewById<View>(R.id.username) as EditText).text.toString()
-        val password = (findViewById<View>(R.id.password) as EditText).text.toString()
+        val username = (findViewById<View>(R.id.username) as TextInputEditText).text.toString()
+        val password = (findViewById<View>(R.id.password) as TextInputEditText).text.toString()
         val loginRequestDto = LoginRequestDto(username, password)
         val call = loginService.authenticate(loginRequestDto)
         call.enqueue(object : Callback<String> {
