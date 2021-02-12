@@ -1,10 +1,14 @@
-package com.example.licenta_mobile
+package com.example.licenta_mobile.activity.login
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.StrictMode
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.licenta_mobile.activity.main.ParkingActivity
+import com.example.licenta_mobile.R
+import com.example.licenta_mobile.activity.register.RegistrationActivity
 import com.example.licenta_mobile.dto.LoginRequestDto
 import com.example.licenta_mobile.model.UserData.update
 import com.example.licenta_mobile.rest.LoginService
@@ -22,8 +26,8 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_login)
-        /*val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)*/
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
     }
 
     fun loginRequest(view: View?) {

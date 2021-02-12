@@ -13,18 +13,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LoginActivity">
+        <activity android:name=".activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".ActiveReservationsActivity" />
-        <activity android:name=".ReservationExtensionActivity" />
-        <activity android:name=".RegistrationActivity" />
-        <activity android:name=".ParkingActivity" />
+        <activity android:name=".activity.main.ProfileActivity" />
+        <activity android:name=".activity.main.ActiveReservationsActivity" />
+        <activity android:name=".activity.reservation.ReservationExtensionActivity" />
+        <activity android:name=".activity.register.RegistrationActivity" />
+        <activity android:name=".activity.main.ParkingActivity" />
     </application>
 
 </manifest>

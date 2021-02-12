@@ -1,4 +1,4 @@
-package com.example.licenta_mobile
+package com.example.licenta_mobile.activity.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,8 +7,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dialog.ExistingReservationDialog
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog
 import com.example.licenta_mobile.dialog.ReservationDialog
@@ -19,6 +19,7 @@ import com.example.licenta_mobile.model.UserData.currentSold
 import com.example.licenta_mobile.model.UserData.update
 import com.example.licenta_mobile.model.UserData.userId
 import com.example.licenta_mobile.model.UserData.userName
+import com.example.licenta_mobile.others.NotificationScheduler
 import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
