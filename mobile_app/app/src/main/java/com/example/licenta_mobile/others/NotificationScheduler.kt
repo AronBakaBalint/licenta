@@ -1,4 +1,4 @@
-package com.example.licenta_mobile
+package com.example.licenta_mobile.others
 
 import android.app.Activity
 import android.app.NotificationChannel
@@ -6,9 +6,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
-import android.os.Handler
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.licenta_mobile.R
+import com.example.licenta_mobile.activity.reservation.ReservationExtensionActivity
 import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
@@ -49,9 +50,9 @@ object NotificationScheduler {
 
     @JvmStatic
     fun builder(activity: Activity, reservationId: Int, reservationStartTime: Date): NotificationScheduler {
-        this.activity = activity
-        this.reservationId = reservationId
-        this.reservationStartTime = reservationStartTime
+        NotificationScheduler.activity = activity
+        NotificationScheduler.reservationId = reservationId
+        NotificationScheduler.reservationStartTime = reservationStartTime
         return this
     }
 

@@ -15,7 +15,6 @@ import android.widget.*
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.appcompat.app.AlertDialog
-import com.example.licenta_mobile.NotificationScheduler
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog
 import com.example.licenta_mobile.dto.ReservationDto

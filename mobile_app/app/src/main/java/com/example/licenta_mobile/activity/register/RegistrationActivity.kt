@@ -1,11 +1,11 @@
-package com.example.licenta_mobile
+package com.example.licenta_mobile.activity.register
 
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.licenta_mobile.dto.MessageDto
+import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dto.RegistrationDto
 import com.example.licenta_mobile.rest.RegistrationService
 import com.example.licenta_mobile.rest.RestClient.client

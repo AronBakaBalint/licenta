@@ -1,10 +1,11 @@
-package com.example.licenta_mobile
+package com.example.licenta_mobile.activity.main
 
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dialog.MoneyTransferDialog
 import com.example.licenta_mobile.dto.MoneyTransferDto
 import com.example.licenta_mobile.model.UserData

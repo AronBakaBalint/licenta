@@ -1,10 +1,10 @@
-package com.example.licenta_mobile
+package com.example.licenta_mobile.activity.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.example.licenta_mobile.R
 import com.example.licenta_mobile.adapter.PendingReservationAdapter
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.UserData.userId
@@ -15,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ReservationExtensionActivity : AppCompatActivity() {
+class ActiveReservationsActivity : AppCompatActivity() {
 
     private val reservationService = client!!.create(ReservationService::class.java)
 
@@ -23,18 +23,13 @@ class ReservationExtensionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reservations)
         val viewTitle = findViewById<TextView>(R.id.reservationTitle)
-        viewTitle.text = getString(R.string.pendingReservations)
-        handleUnconfirmedReservations()
+        viewTitle.text = getString(R.string.reservationHistory)
+        handleReservations()
     }
 
-    override fun onBackPressed() {
-        val intent = Intent(this, ParkingActivity::class.java)
-        startActivity(intent)
-    }
-
-    private fun handleUnconfirmedReservations() {
+    private fun handleReservations() {
         val userId = userId
-        val call = reservationService.getUnoccupiedPlaces("Bearer " + Token.jwtToken, userId)
+        val call = reservationService.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {
