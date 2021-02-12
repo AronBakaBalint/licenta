@@ -2,13 +2,9 @@ package com.example.licenta_mobile
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.StrictMode
-import android.util.JsonReader
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.licenta_mobile.dto.JwtTokenDto
 import com.example.licenta_mobile.dto.LoginRequestDto
 import com.example.licenta_mobile.model.UserData.update
 import com.example.licenta_mobile.rest.LoginService
@@ -25,9 +21,9 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_login)
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
+        setContentView(R.layout.layout_login)
+        /*val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)*/
     }
 
     fun loginRequest(view: View?) {
