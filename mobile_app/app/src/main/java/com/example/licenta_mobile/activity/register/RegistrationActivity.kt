@@ -9,6 +9,7 @@ import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dto.RegistrationDto
 import com.example.licenta_mobile.rest.RegistrationService
 import com.example.licenta_mobile.rest.RestClient.client
+import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -19,15 +20,15 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_registration)
+        setContentView(R.layout.layout_registration)
     }
 
     fun confirmRegistration(view: View?) {
-        val name = (findViewById<View>(R.id.regname) as EditText).text.toString()
-        val username = (findViewById<View>(R.id.regusername) as EditText).text.toString()
-        val email = (findViewById<View>(R.id.regemail) as EditText).text.toString()
-        val password = (findViewById<View>(R.id.regpassword) as EditText).text.toString()
-        val password2 = (findViewById<View>(R.id.regpassword2) as EditText).text.toString()
+        val name = (findViewById<View>(R.id.full_name) as TextInputEditText).text.toString()
+        val email = (findViewById<View>(R.id.email) as TextInputEditText).text.toString()
+        val username = (findViewById<View>(R.id.username) as TextInputEditText).text.toString()
+        val password = (findViewById<View>(R.id.password) as TextInputEditText).text.toString()
+        val password2 = (findViewById<View>(R.id.repeat_password) as TextInputEditText).text.toString()
         if (password != password2) {
             Toast.makeText(this, "The two passwords do not match", Toast.LENGTH_LONG).show()
         } else {
