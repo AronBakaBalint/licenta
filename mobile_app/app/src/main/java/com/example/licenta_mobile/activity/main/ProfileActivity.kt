@@ -28,7 +28,7 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.fragment_profile)
         update()
         val currentSold = findViewById<TextView>(R.id.current_sold)
         val currentBalance = UserData.currentSold

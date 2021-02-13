@@ -19,7 +19,6 @@ import com.example.licenta_mobile.model.UserData.currentSold
 import com.example.licenta_mobile.model.UserData.update
 import com.example.licenta_mobile.model.UserData.userId
 import com.example.licenta_mobile.model.UserData.userName
-import com.example.licenta_mobile.others.NotificationScheduler
 import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.security.Token
@@ -46,7 +45,7 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun onInit() {
         update()
-        setContentView(R.layout.activity_parking_place_selector)
+        setContentView(R.layout.fragment_parking_lot)
         startAutoRefresh()
     }
 
@@ -142,9 +141,6 @@ class ParkingActivity : AppCompatActivity() {
                         ExistingReservationDialog.show(this@ParkingActivity)
                     } else {
                         ReservationInfoDialog.show(this@ParkingActivity)
-                        val dateFormatter = SimpleDateFormat("yyyy-MM-dd HH")
-                        val date = dateFormatter.parse("${selectedDate.year}-${selectedDate.month}-${selectedDate.day} ${getReservationStartHour(reservationDialog.getIntSelectedHours())}")
-                        scheduleNotification(reservationId, date)
                         update()
                     }
                 }
@@ -159,12 +155,6 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun getReservationStartHour(hoursList: List<Int>): Int {
         return hoursList.minOrNull()!!
-    }
-
-    private fun scheduleNotification(reservationId: Int, date: Date?) {
-        if (date != null) {
-            NotificationScheduler.builder(this, reservationId, date).start()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

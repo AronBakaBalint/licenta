@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.licenta_mobile.activity.main.ParkingActivity
 import com.example.licenta_mobile.R
+import com.example.licenta_mobile.activity.main.MainActivity
 import com.example.licenta_mobile.activity.register.RegistrationActivity
 import com.example.licenta_mobile.dto.LoginRequestDto
 import com.example.licenta_mobile.model.UserData.update
@@ -44,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
                     } else {
                         Token.jwtToken = responseBody
                         update()
-                        val intent = Intent(this@LoginActivity, ParkingActivity::class.java)
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                     }
                 }
