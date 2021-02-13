@@ -51,6 +51,8 @@
         android:text="@string/login"
         android:layout_marginTop="60dp"
         android:onClick="loginRequest"
+        android:background="@drawable/main_button"
+        android:textColor="@color/colorWhite"
         app:layout_constraintTop_toBottomOf="@+id/password_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
