@@ -21,7 +21,7 @@ class ActiveReservationsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_reservations)
+        setContentView(R.layout.fragment_reservation_history)
         val viewTitle = findViewById<TextView>(R.id.reservationTitle)
         viewTitle.text = getString(R.string.reservationHistory)
         handleReservations()

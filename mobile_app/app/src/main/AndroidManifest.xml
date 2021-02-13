@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.main.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme"></activity>
         <activity android:name=".activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
