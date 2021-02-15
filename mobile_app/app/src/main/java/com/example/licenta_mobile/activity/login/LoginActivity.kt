@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.main.MainActivity
+import com.example.licenta_mobile.activity.register.RegisterActivity
 
 class LoginActivity : AppCompatActivity(), LoginCommandListener {
 
@@ -20,6 +21,11 @@ class LoginActivity : AppCompatActivity(), LoginCommandListener {
 
     override fun onLogin() {
         val intent = Intent(LoginActivity@this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onGoToRegister() {
+        val intent = Intent(LoginActivity@this, RegisterActivity::class.java)
         startActivity(intent)
     }
 }

@@ -89,7 +89,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:text="Register"
-            android:onClick="register"/>
+            android:onClick="@{() -> viewModel.register()}"/>
     </LinearLayout>
 
     <ProgressBar

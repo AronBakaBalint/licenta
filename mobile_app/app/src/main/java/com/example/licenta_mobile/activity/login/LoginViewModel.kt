@@ -27,6 +27,9 @@ class LoginViewModel : ViewModel() {
     private val _shouldLogin = MutableLiveData<Boolean>()
     val shouldLogin: LiveData<Boolean> = _shouldLogin
 
+    private val _registerCommand = MutableLiveData<Boolean>()
+    val registerCommand: LiveData<Boolean> = _registerCommand
+
     private val _loginToastMessage = MutableLiveData<String>()
     val loginToastMessage: LiveData<String> = _loginToastMessage
 
@@ -55,6 +58,10 @@ class LoginViewModel : ViewModel() {
                 call.cancel()
             }
         })
+    }
+
+    fun register(){
+        _registerCommand.value = true
     }
 
     private fun showProgressBar(){
