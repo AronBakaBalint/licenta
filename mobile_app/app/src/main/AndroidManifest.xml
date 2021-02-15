@@ -13,10 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".activity.main.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme"></activity>
         <activity android:name=".activity.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.main.MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme" />
         <activity android:name=".activity.main.ProfileActivity" />
         <activity android:name=".activity.main.ActiveReservationsActivity" />
         <activity android:name=".activity.reservation.ReservationExtensionActivity" />
