@@ -62,6 +62,10 @@ class LoginFragment : Fragment() {
         viewModel.loginToastMessage.observe(viewLifecycleOwner, {
             Toast.makeText(context, it, Toast.LENGTH_LONG).show()
         })
+
+        viewModel.registerCommand.observe(viewLifecycleOwner, {
+            loginCommandListener?.onGoToRegister()
+        })
     }
 
 }
