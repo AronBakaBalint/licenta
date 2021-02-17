@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.licenta_mobile.activity.main.parkingspots.ParkingSpotsViewModel" />
+    </data>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -19,15 +27,16 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="startReservation"
-            android:text="A1" />
+            android:text="A1"
+            android:background="@{viewModel.colors[0]}"
+            android:onClick="@{() -> viewModel.reserve(0)}"/>
 
         <Button
             android:id="@+id/button22"
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[1]}"
             android:text="A2" />
 
         <Button
@@ -35,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[2]}"
             android:text="A3" />
 
         <Button
@@ -43,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[3]}"
             android:text="A4" />
 
         <Button
@@ -51,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[4]}"
             android:text="A5" />
 
         <Button
@@ -59,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="121dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[5]}"
             android:text="A6" />
     </LinearLayout>
 
@@ -78,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[6]}"
             android:text="B1" />
 
         <Button
@@ -86,7 +95,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[7]}"
             android:text="B2" />
 
         <Button
@@ -94,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[8]}"
             android:text="B3" />
 
         <Button
@@ -102,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[9]}"
             android:text="B4" />
 
         <Button
@@ -110,7 +119,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[10]}"
             android:text="B5" />
 
         <Button
@@ -118,7 +127,7 @@
             android:layout_width="wrap_content"
             android:layout_height="118dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[11]}"
             android:text="B6" />
     </LinearLayout>
 
@@ -133,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[12]}"
             android:text="C1" />
 
         <Button
@@ -141,7 +150,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[13]}"
             android:text="C2" />
 
         <Button
@@ -149,7 +158,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[14]}"
             android:text="C3" />
 
         <Button
@@ -157,7 +166,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[15]}"
             android:text="C4" />
 
         <Button
@@ -165,7 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[16]}"
             android:text="C5" />
 
         <Button
@@ -173,7 +182,7 @@
             android:layout_width="wrap_content"
             android:layout_height="113dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[17]}"
             android:text="C6" />
     </LinearLayout>
 
@@ -192,7 +201,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[18]}"
             android:text="D1" />
 
         <Button
@@ -200,7 +209,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[19]}"
             android:text="D2" />
 
         <Button
@@ -208,7 +217,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[20]}"
             android:text="D3" />
 
         <Button
@@ -216,7 +225,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[21]}"
             android:text="D4" />
 
         <Button
@@ -224,7 +233,7 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[22]}"
             android:text="D5" />
 
         <Button
@@ -232,8 +241,9 @@
             android:layout_width="wrap_content"
             android:layout_height="119dp"
             android:layout_weight="1"
-            android:onClick="startReservation"
+            android:background="@{viewModel.colors[23]}"
             android:text="D6" />
     </LinearLayout>
 
 </LinearLayout>
+</layout>

@@ -13,7 +13,7 @@ import com.example.licenta_mobile.dialog.ExistingReservationDialog
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog
 import com.example.licenta_mobile.dialog.ReservationDialog
 import com.example.licenta_mobile.dialog.ReservationInfoDialog
-import com.example.licenta_mobile.dto.ParkingPlaceDto
+import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.UserData.currentSold
 import com.example.licenta_mobile.model.UserData.update
@@ -25,7 +25,6 @@ import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ParkingActivity : AppCompatActivity() {
@@ -51,15 +50,15 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun displayParkingPlaceStatus() {
         val call = reservationService.getAllParkingPlaces("Bearer " + Token.jwtToken)
-        call.enqueue(object : Callback<List<ParkingPlaceDto>> {
-            override fun onResponse(call: Call<List<ParkingPlaceDto>>, response: Response<List<ParkingPlaceDto>>) {
+        call.enqueue(object : Callback<List<ParkingSpotDto>> {
+            override fun onResponse(call: Call<List<ParkingSpotDto>>, response: Response<List<ParkingSpotDto>>) {
                 if (response.isSuccessful) {
                     val parkingPlaces = response.body()!!
                     setParkingPlaceColors(parkingPlaces)
                 }
             }
 
-            override fun onFailure(call: Call<List<ParkingPlaceDto>>, t: Throwable) {
+            override fun onFailure(call: Call<List<ParkingSpotDto>>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }
@@ -74,7 +73,7 @@ class ParkingActivity : AppCompatActivity() {
         }, 0, 1000) //put here time 1000 milliseconds=1 second
     }
 
-    private fun setParkingPlaceColors(parkingPlaces: List<ParkingPlaceDto>) {
+    private fun setParkingPlaceColors(parkingPlaces: List<ParkingSpotDto>) {
         val uiParkingPlaces = getAllParkingPlacesFromUI()
         for (i in uiParkingPlaces.indices) {
             uiParkingPlaces[i].setBackgroundColor(parkingPlaces[i].color)

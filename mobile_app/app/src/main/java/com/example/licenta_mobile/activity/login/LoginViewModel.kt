@@ -16,9 +16,9 @@ import retrofit2.Response
 
 class LoginViewModel : ViewModel() {
 
-    val username = ObservableField("")
+    val username = ObservableField("asd31")
 
-    val password = ObservableField("")
+    val password = ObservableField("123")
 
     val progressBar = ObservableField(View.GONE)
 
