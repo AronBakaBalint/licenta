@@ -24,20 +24,21 @@ class ParkingSpotsViewModel : ViewModel() {
 
     private val parkingService = RestClient.client!!.create(ReservationService::class.java)
 
-    var colors: List<MutableLiveData<Int>> = getDefaultColors()
+    var spotsState: List<MutableLiveData<ParkingSpotDto>> = getInitialSpotsState()
 
     init {
         getParkingSpotsState()
     }
 
-    fun reserve(spotId: Int){
-        println("Reserved")
+    fun reserve(pos: Int){
+        val spotId = spotsState[pos].value?.id
+        println("$spotId Reserved")
     }
 
-    private fun getDefaultColors(): List<MutableLiveData<Int>> {
-        val defaultColors = mutableListOf<MutableLiveData<Int>>()
-        repeat(24){
-            defaultColors.add(MutableLiveData(546454657))
+    private fun getInitialSpotsState(): List<MutableLiveData<ParkingSpotDto>> {
+        val defaultColors = mutableListOf<MutableLiveData<ParkingSpotDto>>()
+        for(i in 0..23){
+            defaultColors.add(MutableLiveData(ParkingSpotDto(i, 546454657, "reserved", "")))
         }
         return defaultColors
     }
@@ -61,9 +62,12 @@ class ParkingSpotsViewModel : ViewModel() {
 
     private fun updateParkingSpotsState(newState: List<ParkingSpotDto>)  {
         for(i in newState.indices){
-            colors[i].value = newState[i].color
-            println("UPDATED")
+            spotsState[i].value = ParkingSpotDto(newState[i].id, newState[i].color, newState[i].status, newState[i].occupierCarPlate)
         }
+    }
+
+    fun isFree(pos: Int): Boolean {
+        return spotsState[pos].value?.status == "free"
     }
 
 }
