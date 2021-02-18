@@ -31,7 +31,7 @@ interface ReservationService {
 
     @GET("/parking/reserved/{id}")
     @Headers("Content-Type: application/json")
-    fun getAllReservedPlaces(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MutableList<ReservationDto>>
+    fun getReservationHistory(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MutableList<ReservationDto>>
 
     @GET("/reservation/extension")
     @Headers("Content-Type: application/json")

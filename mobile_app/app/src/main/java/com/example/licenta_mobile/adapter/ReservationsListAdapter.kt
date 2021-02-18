@@ -28,7 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class PendingReservationAdapter(private val list: MutableList<ReservationDto>, private val activity: Activity) : BaseAdapter(), ListAdapter {
+class ReservationsListAdapter(private val list: List<ReservationDto>, private val activity: Activity) : BaseAdapter(), ListAdapter {
 
     private val reservationService: ReservationService = RestClient.client!!.create(ReservationService::class.java)
 

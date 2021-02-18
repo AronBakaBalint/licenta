@@ -2,12 +2,10 @@ package com.example.licenta_mobile.activity.reservation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ListView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.main.ParkingActivity
-import com.example.licenta_mobile.adapter.PendingReservationAdapter
+import com.example.licenta_mobile.adapter.ReservationsListAdapter
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.UserData.userId
 import com.example.licenta_mobile.rest.ReservationService
@@ -24,8 +22,6 @@ class ReservationExtensionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_reservation_history)
-        val viewTitle = findViewById<TextView>(R.id.reservationTitle)
-        viewTitle.text = getString(R.string.pendingReservations)
         handleUnconfirmedReservations()
     }
 
@@ -53,8 +49,8 @@ class ReservationExtensionActivity : AppCompatActivity() {
     }
 
     private fun buildView(pendingReservations: MutableList<ReservationDto>) {
-        val adapter = PendingReservationAdapter(pendingReservations, this)
-        val lView = findViewById<ListView>(R.id.pendingReservationList)
-        lView.adapter = adapter
+        val adapter = ReservationsListAdapter(pendingReservations, this)
+        //val lView = findViewById<ListView>(R.id.pendingReservationList)
+        //lView.adapter = adapter
     }
 }

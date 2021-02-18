@@ -183,7 +183,7 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun viewReservations() {
         val userId = userId
-        val call: Call<MutableList<ReservationDto>> = reservationService.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
+        val call: Call<MutableList<ReservationDto>> = reservationService.getReservationHistory("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {

@@ -1,11 +1,9 @@
 package com.example.licenta_mobile.activity.main
 
 import android.os.Bundle
-import android.widget.ListView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.licenta_mobile.R
-import com.example.licenta_mobile.adapter.PendingReservationAdapter
+import com.example.licenta_mobile.adapter.ReservationsListAdapter
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.UserData.userId
 import com.example.licenta_mobile.rest.ReservationService
@@ -22,14 +20,12 @@ class ActiveReservationsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_reservation_history)
-        val viewTitle = findViewById<TextView>(R.id.reservationTitle)
-        viewTitle.text = getString(R.string.reservationHistory)
         handleReservations()
     }
 
     private fun handleReservations() {
         val userId = userId
-        val call = reservationService.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
+        val call = reservationService.getReservationHistory("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {
@@ -46,8 +42,8 @@ class ActiveReservationsActivity : AppCompatActivity() {
     }
 
     private fun buildView(pendingReservations: MutableList<ReservationDto>) {
-        val adapter = PendingReservationAdapter(pendingReservations, this)
-        val lView = findViewById<ListView>(R.id.pendingReservationList)
-        lView.adapter = adapter
+        val adapter = ReservationsListAdapter(pendingReservations, this)
+        //val lView = findViewById<ListView>(R.id.pendingReservationList)
+        //lView.adapter = adapter
     }
 }

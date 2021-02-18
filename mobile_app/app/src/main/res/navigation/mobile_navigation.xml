@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_reservations"
-        android:name="com.example.licenta_mobile.activity.main.reservations.DashboardFragment"
+        android:name="com.example.licenta_mobile.activity.main.reservations.ReservationsFragment"
         android:label="@string/title_reservations"
         tools:layout="@layout/fragment_reservation_history" />
 
