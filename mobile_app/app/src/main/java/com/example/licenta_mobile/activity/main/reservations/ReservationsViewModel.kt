@@ -17,15 +17,22 @@ class ReservationsViewModel : ViewModel() {
     private var _reservations = MutableLiveData<List<ReservationDto>>()
     var reservations: LiveData<List<ReservationDto>> = _reservations
 
+    private var _toggleFilter = MutableLiveData<Boolean>()
+    var activateFilter: LiveData<Boolean> = _toggleFilter
+
     private val reservationService = RestClient.client!!.create(ReservationService::class.java)
 
     init {
         loadReservationHistory()
     }
 
+    fun toggleFilter() {
+        _toggleFilter.value = true
+    }
+
     private fun loadReservationHistory() {
         val userId = UserData.userId
-        val call = reservationService.getUnoccupiedPlaces("Bearer " + Token.jwtToken, userId)
+        val call = reservationService.getReservationHistory("Bearer " + Token.jwtToken, userId)
         call.enqueue(object : Callback<MutableList<ReservationDto>> {
             override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
                 if (response.isSuccessful) {

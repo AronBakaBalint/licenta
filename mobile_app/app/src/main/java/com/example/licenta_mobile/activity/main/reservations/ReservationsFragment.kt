@@ -12,6 +12,7 @@ import com.example.licenta_mobile.activity.main.parkingspots.ParkingSpotsViewMod
 import com.example.licenta_mobile.adapter.ReservationsListAdapter
 import com.example.licenta_mobile.databinding.FragmentParkingLotBinding
 import com.example.licenta_mobile.databinding.FragmentReservationHistoryBinding
+import java.util.stream.Collector
 
 class ReservationsFragment : Fragment() {
 
@@ -35,10 +36,17 @@ class ReservationsFragment : Fragment() {
 
     private fun setupObservers(){
         viewModel.reservations.observe(viewLifecycleOwner, {
-            val adapter = ReservationsListAdapter(it, requireActivity())
             val lView = binding.reservationsList
-            lView.adapter = adapter
-            println(it.size)
+            lView.adapter = ReservationsListAdapter(it, requireActivity())
+        })
+
+        viewModel.activateFilter.observe(viewLifecycleOwner, {
+            val lView = binding.reservationsList
+            var reservationsList = viewModel.reservations.value!!
+            if(!binding.switch1.isChecked) {
+                reservationsList = reservationsList.filter { r -> r.status != "cancelled" && r.status != "finished" }
+            }
+            lView.adapter = ReservationsListAdapter(reservationsList, requireActivity())
         })
     }
 }

@@ -49,7 +49,7 @@ class ReservationsListAdapter(private val list: List<ReservationDto>, private va
         var view = convertView
         if (view == null) {
             val inflater = activity.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            view = inflater.inflate(R.layout.unconfirmed_reservations, null)
+            view = inflater.inflate(R.layout.reservation_details, null)
         }
 
         val licensePlate = view!!.findViewById<TextView>(R.id.licensePlate)
