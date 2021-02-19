@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.licenta_mobile.activity.main.home.HomeFragment"
+        android:name="com.example.licenta_mobile.activity.main.parkingspots.ParkingSpotsFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_parking_lot" />
 
     <fragment
         android:id="@+id/navigation_reservations"
-        android:name="com.example.licenta_mobile.activity.main.reservations.DashboardFragment"
+        android:name="com.example.licenta_mobile.activity.main.reservations.ReservationsFragment"
         android:label="@string/title_reservations"
         tools:layout="@layout/fragment_reservation_history" />
 
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.example.licenta_mobile.activity.main.profile.NotificationsFragment"
+        android:name="com.example.licenta_mobile.activity.main.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

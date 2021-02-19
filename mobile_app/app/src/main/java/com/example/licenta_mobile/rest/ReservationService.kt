@@ -1,7 +1,7 @@
 package com.example.licenta_mobile.rest
 
-import com.example.licenta_mobile.dto.MessageDto
-import com.example.licenta_mobile.dto.ParkingPlaceDto
+import androidx.databinding.ObservableList
+import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.SimpleDate
 import retrofit2.Call
@@ -11,7 +11,7 @@ interface ReservationService {
 
     @GET("/parking")
     @Headers("Content-Type: application/json")
-    fun getAllParkingPlaces(@Header("Authorization") auth: String): Call<List<ParkingPlaceDto>>
+    fun getAllParkingPlaces(@Header("Authorization") auth: String): Call<List<ParkingSpotDto>>
 
     @POST("/reservation")
     @Headers("Content-Type: application/json")
@@ -31,7 +31,7 @@ interface ReservationService {
 
     @GET("/parking/reserved/{id}")
     @Headers("Content-Type: application/json")
-    fun getAllReservedPlaces(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MutableList<ReservationDto>>
+    fun getReservationHistory(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MutableList<ReservationDto>>
 
     @GET("/reservation/extension")
     @Headers("Content-Type: application/json")

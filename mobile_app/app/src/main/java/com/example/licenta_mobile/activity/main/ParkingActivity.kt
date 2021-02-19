@@ -3,17 +3,13 @@ package com.example.licenta_mobile.activity.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.widget.Button
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dialog.ExistingReservationDialog
 import com.example.licenta_mobile.dialog.NotEnoughMoneyDialog
 import com.example.licenta_mobile.dialog.ReservationDialog
 import com.example.licenta_mobile.dialog.ReservationInfoDialog
-import com.example.licenta_mobile.dto.ParkingPlaceDto
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.UserData.currentSold
 import com.example.licenta_mobile.model.UserData.update
@@ -25,7 +21,6 @@ import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
 import java.util.*
 
 class ParkingActivity : AppCompatActivity() {
@@ -49,49 +44,12 @@ class ParkingActivity : AppCompatActivity() {
         startAutoRefresh()
     }
 
-    private fun displayParkingPlaceStatus() {
-        val call = reservationService.getAllParkingPlaces("Bearer " + Token.jwtToken)
-        call.enqueue(object : Callback<List<ParkingPlaceDto>> {
-            override fun onResponse(call: Call<List<ParkingPlaceDto>>, response: Response<List<ParkingPlaceDto>>) {
-                if (response.isSuccessful) {
-                    val parkingPlaces = response.body()!!
-                    setParkingPlaceColors(parkingPlaces)
-                }
-            }
-
-            override fun onFailure(call: Call<List<ParkingPlaceDto>>, t: Throwable) {
-                println(t.message)
-                call.cancel()
-            }
-        })
-    }
-
     private fun startAutoRefresh() {
         Timer().scheduleAtFixedRate(object : TimerTask() {
             override fun run() {
-                displayParkingPlaceStatus()
+
             }
         }, 0, 1000) //put here time 1000 milliseconds=1 second
-    }
-
-    private fun setParkingPlaceColors(parkingPlaces: List<ParkingPlaceDto>) {
-        val uiParkingPlaces = getAllParkingPlacesFromUI()
-        for (i in uiParkingPlaces.indices) {
-            uiParkingPlaces[i].setBackgroundColor(parkingPlaces[i].color)
-        }
-    }
-
-    private fun getAllParkingPlacesFromUI(): List<Button> {
-        val parkingPlaces: MutableList<Button> = ArrayList()
-        var layout = findViewById<LinearLayout>(R.id.row1)
-        buildRow(layout, 0, parkingPlaces)
-        layout = findViewById(R.id.row2)
-        buildRow(layout, 1, parkingPlaces)
-        layout = findViewById(R.id.row3)
-        buildRow(layout, 2, parkingPlaces)
-        layout = findViewById(R.id.row4)
-        buildRow(layout, 3, parkingPlaces)
-        return parkingPlaces
     }
 
     fun startReservation(view: View) {
@@ -165,48 +123,9 @@ class ParkingActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.profile) {
-            viewProfile()
-            return true
-        } else if (id == R.id.reservations) {
-            viewReservations()
-            return true
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun viewProfile() {
         val intent = Intent(this, ProfileActivity::class.java)
         startActivity(intent)
     }
 
-    private fun viewReservations() {
-        val userId = userId
-        val call: Call<MutableList<ReservationDto>> = reservationService.getAllReservedPlaces("Bearer " + Token.jwtToken, userId)
-        call.enqueue(object : Callback<MutableList<ReservationDto>> {
-            override fun onResponse(call: Call<MutableList<ReservationDto>>, response: Response<MutableList<ReservationDto>>) {
-                if (response.isSuccessful) {
-                    val intent = Intent(this@ParkingActivity, ActiveReservationsActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-
-            override fun onFailure(call: Call<MutableList<ReservationDto>>, t: Throwable) {
-                println(t.message)
-                call.cancel()
-            }
-        })
-    }
-
-    private fun buildRow(layout: LinearLayout, row: Int, parkingPlaces: MutableList<Button>) {
-        for (i in 0 until layout.childCount) {
-            val v = layout.getChildAt(i)
-            if (v is Button) {
-                v.setId(row * layout.childCount + i + 1)
-                parkingPlaces.add(v)
-            }
-        }
-    }
 }

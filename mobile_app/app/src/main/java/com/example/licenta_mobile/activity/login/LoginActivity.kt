@@ -20,12 +20,12 @@ class LoginActivity : AppCompatActivity(), LoginCommandListener {
     }
 
     override fun onLogin() {
-        val intent = Intent(LoginActivity@this, MainActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
 
     override fun onGoToRegister() {
-        val intent = Intent(LoginActivity@this, RegisterActivity::class.java)
+        val intent = Intent(this, RegisterActivity::class.java)
         startActivity(intent)
     }
 }

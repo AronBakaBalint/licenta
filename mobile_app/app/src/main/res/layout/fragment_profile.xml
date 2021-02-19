@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.licenta_mobile.activity.main.profile.ProfileViewModel" />
+    </data>
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorWhite"
     tools:context=".activity.main.ProfileActivity">
 
     <TextView
         android:id="@+id/profile_username"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_margin="4pt"
-        android:text="TextView"
+        android:text="@{viewModel.username}"
         android:textSize="16pt"
         tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="40dp" />
+        tools:layout_editor_absoluteY="40dp"
+        tools:text="username" />
 
     <TextView
         android:id="@+id/profile_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4pt"
-        android:text="TextView"
-        android:textSize="8pt" />
+        android:text="@{viewModel.email}"
+        android:textSize="8pt"
+        tools:text="email" />
 
     <Space
         android:layout_width="match_parent"
@@ -38,10 +49,11 @@
             android:id="@+id/current_sold"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:layout_weight="1"
-            android:text="TextView"
             android:layout_marginLeft="8pt"
-            android:textSize="10pt" />
+            android:layout_weight="1"
+            android:text="@{viewModel.currentSold}"
+            android:textSize="10pt"
+            tools:text="balance" />
 
         <ImageView
             android:id="@+id/add_money"
@@ -63,3 +75,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</layout>
