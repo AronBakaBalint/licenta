@@ -28,20 +28,20 @@ class ReservationsFragment : Fragment() {
     private lateinit var binding: FragmentReservationHistoryBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-      binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_reservation_history, container, false)
-      binding.lifecycleOwner = this
-      return binding.root
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reservation_history, container, false)
+        binding.lifecycleOwner = this
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
-      super.onActivityCreated(savedInstanceState)
-      viewModel = ViewModelProvider(this).get(ReservationsViewModel::class.java)
-      binding.viewModel = viewModel
-      setupObservers()
-      // TODO: Use the ViewModel
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(this).get(ReservationsViewModel::class.java)
+        binding.viewModel = viewModel
+        setupObservers()
+        // TODO: Use the ViewModel
     }
 
-    private fun setupObservers(){
+    private fun setupObservers() {
         viewModel.reservations.observe(viewLifecycleOwner, {
             val lView = binding.reservationsList
             val adapter = ReservationsListAdapter(it, requireActivity())
@@ -59,7 +59,7 @@ class ReservationsFragment : Fragment() {
         viewModel.activateFilter.observe(viewLifecycleOwner, {
             val lView = binding.reservationsList
             var reservationsList = viewModel.reservations.value!!
-            if(!binding.switch1.isChecked) {
+            if (!binding.switch1.isChecked) {
                 reservationsList = reservationsList.filter { r -> r.status != "cancelled" && r.status != "finished" }
             }
             val adapter = ReservationsListAdapter(reservationsList, requireActivity())
