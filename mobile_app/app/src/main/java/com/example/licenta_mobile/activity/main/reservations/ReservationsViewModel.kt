@@ -1,5 +1,7 @@
 package com.example.licenta_mobile.activity.main.reservations
 
+import android.widget.Button
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -19,6 +21,9 @@ class ReservationsViewModel : ViewModel() {
 
     private var _toggleFilter = MutableLiveData<Boolean>()
     var activateFilter: LiveData<Boolean> = _toggleFilter
+
+    private var _toastMsg = MutableLiveData<String>()
+    var toastMsg: LiveData<String> = _toastMsg
 
     private val reservationService = RestClient.client!!.create(ReservationService::class.java)
 
@@ -47,7 +52,24 @@ class ReservationsViewModel : ViewModel() {
         })
     }
 
+    fun cancelReservation(reservationDto: ReservationDto) {
+        val call = reservationService.cancelReservation("Bearer " + Token.jwtToken, reservationDto.id)
+        call.enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                if (response.isSuccessful) {
+                    _toastMsg.value = "Reservation cancelled"
+                    loadReservationHistory()
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                println(t.message)
+                call.cancel()
+            }
+        })
+    }
+
     private fun updateReservationsList(reservationsList: MutableList<ReservationDto>?){
-        _reservations.value = reservationsList!!
+        _reservations.value = reservationsList
     }
 }

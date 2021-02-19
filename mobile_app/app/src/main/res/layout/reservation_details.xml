@@ -13,13 +13,6 @@
         android:textSize="12pt" />
 
     <Button
-        android:id="@+id/extendReservation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Extend" />
-
-    <Button
         android:id="@+id/cancelReservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
