@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <variable
@@ -9,70 +9,62 @@
             type="com.example.licenta_mobile.activity.main.profile.ProfileViewModel" />
     </data>
 
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/colorWhite"
-    tools:context=".activity.main.ProfileActivity">
+    android:background="@color/colorWhite">
 
     <TextView
         android:id="@+id/profile_username"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_margin="4pt"
+        android:layout_height="wrap_content"
         android:text="@{viewModel.username}"
-        android:textSize="16pt"
-        tools:layout_editor_absoluteX="54dp"
-        tools:layout_editor_absoluteY="40dp"
-        tools:text="username" />
+        android:textSize="32sp"
+        android:layout_marginTop="30dp"
+        android:textColor="@color/colorBlack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Username" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/bouncing_coin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:lottie_fileName="bouncing-coin.json"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toBottomOf="@id/profile_username"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <TextView
-        android:id="@+id/profile_email"
-        android:layout_width="match_parent"
+        android:id="@+id/current_sold"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4pt"
-        android:text="@{viewModel.email}"
-        android:textSize="8pt"
-        tools:text="email" />
+        android:text="@{viewModel.currentSold}"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bouncing_coin"
+        tools:text="Balance" />
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="14dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="+ Add money"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/main_button"
+        android:paddingHorizontal="40dp"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:onClick="@{() -> viewModel.showMoneyTransferDialog()}"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/current_sold" />
 
-        <TextView
-            android:id="@+id/current_sold"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginLeft="8pt"
-            android:layout_weight="1"
-            android:text="@{viewModel.currentSold}"
-            android:textSize="10pt"
-            tools:text="balance" />
-
-        <ImageView
-            android:id="@+id/add_money"
-            android:layout_width="1pt"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:onClick="addMoney"
-            app:srcCompat="@drawable/add_money" />
-
-        <TextView
-            android:id="@+id/textView18"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:text="Add money"
-            android:textSize="10pt" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

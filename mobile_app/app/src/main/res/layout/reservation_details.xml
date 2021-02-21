@@ -9,6 +9,7 @@
         android:layout_width="140dp"
         android:layout_height="48dp"
         android:layout_weight="1"
+        android:textColor="@color/colorBlack"
         android:text="TextView"
         android:textSize="12pt" />
 
