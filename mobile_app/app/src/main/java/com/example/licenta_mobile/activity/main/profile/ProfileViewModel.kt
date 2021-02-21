@@ -9,7 +9,5 @@ class ProfileViewModel : ViewModel() {
 
     val username = UserData.userName
 
-    val email = UserData.email
-
     val currentSold = "${UserData.currentSold} LEI"
 }

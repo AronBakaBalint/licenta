@@ -37,8 +37,6 @@ class ProfileActivity : AppCompatActivity() {
         currentSold.text = df.format(currentBalance) + " LEI"
         val username = findViewById<TextView>(R.id.profile_username)
         username.text = userName
-        val email = findViewById<TextView>(R.id.profile_email)
-        email.text = UserData.email
     }
 
     fun addMoney(view: View?) {
