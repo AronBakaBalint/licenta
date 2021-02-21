@@ -20,7 +20,7 @@ class RegisterActivity : AppCompatActivity(), RegisterCommandListener {
     }
 
     override fun returnToLoginPage() {
-        val intent = Intent(RegisterActivity@this, LoginActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

@@ -1,5 +1,7 @@
 package com.example.licenta_mobile.model
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.dto.UserDataDto
 import com.example.licenta_mobile.rest.RestClient
 import com.example.licenta_mobile.rest.UserDataService
@@ -10,7 +12,7 @@ import retrofit2.Response
 
 object UserData {
     @JvmStatic var userId: Int = 0
-    @JvmStatic var currentSold: Double = 0.0
+    @JvmStatic var currentSold = 0.0
     @JvmStatic lateinit var userName: String
     @JvmStatic lateinit var email: String
     @JvmStatic val userDataService = RestClient.client!!.create(UserDataService::class.java)!!

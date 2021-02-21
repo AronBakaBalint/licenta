@@ -115,17 +115,6 @@ class ParkingActivity : AppCompatActivity() {
         return hoursList.minOrNull()!!
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.options_menu, menu)
-        val menuItem = menu.findItem(R.id.username_item)
-        menuItem.title = userName
-        return true
-    }
 
-    private fun viewProfile() {
-        val intent = Intent(this, ProfileActivity::class.java)
-        startActivity(intent)
-    }
 
 }
