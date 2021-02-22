@@ -16,13 +16,11 @@ import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dto.ReservationDto
 
 
-class ReservationsListAdapter(private val list: List<ReservationDto>, private val activity: Activity) : BaseAdapter(), ListAdapter {
-
-    private var _qrCodeToDisplay = MutableLiveData<String>()
-    var qrCodeToDisplay: LiveData<String> = _qrCodeToDisplay
-
-    private var _reservationToCancel = MutableLiveData<ReservationDto>()
-    var reservationToCancel: LiveData<ReservationDto> = _reservationToCancel
+class ReservationsListAdapter(private val list: List<ReservationDto>,
+                              private val activity: Activity,
+                              private val reservationDeleteListener: (resId: ReservationDto) -> Unit,
+                              private val qrCodeDisplay: (resId: String) -> Unit
+    ) : BaseAdapter(), ListAdapter {
 
     override fun getCount(): Int {
         return list.size
@@ -53,8 +51,8 @@ class ReservationsListAdapter(private val list: List<ReservationDto>, private va
             hide(cancelBtn)
         }
         val qrCodeBtn = view.findViewById<Button>(R.id.viewQR)
-        cancelBtn.setOnClickListener { _reservationToCancel.value = list[position] }
-        qrCodeBtn.setOnClickListener { _qrCodeToDisplay.value = list[position].id.toString() }
+        cancelBtn.setOnClickListener { reservationDeleteListener.invoke(list[position]) }
+        qrCodeBtn.setOnClickListener { qrCodeDisplay.invoke(list[position].id.toString()) }
         return view
     }
 
