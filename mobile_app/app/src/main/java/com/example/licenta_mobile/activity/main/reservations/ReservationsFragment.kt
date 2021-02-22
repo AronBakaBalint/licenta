@@ -44,15 +44,7 @@ class ReservationsFragment : Fragment() {
     private fun setupObservers() {
         viewModel.reservations.observe(viewLifecycleOwner, {
             val lView = binding.reservationsList
-            val adapter = ReservationsListAdapter(it, requireActivity())
-            adapter.qrCodeToDisplay.observe(viewLifecycleOwner, { code ->
-                showQRCodeDialog(code)
-            })
-            adapter.reservationToCancel.observe(viewLifecycleOwner, { reservation ->
-                run {
-                    viewModel.cancelReservation(reservation)
-                }
-            })
+            val adapter = ReservationsListAdapter(it, requireActivity(), { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })
             lView.adapter = adapter
         })
 
@@ -62,15 +54,7 @@ class ReservationsFragment : Fragment() {
             if (!binding.switch1.isChecked) {
                 reservationsList = reservationsList.filter { r -> r.status != "cancelled" && r.status != "finished" }
             }
-            val adapter = ReservationsListAdapter(reservationsList, requireActivity())
-            adapter.qrCodeToDisplay.observe(viewLifecycleOwner, { code ->
-                showQRCodeDialog(code)
-            })
-            adapter.reservationToCancel.observe(viewLifecycleOwner, { reservation ->
-                run {
-                    viewModel.cancelReservation(reservation)
-                }
-            })
+            val adapter = ReservationsListAdapter(reservationsList, requireActivity(), { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })
             lView.adapter = adapter
         })
 

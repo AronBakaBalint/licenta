@@ -1,6 +1,5 @@
 package com.example.licenta_mobile.activity.main.profile
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
