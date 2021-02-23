@@ -5,7 +5,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.licenta_mobile.activity.main.reservations.LoginResponse.*
+import com.example.licenta_mobile.activity.login.LoginResponse.*
 import com.example.licenta_mobile.dto.LoginRequestDto
 import com.example.licenta_mobile.repository.user.UserRepository
 import com.example.licenta_mobile.repository.user.UserRepositoryImpl
@@ -34,7 +34,7 @@ class LoginViewModel : ViewModel() {
         val loginRequestDto = LoginRequestDto(username.get()!!, password.get()!!)
         userRepository.login(loginRequestDto) { response ->
             hideProgressBar()
-            when(response){
+            when(response) {
 
                 SUCCESS -> {
                     _shouldLogin.value = true

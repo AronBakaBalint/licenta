@@ -1,4 +1,4 @@
-package com.example.licenta_mobile.activity.main.reservations
+package com.example.licenta_mobile.activity.login
 
 enum class LoginResponse {
     SUCCESS,
