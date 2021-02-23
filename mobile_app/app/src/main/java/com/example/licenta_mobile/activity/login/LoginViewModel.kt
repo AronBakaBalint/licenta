@@ -5,14 +5,10 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.licenta_mobile.activity.main.reservations.LoginResponse.*
 import com.example.licenta_mobile.dto.LoginRequestDto
-import com.example.licenta_mobile.model.UserData.update
-import com.example.licenta_mobile.rest.LoginService
-import com.example.licenta_mobile.rest.RestClient.client
-import com.example.licenta_mobile.security.Token
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.licenta_mobile.repository.user.UserRepository
+import com.example.licenta_mobile.repository.user.UserRepositoryImpl
 
 class LoginViewModel : ViewModel() {
 
@@ -21,8 +17,6 @@ class LoginViewModel : ViewModel() {
     val password = ObservableField("123")
 
     val progressBar = ObservableField(View.GONE)
-
-    private val loginService = client!!.create(LoginService::class.java)
 
     private val _shouldLogin = MutableLiveData<Boolean>()
     val shouldLogin: LiveData<Boolean> = _shouldLogin
@@ -33,31 +27,28 @@ class LoginViewModel : ViewModel() {
     private val _loginToastMessage = MutableLiveData<String>()
     val loginToastMessage: LiveData<String> = _loginToastMessage
 
+    private val userRepository: UserRepository = UserRepositoryImpl()
+
     fun login(){
         showProgressBar()
         val loginRequestDto = LoginRequestDto(username.get()!!, password.get()!!)
-        val call = loginService.authenticate(loginRequestDto)
-        call.enqueue(object : Callback<String> {
-            override fun onResponse(call: Call<String>, response: Response<String>) {
-                hideProgressBar()
-                if (response.isSuccessful) {
-                    val responseBody = response.body()!!
-                    if ("false" == responseBody) {
-                        _loginToastMessage.postValue("Incorrect Username or Password")
-                    } else {
-                        _shouldLogin.value = true
-                        Token.jwtToken = responseBody
-                        update()
-                    }
+        userRepository.login(loginRequestDto) { response ->
+            hideProgressBar()
+            when(response){
+
+                SUCCESS -> {
+                    _shouldLogin.value = true
+                }
+
+                WRONG_PASSWORD -> {
+                    _loginToastMessage.postValue("Incorrect Username or Password")
+                }
+
+                CONNECTION_ERROR -> {
+                    _loginToastMessage.postValue("Connection Error! Please try again later!")
                 }
             }
-
-            override fun onFailure(call: Call<String>, t: Throwable) {
-                hideProgressBar()
-                _loginToastMessage.postValue("Connection Error! Please try again later!")
-                call.cancel()
-            }
-        })
+        }
     }
 
     fun register(){
