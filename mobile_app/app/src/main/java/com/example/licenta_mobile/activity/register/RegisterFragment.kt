@@ -55,8 +55,11 @@ class RegisterFragment : Fragment() {
     private fun setupObservers(){
 
         viewModel.registerSuccess.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "Registration successful!", Toast.LENGTH_LONG).show()
             registerCommandListener?.returnToLoginPage()
+        })
+
+        viewModel.registerToastMessage.observe(viewLifecycleOwner, {
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
         })
     }
 
