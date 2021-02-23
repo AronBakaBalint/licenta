@@ -3,11 +3,13 @@ package com.example.licenta_mobile.repository.user
 import com.example.licenta_mobile.activity.login.LoginResponse
 import com.example.licenta_mobile.activity.register.RegisterResponse
 import com.example.licenta_mobile.dto.LoginRequestDto
+import com.example.licenta_mobile.dto.MoneyTransferDto
 import com.example.licenta_mobile.dto.RegistrationDto
 import com.example.licenta_mobile.model.UserData
 import com.example.licenta_mobile.rest.LoginService
 import com.example.licenta_mobile.rest.RegistrationService
 import com.example.licenta_mobile.rest.RestClient
+import com.example.licenta_mobile.rest.UserDataService
 import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
@@ -18,6 +20,8 @@ class UserRepositoryImpl : UserRepository{
     private val loginService = RestClient.client!!.create(LoginService::class.java)
 
     private val registrationService = RestClient.client!!.create(RegistrationService::class.java)
+
+    private val userDataService = RestClient.client!!.create(UserDataService::class.java)
 
     override fun login(loginRequestDto: LoginRequestDto, loginResponse: (loginResponse: LoginResponse) -> Unit) {
         val call = loginService.authenticate(loginRequestDto)
@@ -58,6 +62,27 @@ class UserRepositoryImpl : UserRepository{
 
             override fun onFailure(call: Call<Int>, t: Throwable) {
                 registerResponse.invoke(RegisterResponse.CONNECTION_ERROR)
+                call.cancel()
+            }
+        })
+    }
+
+    override fun addMoney(userId: Int, amount: Double, moneyAddResponse: (response: Boolean) -> Unit) {
+        val moneyTransferDto = MoneyTransferDto()
+        moneyTransferDto.userId = UserData.userId
+        moneyTransferDto.amount = amount
+
+        val call = userDataService.transferMoney("Bearer " + Token.jwtToken, moneyTransferDto)
+        call.enqueue(object : Callback<Void?> {
+            override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
+                if (response.isSuccessful) {
+                    UserData.update()
+                    moneyAddResponse.invoke(true)
+                }
+            }
+
+            override fun onFailure(call: Call<Void?>, t: Throwable) {
+                println(t.message)
                 call.cancel()
             }
         })
