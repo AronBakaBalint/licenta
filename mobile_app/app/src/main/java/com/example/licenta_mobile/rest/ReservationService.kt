@@ -10,42 +10,29 @@ import retrofit2.http.*
 interface ReservationService {
 
     @GET("/parking")
-    @Headers("Content-Type: application/json")
-    fun getAllParkingPlaces(@Header("Authorization") auth: String): Call<List<ParkingSpotDto>>
+    fun getAllParkingPlaces(): Call<List<ParkingSpotDto>>
 
     @POST("/reservation")
-    @Headers("Content-Type: application/json")
-    fun reserveParkingSpot(@Header("Authorization") auth: String, @Body reservationDto: ReservationDto): Call<Int>
+    fun reserveParkingSpot(@Body reservationDto: ReservationDto): Call<Int>
 
     @GET("/reservation/{id}")
-    @Headers("Content-Type: application/json")
-    fun isReservationPending(@Header("Authorization") auth: String, @Path("id") id: Int): Call<Boolean>
+    fun isReservationPending(@Path("id") id: Int): Call<Boolean>
 
     @DELETE("/reservation/{id}")
-    @Headers("Content-Type: application/json")
-    fun cancelReservation(@Header("Authorization") auth: String, @Path("id") id: Int): Call<Void>
-
-    @GET("/parking/unoccupied/{id}")
-    @Headers("Content-Type: application/json")
-    fun getUnoccupiedPlaces(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MutableList<ReservationDto>>
+    fun cancelReservation(@Path("id") id: Int): Call<Void>
 
     @GET("/parking/reserved/{id}")
-    @Headers("Content-Type: application/json")
-    fun getReservationHistory(@Header("Authorization") auth: String, @Path("id") id: Int): Call<MutableList<ReservationDto>>
+    fun getReservationHistory(@Path("id") id: Int): Call<MutableList<ReservationDto>>
 
     @GET("/reservation/extension")
-    @Headers("Content-Type: application/json")
-    fun getExtensionCost(@Header("Authorization") auth: String): Call<Double>
+    fun getExtensionCost(): Call<Double>
 
     @GET("/reservation")
-    @Headers("Content-Type: application/json")
-    fun getPricePerHour(@Header("Authorization") auth: String): Call<Double>
+    fun getPricePerHour(): Call<Double>
 
     @POST("/reservation/date/{id}")
-    @Headers("Content-Type: application/json")
-    fun getAllActiveReservations(@Header("Authorization") auth: String, @Path("id") id: Int, @Body reservationDate: SimpleDate): Call<List<ReservationDto>>
+    fun getAllActiveReservations(@Path("id") id: Int, @Body reservationDate: SimpleDate): Call<List<ReservationDto>>
 
     @PUT("/reservation/{id}")
-    @Headers("Content-Type: application/json")
-    fun extendReservation(@Header("Authorization") auth: String, @Path("id") id: Int): Call<Void>
+    fun extendReservation(@Path("id") id: Int): Call<Void>
 }

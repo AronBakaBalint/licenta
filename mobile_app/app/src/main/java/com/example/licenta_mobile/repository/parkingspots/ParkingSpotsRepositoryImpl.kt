@@ -13,7 +13,7 @@ class ParkingSpotsRepositoryImpl : ParkingSpotsRepository {
     private val parkingService = RestClient.client!!.create(ReservationService::class.java)
 
     override fun getParkingSpotsState(parkingSpotsResponse: (parkingSpots: List<ParkingSpotDto>) -> Unit) {
-        val call = parkingService.getAllParkingPlaces("Bearer ${Token.jwtToken}")
+        val call = parkingService.getAllParkingPlaces()
         call.enqueue(object : Callback<List<ParkingSpotDto>> {
             override fun onResponse(call: Call<List<ParkingSpotDto>>, response: Response<List<ParkingSpotDto>>) {
                 if (response.isSuccessful) {

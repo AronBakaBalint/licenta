@@ -10,6 +10,5 @@ import retrofit2.http.POST
 interface LoginService {
 
     @POST("/login")
-    @Headers("Content-Type: application/json")
     fun authenticate(@Body loginRequestDto: LoginRequestDto): Call<String>
 }

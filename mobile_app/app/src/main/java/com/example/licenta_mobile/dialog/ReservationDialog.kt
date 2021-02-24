@@ -86,7 +86,7 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int,
 
     private fun getReservationSchedule(parkingPlaceId: Int, reservationDate: SimpleDate): List<Int> {
         val reservationList: MutableList<Int> = ArrayList()
-        val callSync = service.getAllActiveReservations("Bearer " + Token.jwtToken, parkingPlaceId, reservationDate)
+        val callSync = service.getAllActiveReservations(parkingPlaceId, reservationDate)
         try {
             val response = callSync.execute()
             val apiResponse = response.body()!!

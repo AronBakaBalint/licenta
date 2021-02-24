@@ -72,7 +72,7 @@ class UserRepositoryImpl : UserRepository{
         moneyTransferDto.userId = UserData.userId
         moneyTransferDto.amount = amount
 
-        val call = userDataService.transferMoney("Bearer " + Token.jwtToken, moneyTransferDto)
+        val call = userDataService.transferMoney(moneyTransferDto)
         call.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
