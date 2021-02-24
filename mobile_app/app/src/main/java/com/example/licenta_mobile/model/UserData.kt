@@ -19,7 +19,7 @@ object UserData {
 
     @JvmStatic
     fun update() {
-        val call = userDataService.getUserDetails("Bearer " + Token.jwtToken, userId)
+        val call = userDataService.getUserDetails(userId)
         call.enqueue(object : Callback<UserDataDto> {
             override fun onResponse(call: Call<UserDataDto>, response: Response<UserDataDto>) {
                 if (response.isSuccessful) {

@@ -1,7 +1,9 @@
 package com.example.licenta_mobile.rest
 
 import android.annotation.SuppressLint
+import com.example.licenta_mobile.security.Token
 import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -62,6 +64,14 @@ object RestClient {
             val builder = OkHttpClient.Builder()
             builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
             builder.hostnameVerifier { _, _ -> true }
+            builder.addInterceptor(Interceptor { chain ->
+                val chainBuilder = chain.request().newBuilder()
+                chainBuilder.header("Content-Type", "application/json")
+                if (Token.jwtToken != null) {
+                    chainBuilder.header("Authorization", "Bearer ${Token.jwtToken}")
+                }
+                return@Interceptor chain.proceed(chainBuilder.build())
+            })
             return builder
         } catch (e: Exception) {
             throw RuntimeException(e)

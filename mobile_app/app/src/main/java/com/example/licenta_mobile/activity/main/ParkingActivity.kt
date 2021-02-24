@@ -69,7 +69,7 @@ class ParkingActivity : AppCompatActivity() {
 
     private fun getPriceperHour(): Double {
         var reservationCost = -1.0
-        val call = reservationService.getPricePerHour("Bearer " + Token.jwtToken)
+        val call = reservationService.getPricePerHour()
         try {
             val response = call.execute()
             reservationCost = response.body()!!
@@ -90,7 +90,7 @@ class ParkingActivity : AppCompatActivity() {
         reservationDto.licensePlate = introducedLicensePlate
         reservationDto.startTime = selectedDate
         reservationDialog.dismiss()
-        val call = reservationService.reserveParkingSpot("Bearer " + Token.jwtToken, reservationDto)
+        val call = reservationService.reserveParkingSpot(reservationDto)
         call.enqueue(object : Callback<Int> {
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 if (response.isSuccessful) {
