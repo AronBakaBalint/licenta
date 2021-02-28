@@ -41,15 +41,6 @@ class ParkingActivity : AppCompatActivity() {
     private fun onInit() {
         update()
         setContentView(R.layout.fragment_parking_lot)
-        startAutoRefresh()
-    }
-
-    private fun startAutoRefresh() {
-        Timer().scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-
-            }
-        }, 0, 1000) //put here time 1000 milliseconds=1 second
     }
 
     fun startReservation(view: View) {

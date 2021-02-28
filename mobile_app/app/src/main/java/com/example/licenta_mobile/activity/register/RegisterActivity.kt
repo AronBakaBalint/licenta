@@ -5,13 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.login.LoginActivity
-import com.example.licenta_mobile.activity.main.MainActivity
 
 class RegisterActivity : AppCompatActivity(), RegisterCommandListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.register_activity)
+        setContentView(R.layout.activity_register)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                     .replace(R.id.container, RegisterFragment.newInstance())

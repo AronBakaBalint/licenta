@@ -29,7 +29,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[0].color}"
             android:text="A1"
-            android:clickable="@{viewModel.isFree(0)}"
             android:onClick="@{() -> viewModel.reserve(0)}"/>
 
         <Button
@@ -39,7 +38,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[1].color}"
             android:text="A2"
-            android:clickable="@{viewModel.isFree(1)}"
             android:onClick="@{() -> viewModel.reserve(1)}"/>
 
         <Button
@@ -49,7 +47,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[2].color}"
             android:text="A3"
-            android:clickable="@{viewModel.isFree(2)}"
             android:onClick="@{() -> viewModel.reserve(2)}"/>
 
         <Button
@@ -59,7 +56,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[3].color}"
             android:text="A4"
-            android:clickable="@{viewModel.isFree(3)}"
             android:onClick="@{() -> viewModel.reserve(3)}"/>
 
         <Button
@@ -69,7 +65,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[4].color}"
             android:text="A5"
-            android:clickable="@{viewModel.isFree(4)}"
             android:onClick="@{() -> viewModel.reserve(4)}"/>
 
         <Button
@@ -79,7 +74,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[5].color}"
             android:text="A6"
-            android:clickable="@{viewModel.isFree(5)}"
             android:onClick="@{() -> viewModel.reserve(5)}"/>
     </LinearLayout>
 
@@ -100,7 +94,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[6].color}"
             android:text="B1"
-            android:clickable="@{viewModel.isFree(6)}"
             android:onClick="@{() -> viewModel.reserve(6)}"/>
 
         <Button
@@ -110,7 +103,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[7].color}"
             android:text="B2"
-            android:clickable="@{viewModel.isFree(7)}"
             android:onClick="@{() -> viewModel.reserve(7)}"/>
 
         <Button
@@ -120,7 +112,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[8].color}"
             android:text="B3"
-            android:clickable="@{viewModel.isFree(8)}"
             android:onClick="@{() -> viewModel.reserve(8)}"/>
 
         <Button
@@ -130,7 +121,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[9].color}"
             android:text="B4"
-            android:clickable="@{viewModel.isFree(9)}"
             android:onClick="@{() -> viewModel.reserve(9)}"/>
 
         <Button
@@ -140,7 +130,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[10].color}"
             android:text="B5"
-            android:clickable="@{viewModel.isFree(10)}"
             android:onClick="@{() -> viewModel.reserve(10)}"/>
 
         <Button
@@ -150,7 +139,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[11].color}"
             android:text="B6"
-            android:clickable="@{viewModel.isFree(11)}"
             android:onClick="@{() -> viewModel.reserve(11)}"/>
     </LinearLayout>
 
@@ -167,7 +155,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[12].color}"
             android:text="C1"
-            android:clickable="@{viewModel.isFree(12)}"
             android:onClick="@{() -> viewModel.reserve(12)}"/>
 
         <Button
@@ -177,7 +164,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[13].color}"
             android:text="C2"
-            android:clickable="@{viewModel.isFree(13)}"
             android:onClick="@{() -> viewModel.reserve(13)}"/>
 
         <Button
@@ -187,7 +173,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[14].color}"
             android:text="C3"
-            android:clickable="@{viewModel.isFree(14)}"
             android:onClick="@{() -> viewModel.reserve(14)}"/>
 
         <Button
@@ -197,7 +182,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[15].color}"
             android:text="C4"
-            android:clickable="@{viewModel.isFree(15)}"
             android:onClick="@{() -> viewModel.reserve(15)}"/>
 
         <Button
@@ -207,7 +191,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[16].color}"
             android:text="C5"
-            android:clickable="@{viewModel.isFree(16)}"
             android:onClick="@{() -> viewModel.reserve(16)}"/>
 
         <Button
@@ -217,7 +200,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[17].color}"
             android:text="C6"
-            android:clickable="@{viewModel.isFree(17)}"
             android:onClick="@{() -> viewModel.reserve(17)}"/>
     </LinearLayout>
 
@@ -238,7 +220,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[18].color}"
             android:text="D1"
-            android:clickable="@{viewModel.isFree(18)}"
             android:onClick="@{() -> viewModel.reserve(18)}"/>
 
         <Button
@@ -248,7 +229,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[19].color}"
             android:text="D2"
-            android:clickable="@{viewModel.isFree(19)}"
             android:onClick="@{() -> viewModel.reserve(19)}"/>
 
         <Button
@@ -258,7 +238,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[20].color}"
             android:text="D3"
-            android:clickable="@{viewModel.isFree(20)}"
             android:onClick="@{() -> viewModel.reserve(20)}"/>
 
         <Button
@@ -268,7 +247,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[21].color}"
             android:text="D4"
-            android:clickable="@{viewModel.isFree(21)}"
             android:onClick="@{() -> viewModel.reserve(21)}"/>
 
         <Button
@@ -278,7 +256,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[22].color}"
             android:text="D5"
-            android:clickable="@{viewModel.isFree(22)}"
             android:onClick="@{() -> viewModel.reserve(22)}"/>
 
         <Button
@@ -288,7 +265,6 @@
             android:layout_weight="1"
             android:background="@{viewModel.spotsState[23].color}"
             android:text="D6"
-            android:clickable="@{viewModel.isFree(23)}"
             android:onClick="@{() -> viewModel.reserve(23)}"/>
     </LinearLayout>
 

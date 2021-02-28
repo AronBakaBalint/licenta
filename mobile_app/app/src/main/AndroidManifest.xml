@@ -13,6 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.reservation.SpotReservationActivity"></activity>
         <activity android:name=".activity.register.RegisterActivity" />
         <activity android:name=".activity.login.LoginActivity">
             <intent-filter>
