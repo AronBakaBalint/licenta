@@ -9,10 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.licenta_mobile.R
-import com.example.licenta_mobile.activity.login.LoginCommandListener
 import com.example.licenta_mobile.activity.main.MainCommandListener
 import com.example.licenta_mobile.databinding.FragmentParkingLotBinding
-import java.lang.ClassCastException
+import com.example.licenta_mobile.factory.ParkingSpotVMFactory
 
 class ParkingSpotsFragment : Fragment() {
 
@@ -30,9 +29,8 @@ class ParkingSpotsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ParkingSpotsViewModel::class.java)
+        viewModel = ViewModelProvider(this, ParkingSpotVMFactory { spotId -> reserve(spotId) }).get(ParkingSpotsViewModel::class.java)
         binding.viewModel = viewModel
-        setupObservers()
         // TODO: Use the ViewModel
     }
 
@@ -50,10 +48,8 @@ class ParkingSpotsFragment : Fragment() {
         mainCommandListener = null
     }
 
-    private fun setupObservers() {
-        viewModel.reservedSpotId.observe(viewLifecycleOwner, {
-            mainCommandListener?.onGoToReservation(it)
-        })
+    fun reserve(spotId: Int){
+        mainCommandListener?.onGoToReservation(spotId)
     }
 
 }

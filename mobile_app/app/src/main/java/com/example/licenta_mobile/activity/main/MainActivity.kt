@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity(), MainCommandListener {
 
     override fun onGoToReservation(spotId: Int) {
         val intent = Intent(this, SpotReservationActivity::class.java)
+        intent.putExtra("spotId", spotId)
         startActivity(intent)
     }
 }
