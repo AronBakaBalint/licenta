@@ -6,7 +6,7 @@ import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
 
-class ParkingSpotsViewModel : ViewModel() {
+class ParkingSpotsViewModel(private val spotToReserve: (Int) -> Unit) : ViewModel() {
 
     var spotsState: List<MutableLiveData<ParkingSpotDto>> = getInitialSpotsState()
 
@@ -17,7 +17,8 @@ class ParkingSpotsViewModel : ViewModel() {
     }
 
     fun reserve(pos: Int){
-        val spotId = spotsState[pos].value?.id
+        val spotId = spotsState[pos].value?.id!!
+        spotToReserve.invoke(spotId)
     }
 
     private fun getInitialSpotsState(): List<MutableLiveData<ParkingSpotDto>> {
@@ -38,10 +39,6 @@ class ParkingSpotsViewModel : ViewModel() {
         for(i in newState.indices){
             spotsState[i].value = ParkingSpotDto(newState[i].id, newState[i].color, newState[i].status, newState[i].occupierCarPlate)
         }
-    }
-
-    fun isFree(pos: Int): Boolean {
-        return spotsState[pos].value?.status == "free"
     }
 
 }
