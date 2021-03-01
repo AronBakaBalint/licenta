@@ -48,7 +48,7 @@ class ParkingSpotsFragment : Fragment() {
         mainCommandListener = null
     }
 
-    fun reserve(spotId: Int){
+    private fun reserve(spotId: Int){
         mainCommandListener?.onGoToReservation(spotId)
     }
 
