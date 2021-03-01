@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.licenta_mobile.activity.reservation.SpotReservationViewModel" />
+    </data>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite">
+
+    <TextView
+        android:id="@+id/summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Summary"
+        android:textColor="@color/colorBlack"
+        android:textSize="24sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/summary">
+
+        <TextView
+            android:id="@+id/text_reservation_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservation Date"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/reservation_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGreen"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/text_reservation_hours"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservation Hours"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/reservation_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGreen"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/text_license_plate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="License Plate"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/license_plate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorGreen"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="TOTAL 0 LEI"
+            android:textSize="20sp"
+            android:layout_gravity="end"
+            android:textStyle="bold"
+            android:textColor="@color/colorBlack"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cancel"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="20dp"
+        android:textColor="@color/colorPrimary"
+        android:backgroundTint="@color/colorWhite"
+        app:layout_constraintEnd_toStartOf="@id/next_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/next_button" />
+
+    <Button
+        android:id="@+id/next_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/confirm"
+        android:textColor="@color/colorWhite"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cancel_button"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

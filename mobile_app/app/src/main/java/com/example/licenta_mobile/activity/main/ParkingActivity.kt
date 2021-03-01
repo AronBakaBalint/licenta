@@ -1,5 +1,6 @@
 package com.example.licenta_mobile.activity.main
 
+/*
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -108,4 +109,4 @@ class ParkingActivity : AppCompatActivity() {
 
 
 
-}
+}*/

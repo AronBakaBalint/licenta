@@ -10,4 +10,7 @@
     <string name="title_reservations">Reservations</string>
     <string name="title_profile">Profile</string>
     <string name="submit">Submit</string>
+    <string name="cancel">Cancel</string>
+    <string name="next">Next</string>
+    <string name="confirm">Confirm</string>
 </resources>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.licenta_mobile.R
@@ -16,7 +17,7 @@ import java.lang.ClassCastException
 
 class LoginFragment : Fragment() {
 
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by activityViewModels()
 
     private lateinit var binding: FragmentLoginBinding
 
@@ -48,7 +49,6 @@ class LoginFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding.viewModel = viewModel
         setupObservers()
         // TODO: Use the ViewModel
