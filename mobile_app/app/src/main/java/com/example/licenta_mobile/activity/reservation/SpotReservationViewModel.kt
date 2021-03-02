@@ -1,5 +1,6 @@
 package com.example.licenta_mobile.activity.reservation
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
@@ -24,6 +25,8 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
 
     private val _reservationHours = MutableLiveData<List<Int>>()
     val reservationHours: LiveData<List<Int>> = _reservationHours
+
+    var selectedHours = ObservableField<List<Int>>()
 
     private var selectedDate = today()
 
@@ -71,5 +74,9 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
             }
         }
         _reservationHours.value = reservedHours
+    }
+
+    fun getSelectedDate(): String {
+        return "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"
     }
 }
