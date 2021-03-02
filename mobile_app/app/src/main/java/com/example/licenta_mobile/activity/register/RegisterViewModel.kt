@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.licenta_mobile.activity.register.RegisterResponse.*
+import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.RegistrationDto
 import com.example.licenta_mobile.repository.user.UserRepository
 import com.example.licenta_mobile.repository.user.UserRepositoryImpl
@@ -16,7 +17,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel : BaseViewModel() {
 
     val fullName = ObservableField("")
 

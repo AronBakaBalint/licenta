@@ -3,8 +3,9 @@ package com.example.licenta_mobile.activity.reservation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.licenta_mobile.base.BaseViewModel
 
-class SpotReservationViewModel : ViewModel() {
+class SpotReservationViewModel : BaseViewModel() {
 
     private val _cancelReservation = MutableLiveData<Boolean>()
     val cancelReservation: LiveData<Boolean> = _cancelReservation

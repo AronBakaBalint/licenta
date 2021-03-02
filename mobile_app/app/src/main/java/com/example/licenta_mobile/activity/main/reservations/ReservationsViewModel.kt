@@ -3,11 +3,12 @@ package com.example.licenta_mobile.activity.main.reservations
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.repository.reservations.ReservationsRepository
 import com.example.licenta_mobile.repository.reservations.ReservationsRepositoryImpl
 
-class ReservationsViewModel : ViewModel() {
+class ReservationsViewModel : BaseViewModel() {
 
     private var _reservations = MutableLiveData<List<ReservationDto>>()
     var reservations: LiveData<List<ReservationDto>> = _reservations

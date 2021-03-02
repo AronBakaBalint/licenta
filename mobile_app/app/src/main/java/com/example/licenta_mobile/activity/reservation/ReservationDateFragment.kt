@@ -2,21 +2,15 @@ package com.example.licenta_mobile.activity.reservation
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
+import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationDateBinding
 
-class ReservationDateFragment : Fragment() {
+class ReservationDateFragment : BaseFragment<SpotReservationViewModel, FragmentReservationDateBinding>(R.layout.fragment_reservation_date) {
 
-    private var binding: FragmentReservationDateBinding? = null
-
-    private val sharedViewModel: SpotReservationViewModel by activityViewModels()
+    override val viewModel: SpotReservationViewModel by activityViewModels()
 
     private var reservationCommandListener: ReservationCommandListener? = null
 
@@ -24,15 +18,9 @@ class ReservationDateFragment : Fragment() {
         fun newInstance() = ReservationDateFragment()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_reservation_date, container, false)
-        binding?.lifecycleOwner = this
-        return binding?.root
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding?.viewModel = sharedViewModel
+        binding?.viewModel = viewModel
         setupObservers()
         // TODO: Use the ViewModel
     }
@@ -58,12 +46,12 @@ class ReservationDateFragment : Fragment() {
 
     private fun setupObservers() {
 
-        sharedViewModel.cancelReservation.observe(viewLifecycleOwner, {
+        viewModel.cancelReservation.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "Reservation Cancelled", Toast.LENGTH_SHORT).show()
             reservationCommandListener?.cancelReservation()
         })
 
-        sharedViewModel.navigateToHourPicker.observe(viewLifecycleOwner, {
+        viewModel.navigateToHourPicker.observe(viewLifecycleOwner, {
             reservationCommandListener?.navigateToHourPicker()
         })
     }

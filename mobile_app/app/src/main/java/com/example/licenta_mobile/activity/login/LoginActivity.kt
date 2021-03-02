@@ -6,17 +6,18 @@ import android.os.Bundle
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.main.MainActivity
 import com.example.licenta_mobile.activity.register.RegisterActivity
+import com.example.licenta_mobile.base.BaseActivity
 
-class LoginActivity : AppCompatActivity(), LoginCommandListener {
+class LoginActivity : BaseActivity(), LoginCommandListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, LoginFragment.newInstance())
-                    .commitNow()
-        }
+        setupFragment()
+    }
+
+    private fun setupFragment() {
+        addFragment(R.id.container, LoginFragment.newInstance())
     }
 
     override fun onLogin() {

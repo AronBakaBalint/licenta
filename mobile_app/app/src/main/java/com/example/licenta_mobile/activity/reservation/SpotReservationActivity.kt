@@ -1,20 +1,20 @@
 package com.example.licenta_mobile.activity.reservation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.findNavController
+import androidx.appcompat.app.AppCompatActivity
 import com.example.licenta_mobile.R
+import com.example.licenta_mobile.base.BaseActivity
 
-class SpotReservationActivity : AppCompatActivity(), ReservationCommandListener {
+class SpotReservationActivity : BaseActivity(), ReservationCommandListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_spot_reservation)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, ReservationDateFragment.newInstance())
-                    .commitNow()
-        }
+        createFragment()
+    }
+
+    private fun createFragment() {
+        addFragment(R.id.container, ReservationDateFragment.newInstance())
     }
 
     override fun cancelReservation() {
@@ -22,20 +22,14 @@ class SpotReservationActivity : AppCompatActivity(), ReservationCommandListener 
     }
 
     override fun navigateToHourPicker() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ReservationHoursFragment.newInstance())
-                .commitNow()
+        addFragment(R.id.container, ReservationHoursFragment.newInstance())
     }
 
     override fun navigateToLicensePlate() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ReservationLicensePlateFragment.newInstance())
-                .commitNow()
+        addFragment(R.id.container, ReservationLicensePlateFragment.newInstance())
     }
 
     override fun navigateToSummary() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, ReservationSummaryFragment.newInstance())
-                .commitNow()
+        addFragment(R.id.container, ReservationSummaryFragment.newInstance())
     }
 }

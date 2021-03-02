@@ -1,21 +1,21 @@
 package com.example.licenta_mobile.activity.register
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.login.LoginActivity
+import com.example.licenta_mobile.base.BaseActivity
 
-class RegisterActivity : AppCompatActivity(), RegisterCommandListener {
+class RegisterActivity : BaseActivity(), RegisterCommandListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, RegisterFragment.newInstance())
-                    .commitNow()
-        }
+        setupFragment()
+    }
+
+    private fun setupFragment() {
+        addFragment(R.id.container, RegisterFragment.newInstance())
     }
 
     override fun returnToLoginPage() {
