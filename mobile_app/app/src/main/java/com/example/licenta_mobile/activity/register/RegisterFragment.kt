@@ -2,21 +2,15 @@ package com.example.licenta_mobile.activity.register
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
+import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentRegisterBinding
 
-class RegisterFragment : Fragment() {
+class RegisterFragment : BaseFragment<RegisterViewModel, FragmentRegisterBinding>(R.layout.fragment_register) {
 
-    private lateinit var viewModel: RegisterViewModel
-
-    private lateinit var binding: FragmentRegisterBinding
+    override val viewModel: RegisterViewModel by activityViewModels()
 
     private var registerCommandListener: RegisterCommandListener? = null
 
@@ -38,16 +32,9 @@ class RegisterFragment : Fragment() {
         registerCommandListener = null
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
-        binding.lifecycleOwner = this
-        return binding.root
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
-        binding.viewModel = viewModel
+        binding?.viewModel = viewModel
         setupObservers()
         // TODO: Use the ViewModel
     }

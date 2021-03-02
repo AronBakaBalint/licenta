@@ -2,23 +2,15 @@ package com.example.licenta_mobile.activity.login
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
+import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentLoginBinding
-import java.lang.ClassCastException
 
-class LoginFragment : Fragment() {
+class LoginFragment : BaseFragment<LoginViewModel, FragmentLoginBinding>(R.layout.fragment_login) {
 
-    private lateinit var viewModel: LoginViewModel
-
-    private lateinit var binding: FragmentLoginBinding
+    override val viewModel: LoginViewModel by activityViewModels()
 
     private var loginCommandListener: LoginCommandListener? = null
 
@@ -40,16 +32,9 @@ class LoginFragment : Fragment() {
         loginCommandListener = null
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
-        binding.lifecycleOwner = this
-        return binding.root
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
-        binding.viewModel = viewModel
+        binding?.viewModel = viewModel
         setupObservers()
         // TODO: Use the ViewModel
     }

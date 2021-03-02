@@ -2,11 +2,12 @@ package com.example.licenta_mobile.activity.main.parkingspots
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
 
-class ParkingSpotsViewModel(private val spotToReserve: (Int) -> Unit) : ViewModel() {
+class ParkingSpotsViewModel(private val spotToReserve: (Int) -> Unit) : BaseViewModel() {
 
     var spotsState: List<MutableLiveData<ParkingSpotDto>> = getInitialSpotsState()
 

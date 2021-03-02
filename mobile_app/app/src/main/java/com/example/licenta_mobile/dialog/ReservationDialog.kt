@@ -1,5 +1,6 @@
 package com.example.licenta_mobile.dialog
 
+/*
 import android.app.Activity
 import android.app.Dialog
 import android.graphics.Color
@@ -34,7 +35,6 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.reservation_dialog)
         listView = findViewById(R.id.hourList)
         window!!.setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         confirmButton = findViewById(R.id.button3)
@@ -116,4 +116,4 @@ class ReservationDialog(private val activity: Activity, var parkingPlaceId: Int,
         }
         return intHoursList
     }
-}
+}*/

@@ -12,6 +12,11 @@ import com.example.licenta_mobile.activity.reservation.SpotReservationActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity(), MainCommandListener {
+
+    companion object {
+        const val PARKING_SPOT_ID_EXTRA = "spotId"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,7 +36,7 @@ class MainActivity : AppCompatActivity(), MainCommandListener {
 
     override fun onGoToReservation(spotId: Int) {
         val intent = Intent(this, SpotReservationActivity::class.java)
-        intent.putExtra("spotId", spotId)
+        intent.putExtra(PARKING_SPOT_ID_EXTRA, "$spotId")
         startActivity(intent)
     }
 }
