@@ -39,7 +39,7 @@ class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReserva
         viewModel.activateFilter.observe(viewLifecycleOwner, {
             val lView = binding?.reservationsList
             var reservationsList = viewModel.reservations.value!!
-            if (!binding?.switch1?.isChecked!!) {
+            if (!binding?.switchShowCompleted?.isChecked!!) {
                 reservationsList = reservationsList.filter { r -> r.status != "cancelled" && r.status != "finished" }
             }
             val adapter = ReservationsListAdapter(reservationsList, requireActivity(), { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })

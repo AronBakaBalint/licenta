@@ -12,15 +12,16 @@ import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationLicensePlateBinding
+import com.example.licenta_mobile.factory.ReservationVMFactory
 
-class ReservationLicensePlateFragment : BaseFragment<SpotReservationViewModel, FragmentReservationLicensePlateBinding>(R.layout.fragment_reservation_license_plate) {
+class ReservationLicensePlateFragment(private val parkingSpotId: Int?) : BaseFragment<SpotReservationViewModel, FragmentReservationLicensePlateBinding>(R.layout.fragment_reservation_license_plate) {
 
-    override val viewModel: SpotReservationViewModel by activityViewModels()
+    override val viewModel: SpotReservationViewModel by activityViewModels{ ReservationVMFactory(parkingSpotId) }
 
     private var reservationCommandListener: ReservationCommandListener? = null
 
     companion object {
-        fun newInstance() = ReservationLicensePlateFragment()
+        fun newInstance(parkingSpotId: Int?) = ReservationLicensePlateFragment(parkingSpotId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

@@ -4,18 +4,20 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationHoursBinding
+import com.example.licenta_mobile.factory.ReservationVMFactory
 
-class ReservationHoursFragment : BaseFragment<SpotReservationViewModel, FragmentReservationHoursBinding>(R.layout.fragment_reservation_hours) {
+class ReservationHoursFragment(private val parkingSpotId: Int?) : BaseFragment<SpotReservationViewModel, FragmentReservationHoursBinding>(R.layout.fragment_reservation_hours) {
 
-    override val viewModel: SpotReservationViewModel by activityViewModels()
+    override val viewModel: SpotReservationViewModel by activityViewModels{ ReservationVMFactory(parkingSpotId) }
 
     private var reservationCommandListener: ReservationCommandListener? = null
 
     companion object {
-        fun newInstance() = ReservationHoursFragment()
+        fun newInstance(parkingSpotId: Int?) = ReservationHoursFragment(parkingSpotId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -53,6 +55,13 @@ class ReservationHoursFragment : BaseFragment<SpotReservationViewModel, Fragment
 
         viewModel.navigateToLicensePlate.observe(viewLifecycleOwner, {
             reservationCommandListener?.navigateToLicensePlate()
+        })
+
+        viewModel.reservationHours.observe(viewLifecycleOwner, {
+            val recyclerView = binding?.recyclerView
+            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+            val adapter = ReservationHoursAdapter(it)
+            recyclerView?.adapter = adapter
         })
     }
 }

@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <DatePicker
-        android:id="@+id/datePicker1"
+        android:id="@+id/datePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:datePickerMode="calendar"
@@ -64,7 +64,7 @@
         android:onClick="@{() -> viewModel.navigateToHourPicker()}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/cancel_button"
-        app:layout_constraintTop_toBottomOf="@id/datePicker1" />
+        app:layout_constraintTop_toBottomOf="@id/datePicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

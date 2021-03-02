@@ -7,15 +7,16 @@ import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationDateBinding
+import com.example.licenta_mobile.factory.ReservationVMFactory
 
-class ReservationDateFragment : BaseFragment<SpotReservationViewModel, FragmentReservationDateBinding>(R.layout.fragment_reservation_date) {
+class ReservationDateFragment(private val parkingSpotId: Int?) : BaseFragment<SpotReservationViewModel, FragmentReservationDateBinding>(R.layout.fragment_reservation_date) {
 
-    override val viewModel: SpotReservationViewModel by activityViewModels()
+    override val viewModel: SpotReservationViewModel by activityViewModels { ReservationVMFactory(parkingSpotId)}
 
     private var reservationCommandListener: ReservationCommandListener? = null
 
     companion object {
-        fun newInstance() = ReservationDateFragment()
+        fun newInstance(parkingSpotId: Int?) = ReservationDateFragment(parkingSpotId)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -45,6 +46,10 @@ class ReservationDateFragment : BaseFragment<SpotReservationViewModel, FragmentR
     }
 
     private fun setupObservers() {
+
+        binding?.datePicker?.setOnDateChangedListener{
+            _, year, month, dayOfMonth -> viewModel.setSelectedDate(year, month, dayOfMonth)
+        }
 
         viewModel.cancelReservation.observe(viewLifecycleOwner, {
             Toast.makeText(requireContext(), "Reservation Cancelled", Toast.LENGTH_SHORT).show()

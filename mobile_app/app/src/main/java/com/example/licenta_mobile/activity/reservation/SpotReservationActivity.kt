@@ -1,8 +1,8 @@
 package com.example.licenta_mobile.activity.reservation
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.example.licenta_mobile.R
+import com.example.licenta_mobile.activity.main.MainActivity
 import com.example.licenta_mobile.base.BaseActivity
 
 class SpotReservationActivity : BaseActivity(), ReservationCommandListener {
@@ -14,7 +14,8 @@ class SpotReservationActivity : BaseActivity(), ReservationCommandListener {
     }
 
     private fun createFragment() {
-        addFragment(R.id.container, ReservationDateFragment.newInstance())
+        val parkingSpotId = intent.getStringExtra(MainActivity.PARKING_SPOT_ID_EXTRA)?.toInt()
+        addFragment(R.id.container, ReservationDateFragment.newInstance(parkingSpotId))
     }
 
     override fun cancelReservation() {
@@ -22,14 +23,18 @@ class SpotReservationActivity : BaseActivity(), ReservationCommandListener {
     }
 
     override fun navigateToHourPicker() {
-        addFragment(R.id.container, ReservationHoursFragment.newInstance())
+        val parkingSpotId = intent.getStringExtra(MainActivity.PARKING_SPOT_ID_EXTRA)?.toInt()
+        addFragment(R.id.container, ReservationHoursFragment.newInstance(parkingSpotId))
     }
 
     override fun navigateToLicensePlate() {
-        addFragment(R.id.container, ReservationLicensePlateFragment.newInstance())
+        val parkingSpotId = intent.getStringExtra(MainActivity.PARKING_SPOT_ID_EXTRA)?.toInt()
+        addFragment(R.id.container, ReservationLicensePlateFragment.newInstance(parkingSpotId))
     }
 
     override fun navigateToSummary() {
-        addFragment(R.id.container, ReservationSummaryFragment.newInstance())
+        val parkingSpotId = intent.getStringExtra(MainActivity.PARKING_SPOT_ID_EXTRA)?.toInt()
+        addFragment(R.id.container, ReservationSummaryFragment.newInstance(parkingSpotId))
     }
+
 }

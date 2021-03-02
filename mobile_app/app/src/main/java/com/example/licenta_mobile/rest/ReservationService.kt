@@ -31,7 +31,7 @@ interface ReservationService {
     fun getPricePerHour(): Call<Double>
 
     @POST("/reservation/date/{id}")
-    fun getAllActiveReservations(@Path("id") id: Int, @Body reservationDate: SimpleDate): Call<List<ReservationDto>>
+    fun getReservationSchedule(@Path("id") id: Int, @Body reservationDate: SimpleDate): Call<List<ReservationDto>>
 
     @PUT("/reservation/{id}")
     fun extendReservation(@Path("id") id: Int): Call<Void>
