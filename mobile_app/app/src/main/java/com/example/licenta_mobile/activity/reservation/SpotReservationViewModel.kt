@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.model.SimpleDate
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
+import com.example.licenta_mobile.repository.prices.PriceRepositoryImpl
 import java.util.*
 
 
@@ -23,17 +24,22 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
     private val _navigateToSummary = MutableLiveData<Boolean>()
     val navigateToSummary: LiveData<Boolean> = _navigateToSummary
 
-    private val _reservationHours = MutableLiveData<List<Int>>()
-    val reservationHours: LiveData<List<Int>> = _reservationHours
+    val pricePerHour = ObservableField(0.0)
 
-    var selectedHours = ObservableField<List<Int>>()
+    var reservationHours: List<Int>? = null
+
+    var selectedHours = MutableLiveData<MutableList<Int>>()
 
     private var selectedDate = today()
 
     private val parkingSpotsRepository = ParkingSpotsRepositoryImpl()
 
+    private val priceRepository = PriceRepositoryImpl()
+
     init {
         getParkingSpotSchedule()
+        selectedHours.value = arrayListOf()
+        getPricePerHour()
     }
 
     fun navigateToHourPicker() {
@@ -73,10 +79,24 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
                 reservation.duration.forEach { reservedHours.add(it) }
             }
         }
-        _reservationHours.value = reservedHours
+        reservationHours = reservedHours
     }
 
     fun getSelectedDate(): String {
         return "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"
+    }
+
+    fun onHourSelected(hour: Int) {
+        val selectedHoursList = selectedHours.value
+        if(selectedHoursList?.contains(hour)!!) {
+            selectedHoursList.remove(hour)
+        } else {
+            selectedHoursList.add(hour)
+        }
+        selectedHours.value = selectedHoursList
+    }
+
+    private fun getPricePerHour() {
+        priceRepository.getPricePerHour { pricePerHour.set(it) }
     }
 }
