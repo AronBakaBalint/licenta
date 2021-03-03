@@ -58,11 +58,6 @@ class ReservationHoursFragment(private val parkingSpotId: Int?) : BaseFragment<S
             reservationCommandListener?.navigateToLicensePlate()
         })
 
-        viewModel.selectedHours.observe(viewLifecycleOwner, {
-            val priceToDisplay = viewModel.pricePerHour.get()!! * viewModel.selectedHours.value?.size!!
-            binding?.total?.text = "TOTAL $priceToDisplay LEI"
-        })
-
         val recyclerView = binding?.recyclerView
         recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ReservationHoursAdapter(viewModel.reservationHours, viewModel.selectedHours.value) { hour -> viewModel.onHourSelected(hour) }

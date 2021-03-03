@@ -43,4 +43,20 @@ class ReservationsRepositoryImpl : ReservationsRepository {
             }
         })
     }
+
+    override fun makeReservation(reservationDto: ReservationDto, reservationResponse: (response: Int) -> Unit) {
+        val call = reservationService?.reserveParkingSpot(reservationDto)
+        call?.enqueue(object : Callback<Int?> {
+            override fun onResponse(call: Call<Int?>, response: Response<Int?>) {
+                if (response.isSuccessful) {
+                    reservationResponse.invoke(response.body()!!)
+                }
+            }
+
+            override fun onFailure(call: Call<Int?>, t: Throwable) {
+                println(t.message)
+                call.cancel()
+            }
+        })
+    }
 }
