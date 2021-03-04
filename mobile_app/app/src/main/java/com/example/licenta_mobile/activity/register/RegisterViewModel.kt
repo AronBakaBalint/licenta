@@ -1,21 +1,13 @@
 package com.example.licenta_mobile.activity.register
 
-import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.licenta_mobile.activity.register.RegisterResponse.*
 import com.example.licenta_mobile.base.BaseViewModel
-import com.example.licenta_mobile.dto.RegistrationDto
 import com.example.licenta_mobile.repository.user.UserRepository
 import com.example.licenta_mobile.repository.user.UserRepositoryImpl
-import com.example.licenta_mobile.rest.RegistrationService
-import com.example.licenta_mobile.rest.RestClient.client
 import com.example.licenta_mobile.util.addOnPropertyChanged
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RegisterViewModel : BaseViewModel() {
 
@@ -57,7 +49,7 @@ class RegisterViewModel : BaseViewModel() {
         if (password.get() != repeatPassword.get()) {
             passwordError.set("The two passwords should match")
         } else {
-            userRepository.register(fullName.get()!!, username.get()!!, password.get()!!, email.get()!!) {
+            userRepository.register(fullName.get()!!, username.get()!!, email.get()!!, password.get()!!) {
                 response -> when(response) {
 
                     SUCCESS -> {

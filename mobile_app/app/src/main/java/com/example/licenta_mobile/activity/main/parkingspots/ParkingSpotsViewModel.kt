@@ -1,7 +1,6 @@
 package com.example.licenta_mobile.activity.main.parkingspots
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository

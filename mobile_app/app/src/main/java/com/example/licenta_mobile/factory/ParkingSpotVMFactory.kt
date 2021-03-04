@@ -7,7 +7,8 @@ import com.example.licenta_mobile.activity.main.parkingspots.ParkingSpotsViewMod
 
 class ParkingSpotVMFactory(private val reservation: (Int) -> Unit) : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return ParkingSpotsViewModel(reservation) as T;
+        return ParkingSpotsViewModel(reservation) as T
     }
 }

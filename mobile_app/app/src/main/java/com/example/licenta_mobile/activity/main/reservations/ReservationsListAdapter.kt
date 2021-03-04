@@ -10,8 +10,6 @@ import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.ListAdapter
 import android.widget.TextView
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.dto.ReservationDto
 
