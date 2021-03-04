@@ -45,8 +45,8 @@ public class ReservationController {
 	}
 	
 	@PostMapping("/reservation/date/{id}")
-	public List<ReservationDto> getAllActiveReservations(@PathVariable Integer id, @RequestBody SimpleDate reservationDate) {
-		List<ReservationDto> response = reservationFacade.getAllActiveReservations(id, reservationDate);
+	public List<ReservationDto> getReservationSchedule(@PathVariable Integer id, @RequestBody SimpleDate reservationDate) {
+		List<ReservationDto> response = reservationFacade.getReservationSchedule(id, reservationDate);
 		return response;
 	}
 	

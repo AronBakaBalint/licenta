@@ -94,7 +94,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	}
 
 	@Override
-	public List<Reservation> getAllActiveReservations(Integer parkingSpotId, SimpleDate reservationDate) {
+	public List<Reservation> getReservationSchedule(Integer parkingSpotId, SimpleDate reservationDate) {
 		return reservationRepository.getAllReservations().stream()
 				.filter(reservation -> reservation.getParkingSpotId() == parkingSpotId)
 				.filter(reservation -> reservation.hasDate(reservationDate))

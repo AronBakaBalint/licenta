@@ -15,7 +15,7 @@ public interface ReservationManagementService {
 	
 	public Reservation findById(int reservationId);
 	
-	public List<Reservation> getAllActiveReservations(Integer parkingSpotId, SimpleDate reservationDate);
+	public List<Reservation> getReservationSchedule(Integer parkingSpotId, SimpleDate reservationDate);
 	
 	public List<Reservation> findReservationsByUser(int userId);
 	
