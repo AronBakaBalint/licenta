@@ -17,15 +17,15 @@ import retrofit2.Response
 
 class UserRepositoryImpl : UserRepository{
 
-    private val loginService = RestClient.client!!.create(LoginService::class.java)
+    private val loginService = RestClient.client?.create(LoginService::class.java)
 
-    private val registrationService = RestClient.client!!.create(RegistrationService::class.java)
+    private val registrationService = RestClient.client?.create(RegistrationService::class.java)
 
-    private val userDataService = RestClient.client!!.create(UserDataService::class.java)
+    private val userDataService = RestClient.client?.create(UserDataService::class.java)
 
     override fun login(loginRequestDto: LoginRequestDto, loginResponse: (loginResponse: LoginResponse) -> Unit) {
-        val call = loginService.authenticate(loginRequestDto)
-        call.enqueue(object : Callback<String> {
+        val call = loginService?.authenticate(loginRequestDto)
+        call?.enqueue(object : Callback<String> {
             override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()!!
@@ -48,8 +48,8 @@ class UserRepositoryImpl : UserRepository{
 
     override fun register(fullName: String, username: String, email: String, password: String, registerResponse: (response: RegisterResponse) -> Unit) {
         val registrationDto = RegistrationDto(fullName, username, email, password)
-        val call = registrationService.register(registrationDto)
-        call.enqueue(object : Callback<Int> {
+        val call = registrationService?.register(registrationDto)
+        call?.enqueue(object : Callback<Int> {
             override fun onResponse(call: Call<Int>, response: Response<Int>) {
                 if (response.isSuccessful) {
                     if (0 == response.body()!!) {
@@ -72,8 +72,8 @@ class UserRepositoryImpl : UserRepository{
         moneyTransferDto.userId = UserData.userId
         moneyTransferDto.amount = amount
 
-        val call = userDataService.transferMoney(moneyTransferDto)
-        call.enqueue(object : Callback<Void?> {
+        val call = userDataService?.transferMoney(moneyTransferDto)
+        call?.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
                     UserData.update()

@@ -9,6 +9,7 @@ import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationHoursBinding
 import com.example.licenta_mobile.factory.ReservationVMFactory
+import com.example.licenta_mobile.util.addOnPropertyChanged
 
 class ReservationHoursFragment(private val parkingSpotId: Int?) : BaseFragment<SpotReservationViewModel, FragmentReservationHoursBinding>(R.layout.fragment_reservation_hours) {
 
@@ -57,11 +58,9 @@ class ReservationHoursFragment(private val parkingSpotId: Int?) : BaseFragment<S
             reservationCommandListener?.navigateToLicensePlate()
         })
 
-        viewModel.reservationHours.observe(viewLifecycleOwner, {
-            val recyclerView = binding?.recyclerView
-            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-            val adapter = ReservationHoursAdapter(it)
-            recyclerView?.adapter = adapter
-        })
+        val recyclerView = binding?.recyclerView
+        recyclerView?.layoutManager = LinearLayoutManager(requireContext())
+        val adapter = ReservationHoursAdapter(viewModel.reservationHours, viewModel.selectedHours.value) { hour -> viewModel.onHourSelected(hour) }
+        recyclerView?.adapter = adapter
     }
 }

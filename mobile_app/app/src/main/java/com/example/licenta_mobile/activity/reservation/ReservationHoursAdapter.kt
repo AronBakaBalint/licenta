@@ -8,7 +8,10 @@ import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
 import com.example.licenta_mobile.R
 
-class ReservationHoursAdapter (private val occupiedHours: List<Int>) : RecyclerView.Adapter<ReservationHoursAdapter.MyViewHolder>() {
+class ReservationHoursAdapter (private val occupiedHours: List<Int>?,
+                               private val selectedHours: List<Int>?,
+                               private val hourClickListener: (hour: Int) -> Unit
+    ) : RecyclerView.Adapter<ReservationHoursAdapter.MyViewHolder>() {
 
     private val reservationHours: List<String> = generateHoursList()
 
@@ -26,30 +29,38 @@ class ReservationHoursAdapter (private val occupiedHours: List<Int>) : RecyclerV
     override fun onBindViewHolder(viewHolder: ReservationHoursAdapter.MyViewHolder, position: Int) {
         val hour = viewHolder.hour
         hour.text = reservationHours[position]
-        if(isHourOccupied(reservationHours[position])) {
+        if(isHourOccupied(position)) {
             hour.isClickable = false
             hour.setBackgroundColor(Color.RED)
         } else {
-            hour.setBackgroundColor(Color.GREEN)
+            hour.isClickable = true
+            hour.setOnClickListener {
+                hourClickListener.invoke(position)
+                notifyDataSetChanged()
+            }
+            if(isHourSelected(position)) {
+                hour.setBackgroundColor(Color.YELLOW)
+            } else {
+                hour.setBackgroundColor(Color.GREEN)
+            }
         }
     }
 
     override fun getItemCount(): Int {
-        return 24
+        return reservationHours.size
     }
 
-    private fun isHourOccupied(btnHour: String): Boolean {
-        for (i in occupiedHours) {
-            if (btnHour.substring(0, 2).toInt() == i) {
-                return true
-            }
-        }
-        return false
+    private fun isHourOccupied(position: Int): Boolean {
+        return occupiedHours?.contains(position)!!
+    }
+
+    private fun isHourSelected(position: Int): Boolean {
+        return selectedHours?.contains(position)!!
     }
 
     private fun generateHoursList(): List<String> {
         val hoursList = arrayListOf<String>()
-        for(i in 0..24) {
+        for(i in 0..23) {
             if(i < 10) {
                 hoursList.add("0$i:00")
             } else {

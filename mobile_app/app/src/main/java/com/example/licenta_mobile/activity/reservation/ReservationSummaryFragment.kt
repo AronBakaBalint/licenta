@@ -3,11 +3,13 @@ package com.example.licenta_mobile.activity.reservation
 import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationSummaryBinding
 import com.example.licenta_mobile.factory.ReservationVMFactory
+
 
 class ReservationSummaryFragment(private val parkingSpotId: Int?) : BaseFragment<SpotReservationViewModel, FragmentReservationSummaryBinding>(R.layout.fragment_reservation_summary) {
 
@@ -30,7 +32,7 @@ class ReservationSummaryFragment(private val parkingSpotId: Int?) : BaseFragment
         super.onAttach(context)
         try {
             reservationCommandListener = context as ReservationCommandListener
-        } catch (e : ClassCastException) {
+        } catch (e: ClassCastException) {
             println("Activity should implement ReservationCommandListener")
         }
     }
@@ -46,5 +48,20 @@ class ReservationSummaryFragment(private val parkingSpotId: Int?) : BaseFragment
             Toast.makeText(requireContext(), "Reservation Cancelled", Toast.LENGTH_SHORT).show()
             reservationCommandListener?.cancelReservation()
         })
+
+        viewModel.reservationInfo.observe(viewLifecycleOwner, {
+            showReservationInfoDialog(it)
+        })
+    }
+
+    private fun showReservationInfoDialog(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK") { _, _ ->
+                    reservationCommandListener?.navigateToMainActivity()
+                }
+        val alert = builder.create()
+        alert.show()
     }
 }

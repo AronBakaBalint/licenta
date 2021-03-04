@@ -37,4 +37,8 @@ class SpotReservationActivity : BaseActivity(), ReservationCommandListener {
         addFragment(R.id.container, ReservationSummaryFragment.newInstance(parkingSpotId))
     }
 
+    override fun navigateToMainActivity() {
+        finish()
+    }
+
 }

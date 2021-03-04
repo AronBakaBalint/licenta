@@ -9,4 +9,6 @@ interface ReservationCommandListener {
     fun navigateToLicensePlate()
 
     fun navigateToSummary()
+
+    fun navigateToMainActivity()
 }
