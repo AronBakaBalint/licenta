@@ -11,7 +11,7 @@ public interface ReservationFacade {
 
 	public void extendReservation(Integer reservationId);
 	
-	public List<ReservationDto> getAllActiveReservations(Integer id, SimpleDate reservationDate);
+	public List<ReservationDto> getReservationSchedule(Integer id, SimpleDate reservationDate);
 
 	public void cancelReservation(Integer reservationId);
 	

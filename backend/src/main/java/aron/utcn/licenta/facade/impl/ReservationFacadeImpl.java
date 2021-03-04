@@ -42,8 +42,8 @@ public class ReservationFacadeImpl implements ReservationFacade {
 	}
 
 	@Override
-	public List<ReservationDto> getAllActiveReservations(Integer parkingSpotId, SimpleDate reservationDate) {
-		return reservationService.getAllActiveReservations(parkingSpotId, reservationDate).stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
+	public List<ReservationDto> getReservationSchedule(Integer parkingSpotId, SimpleDate reservationDate) {
+		return reservationService.getReservationSchedule(parkingSpotId, reservationDate).stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
 	}
 
 }
