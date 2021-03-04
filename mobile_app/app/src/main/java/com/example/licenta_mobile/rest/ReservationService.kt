@@ -1,6 +1,5 @@
 package com.example.licenta_mobile.rest
 
-import androidx.databinding.ObservableList
 import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.SimpleDate
@@ -14,9 +13,6 @@ interface ReservationService {
 
     @POST("/reservation")
     fun reserveParkingSpot(@Body reservationDto: ReservationDto): Call<Int>
-
-    @GET("/reservation/{id}")
-    fun isReservationPending(@Path("id") id: Int): Call<Boolean>
 
     @DELETE("/reservation/{id}")
     fun cancelReservation(@Path("id") id: Int): Call<Void>

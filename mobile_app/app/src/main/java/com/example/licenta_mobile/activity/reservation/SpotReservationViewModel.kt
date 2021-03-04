@@ -31,7 +31,7 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
 
     private val pricePerHour = ObservableField(0.0)
 
-    private val _price = MutableLiveData<Double>(0.0)
+    private val _price = MutableLiveData(0.0)
     val price = _price.map {
         formatPrice(it)
     }
@@ -56,8 +56,8 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
     val reservationInfo: LiveData<String> = _reservationInfo
 
     init {
-        getParkingSpotSchedule()
         selectedHours.value = arrayListOf()
+        getParkingSpotSchedule()
         getPricePerHour()
     }
 
@@ -79,6 +79,7 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
 
     fun setSelectedDate(year: Int, month: Int, day: Int) {
         selectedDate = SimpleDate(day, month, year)
+        getParkingSpotSchedule()
     }
 
     fun confirmReservation() {

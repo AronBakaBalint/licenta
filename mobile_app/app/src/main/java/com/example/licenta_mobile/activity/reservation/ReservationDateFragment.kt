@@ -48,7 +48,7 @@ class ReservationDateFragment(private val parkingSpotId: Int?) : BaseFragment<Sp
     private fun setupObservers() {
 
         binding?.datePicker?.setOnDateChangedListener{
-            _, year, month, dayOfMonth -> viewModel.setSelectedDate(year, month, dayOfMonth)
+            _, year, month, dayOfMonth -> viewModel.setSelectedDate(year, month + 1, dayOfMonth)
         }
 
         viewModel.cancelReservation.observe(viewLifecycleOwner, {
