@@ -2,7 +2,6 @@ package com.example.licenta_mobile.activity.main.profile
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.model.UserData
 import com.example.licenta_mobile.repository.user.UserRepository

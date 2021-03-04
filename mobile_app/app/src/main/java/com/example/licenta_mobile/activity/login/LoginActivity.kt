@@ -1,7 +1,6 @@
 package com.example.licenta_mobile.activity.login
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.main.MainActivity

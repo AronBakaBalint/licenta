@@ -1,15 +1,13 @@
 package com.example.licenta_mobile.model
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.dto.UserDataDto
 import com.example.licenta_mobile.rest.RestClient
 import com.example.licenta_mobile.rest.UserDataService
-import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+// needs to be rewritten
 object UserData {
     @JvmStatic var userId: Int = 0
     @JvmStatic var currentSold = 0.0

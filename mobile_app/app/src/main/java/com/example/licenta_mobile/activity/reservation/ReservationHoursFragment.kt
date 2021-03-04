@@ -9,7 +9,6 @@ import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationHoursBinding
 import com.example.licenta_mobile.factory.ReservationVMFactory
-import com.example.licenta_mobile.util.addOnPropertyChanged
 
 class ReservationHoursFragment(private val parkingSpotId: Int?) : BaseFragment<SpotReservationViewModel, FragmentReservationHoursBinding>(R.layout.fragment_reservation_hours) {
 

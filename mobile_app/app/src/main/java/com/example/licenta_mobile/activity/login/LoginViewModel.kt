@@ -4,7 +4,6 @@ import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.licenta_mobile.activity.login.LoginResponse.*
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.LoginRequestDto
