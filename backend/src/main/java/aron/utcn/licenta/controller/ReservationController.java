@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ReservationFacade;
+import aron.utcn.licenta.jwt.JwtTokenUtil;
 import aron.utcn.licenta.model.SimpleDate;
 import lombok.RequiredArgsConstructor;
 
@@ -24,13 +26,17 @@ public class ReservationController {
 	
 	private final ReservationFacade reservationFacade;
 	
+	private final JwtTokenUtil jwtTokenUtil;
+	
 	@GetMapping("/reservation/{id}")
 	public Boolean isReservationPending(@PathVariable Integer id) {
 		return reservationFacade.isReservationPending(id);
 	}
 	
 	@PostMapping("/reservation")
-	public Integer makeReservation(@RequestBody ReservationDto reservation) {
+	public Integer makeReservation(@RequestHeader("Authorization") String token, @RequestBody ReservationDto reservation) {
+		Integer userId = Integer.parseInt(jwtTokenUtil.getIdFromToken(token.replace("Bearer ", ""))); 
+		reservation.setId(userId);
 		return reservationFacade.reserveParkingPlace(reservation);
 	}
 	
@@ -45,8 +51,8 @@ public class ReservationController {
 	}
 	
 	@PostMapping("/reservation/date/{id}")
-	public List<ReservationDto> getReservationSchedule(@PathVariable Integer id, @RequestBody SimpleDate reservationDate) {
-		List<ReservationDto> response = reservationFacade.getReservationSchedule(id, reservationDate);
+	public List<ReservationDto> getReservationSchedule(@PathVariable("id") Integer parkingSpotId, @RequestBody SimpleDate reservationDate) {
+		List<ReservationDto> response = reservationFacade.getReservationSchedule(parkingSpotId, reservationDate);
 		return response;
 	}
 	
