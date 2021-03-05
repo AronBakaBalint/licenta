@@ -29,12 +29,12 @@ class LoginViewModel : BaseViewModel() {
 
     private val userRepository: UserRepository = UserRepositoryImpl()
 
-    fun login(){
+    fun login() {
         showProgressBar()
         val loginRequestDto = LoginRequestDto(username.get()!!, password.get()!!)
         userRepository.login(loginRequestDto) { response ->
             hideProgressBar()
-            when(response) {
+            when (response) {
 
                 SUCCESS -> {
                     _shouldLogin.value = true
@@ -51,15 +51,15 @@ class LoginViewModel : BaseViewModel() {
         }
     }
 
-    fun register(){
+    fun register() {
         _registerCommand.value = true
     }
 
-    private fun showProgressBar(){
+    private fun showProgressBar() {
         progressBar.set(View.VISIBLE)
     }
 
-    private fun hideProgressBar(){
+    private fun hideProgressBar() {
         progressBar.set(View.GONE)
     }
 }
