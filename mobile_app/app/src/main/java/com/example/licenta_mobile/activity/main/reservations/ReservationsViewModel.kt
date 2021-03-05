@@ -44,6 +44,6 @@ class ReservationsViewModel : BaseViewModel() {
     }
 
     private fun updateReservationsList(reservationsList: List<ReservationDto>?) {
-        _reservations.value = reservationsList
+        _reservations.value = reservationsList!!
     }
 }
