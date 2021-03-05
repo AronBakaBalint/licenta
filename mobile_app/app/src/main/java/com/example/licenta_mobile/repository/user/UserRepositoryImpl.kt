@@ -5,6 +5,7 @@ import com.example.licenta_mobile.activity.register.RegisterResponse
 import com.example.licenta_mobile.dto.LoginRequestDto
 import com.example.licenta_mobile.dto.MoneyTransferDto
 import com.example.licenta_mobile.dto.RegistrationDto
+import com.example.licenta_mobile.dto.UserDataDto
 import com.example.licenta_mobile.model.UserData
 import com.example.licenta_mobile.rest.LoginService
 import com.example.licenta_mobile.rest.RegistrationService
@@ -15,7 +16,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserRepositoryImpl : UserRepository{
+class UserRepositoryImpl : UserRepository {
 
     private val loginService = RestClient.client?.create(LoginService::class.java)
 
@@ -34,7 +35,6 @@ class UserRepositoryImpl : UserRepository{
                     } else {
                         loginResponse.invoke(LoginResponse.SUCCESS)
                         Token.jwtToken = responseBody
-                        UserData.update()
                     }
                 }
             }
@@ -76,12 +76,27 @@ class UserRepositoryImpl : UserRepository{
         call?.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
-                    UserData.update()
                     moneyAddResponse.invoke(true)
                 }
             }
 
             override fun onFailure(call: Call<Void?>, t: Throwable) {
+                println(t.message)
+                call.cancel()
+            }
+        })
+    }
+
+    override fun getUserDetails(userId: Int, userDetails: (response: UserDataDto) -> Unit) {
+        val call = userDataService?.getUserDetails(UserData.userId)
+        call?.enqueue(object : Callback<UserDataDto> {
+            override fun onResponse(call: Call<UserDataDto>, response: Response<UserDataDto>) {
+                if (response.isSuccessful) {
+                    userDetails.invoke(response.body()!!)
+                }
+            }
+
+            override fun onFailure(call: Call<UserDataDto>, t: Throwable) {
                 println(t.message)
                 call.cancel()
             }
