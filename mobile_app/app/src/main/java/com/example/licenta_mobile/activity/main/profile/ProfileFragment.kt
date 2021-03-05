@@ -5,6 +5,7 @@ import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment

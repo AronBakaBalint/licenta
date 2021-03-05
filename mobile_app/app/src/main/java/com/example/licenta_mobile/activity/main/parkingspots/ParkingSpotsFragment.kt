@@ -9,6 +9,7 @@ import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentParkingLotBinding
 import com.example.licenta_mobile.factory.ParkingSpotVMFactory
 
+
 class ParkingSpotsFragment : BaseFragment<ParkingSpotsViewModel, FragmentParkingLotBinding>(R.layout.fragment_parking_lot) {
 
     override val viewModel: ParkingSpotsViewModel by activityViewModels { ParkingSpotVMFactory { reserve(it) } }
@@ -25,14 +26,9 @@ class ParkingSpotsFragment : BaseFragment<ParkingSpotsViewModel, FragmentParking
         super.onAttach(context)
         try {
             mainCommandListener = context as MainCommandListener
-        } catch (e : ClassCastException) {
+        } catch (e: ClassCastException) {
             println("Activity should implement MainCommandListener")
         }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        mainCommandListener = null
     }
 
     private fun reserve(spotId: Int){

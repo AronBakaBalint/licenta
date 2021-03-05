@@ -5,7 +5,7 @@
     android:paddingHorizontal="5dp">
 
     <TextView
-        android:id="@+id/licensePlate"
+        android:id="@+id/license_plate"
         android:layout_width="140dp"
         android:layout_height="48dp"
         android:layout_weight="1"
@@ -14,14 +14,14 @@
         android:textSize="12pt" />
 
     <Button
-        android:id="@+id/cancelReservation"
+        android:id="@+id/btn_cancel_reservation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="Cancel" />
 
     <Button
-        android:id="@+id/viewQR"
+        android:id="@+id/btn_view_QR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"

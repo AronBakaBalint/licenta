@@ -13,10 +13,12 @@ import android.widget.Toast
 import androidmads.library.qrgenearator.QRGContents
 import androidmads.library.qrgenearator.QRGEncoder
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationHistoryBinding
 import com.google.zxing.WriterException
+import java.util.*
 
 class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReservationHistoryBinding>(R.layout.fragment_reservation_history) {
 
@@ -30,20 +32,16 @@ class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReserva
     }
 
     private fun setupObservers() {
-        viewModel.reservations.observe(viewLifecycleOwner, {
-            val lView = binding?.reservationsList
-            val adapter = ReservationsListAdapter(it, requireActivity(), { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })
-            lView?.adapter = adapter
-        })
 
-        viewModel.activateFilter.observe(viewLifecycleOwner, {
-            val lView = binding?.reservationsList
+        viewModel.updateReservationHistory.observe(viewLifecycleOwner, {
+            val recyclerView = binding?.reservationsHistoryList
+            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
             var reservationsList = viewModel.reservations.value!!
             if (!binding?.switchShowCompleted?.isChecked!!) {
                 reservationsList = reservationsList.filter { r -> r.status != "cancelled" && r.status != "finished" }
             }
-            val adapter = ReservationsListAdapter(reservationsList, requireActivity(), { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })
-            lView?.adapter = adapter
+            val adapter = ReservationHistoryAdapter(reservationsList, { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })
+            recyclerView?.adapter = adapter
         })
 
         viewModel.toastMsg.observe(viewLifecycleOwner, {
