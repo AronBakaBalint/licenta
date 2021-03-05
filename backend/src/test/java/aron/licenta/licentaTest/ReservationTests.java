@@ -92,9 +92,9 @@ public class ReservationTests {
 	@Test
 	public void testMoneyTransfer() {
 		double amount = 5.0;
-		double balanceBeforeTransaction = personFacade.findById(1).getCurrentSold();
+		double balanceBeforeTransaction = personFacade.findById(1).getBalance();
 		personManagementService.addMoney(1, amount);
-		double balanceAfterTransaction = personFacade.findById(1).getCurrentSold();
+		double balanceAfterTransaction = personFacade.findById(1).getBalance();
 		assert(balanceBeforeTransaction + amount == balanceAfterTransaction);
 	}
 	
@@ -189,7 +189,7 @@ public class ReservationTests {
 		
 		//add money for the user to be able to pay
 		personManagementService.addMoney(1, 12.0);
-		double balanceBeforePayment = personFacade.findById(1).getCurrentSold();
+		double balanceBeforePayment = personFacade.findById(1).getBalance();
 				
 		int reservationId = reservationFacade.reserveParkingPlace(reservation);
 		String status = reservationService.findById(reservationId).getStatus();
@@ -208,7 +208,7 @@ public class ReservationTests {
 		status = reservationService.findById(reservationId).getStatus();
 		assertEquals("finished", status);
 		
-		double balanceAfterPayment = personFacade.findById(1).getCurrentSold();
+		double balanceAfterPayment = personFacade.findById(1).getBalance();
 		assert(balanceAfterPayment < balanceBeforePayment);
 	}
 
