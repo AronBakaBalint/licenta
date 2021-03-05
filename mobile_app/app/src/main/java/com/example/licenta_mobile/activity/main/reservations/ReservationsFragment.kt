@@ -18,6 +18,7 @@ import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationHistoryBinding
 import com.google.zxing.WriterException
+import java.util.*
 
 class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReservationHistoryBinding>(R.layout.fragment_reservation_history) {
 
@@ -31,14 +32,8 @@ class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReserva
     }
 
     private fun setupObservers() {
-        viewModel.reservations.observe(viewLifecycleOwner, {
-            val recyclerView = binding?.reservationsHistoryList
-            recyclerView?.layoutManager = LinearLayoutManager(requireContext())
-            val adapter = ReservationHistoryAdapter(it, { resId -> viewModel.cancelReservation(resId)}, { resId -> showQRCodeDialog(resId) })
-            recyclerView?.adapter = adapter
-        })
 
-        viewModel.activateFilter.observe(viewLifecycleOwner, {
+        viewModel.updateReservationHistory.observe(viewLifecycleOwner, {
             val recyclerView = binding?.reservationsHistoryList
             recyclerView?.layoutManager = LinearLayoutManager(requireContext())
             var reservationsList = viewModel.reservations.value!!

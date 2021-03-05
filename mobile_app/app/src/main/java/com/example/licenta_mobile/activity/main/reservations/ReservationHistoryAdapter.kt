@@ -38,7 +38,7 @@ class ReservationHistoryAdapter(private val reservationsList: List<ReservationDt
                 notifyDataSetChanged()
             }
         }
-        viewHolder.showQRCode.setOnClickListener { showQRCodeListener.invoke("$reservationsList[position].id") }
+        viewHolder.showQRCode.setOnClickListener { showQRCodeListener.invoke("${reservationsList[position].id}") }
     }
 
     override fun getItemCount(): Int {

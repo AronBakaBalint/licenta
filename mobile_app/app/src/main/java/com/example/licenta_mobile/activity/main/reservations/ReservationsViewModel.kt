@@ -12,6 +12,9 @@ class ReservationsViewModel : BaseViewModel() {
     private var _reservations = MutableLiveData<List<ReservationDto>>()
     var reservations: LiveData<List<ReservationDto>> = _reservations
 
+    private var _updateReservationHistory = MutableLiveData<Boolean>()
+    var updateReservationHistory: LiveData<Boolean> = _updateReservationHistory
+
     private var _toggleFilter = MutableLiveData<Boolean>()
     var activateFilter: LiveData<Boolean> = _toggleFilter
 
@@ -26,6 +29,7 @@ class ReservationsViewModel : BaseViewModel() {
 
     fun toggleFilter() {
         _toggleFilter.value = true
+        _updateReservationHistory.value = true
     }
 
     private fun loadReservationHistory() {
@@ -45,5 +49,6 @@ class ReservationsViewModel : BaseViewModel() {
 
     private fun updateReservationsList(reservationsList: List<ReservationDto>?) {
         _reservations.value = reservationsList!!
+        _updateReservationHistory.value = true
     }
 }
