@@ -39,4 +39,5 @@ class MainActivity : AppCompatActivity(), MainCommandListener {
         intent.putExtra(PARKING_SPOT_ID_EXTRA, "$spotId")
         startActivity(intent)
     }
+
 }
