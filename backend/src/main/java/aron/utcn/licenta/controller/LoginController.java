@@ -1,6 +1,5 @@
 package aron.utcn.licenta.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,18 +15,17 @@ import aron.utcn.licenta.jwt.JwtResponse;
 import aron.utcn.licenta.jwt.JwtTokenUtil;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.service.PersonManagementService;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 public class LoginController {
 
-	@Autowired
-	private JwtTokenUtil jwtTokenUtil;
+	private final JwtTokenUtil jwtTokenUtil;
 
-	@Autowired
-	private UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
 	
-	@Autowired
-	private PersonManagementService personManagementService;
+	private final PersonManagementService personManagementService;
 	
 	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
