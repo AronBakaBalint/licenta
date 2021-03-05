@@ -4,7 +4,6 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
-import com.example.licenta_mobile.model.UserData
 import com.example.licenta_mobile.repository.user.UserRepository
 import com.example.licenta_mobile.repository.user.UserRepositoryImpl
 import java.math.RoundingMode
@@ -33,7 +32,7 @@ class ProfileViewModel : BaseViewModel() {
     }
 
     fun addMoney(amount: Double) {
-        userRepository.addMoney(UserData.userId, amount) { response ->
+        userRepository.addMoney(amount) { response ->
             if (response) {
                 _toastMsg.value = "$amount transferred successfully"
                 updateUserData()
@@ -42,7 +41,7 @@ class ProfileViewModel : BaseViewModel() {
     }
 
     private fun updateUserData() {
-        userRepository.getUserDetails(UserData.userId) { userData ->
+        userRepository.getUserDetails { userData ->
             username.set(userData.username)
             balance.set("${format(userData.balance)} LEI")
         }

@@ -8,7 +8,6 @@ import androidx.lifecycle.map
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.SimpleDate
-import com.example.licenta_mobile.model.UserData
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
 import com.example.licenta_mobile.repository.prices.PriceRepositoryImpl
 import com.example.licenta_mobile.repository.reservations.ReservationsRepositoryImpl
@@ -86,7 +85,6 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
         val reservationDto = ReservationDto()
         reservationDto.parkingSpotId = spotId!!
         reservationDto.licensePlate = licensePlate.get()!!
-        reservationDto.userId = UserData.userId
         reservationDto.startTime = selectedDate
         reservationDto.duration = selectedHours.value!!
 
