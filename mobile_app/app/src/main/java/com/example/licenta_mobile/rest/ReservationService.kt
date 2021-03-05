@@ -17,8 +17,8 @@ interface ReservationService {
     @DELETE("/reservation/{id}")
     fun cancelReservation(@Path("id") id: Int): Call<Void>
 
-    @GET("/parking/reserved/{id}")
-    fun getReservationHistory(@Path("id") id: Int): Call<MutableList<ReservationDto>>
+    @GET("/parking/reserved")
+    fun getReservationHistory(): Call<MutableList<ReservationDto>>
 
     @GET("/reservation/extension")
     fun getExtensionCost(): Call<Double>
@@ -27,7 +27,7 @@ interface ReservationService {
     fun getPricePerHour(): Call<Double>
 
     @POST("/reservation/date/{id}")
-    fun getReservationSchedule(@Path("id") id: Int, @Body reservationDate: SimpleDate): Call<List<ReservationDto>>
+    fun getReservationSchedule(@Path("id") spotId: Int, @Body reservationDate: SimpleDate): Call<List<ReservationDto>>
 
     @PUT("/reservation/{id}")
     fun extendReservation(@Path("id") id: Int): Call<Void>

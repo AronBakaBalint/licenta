@@ -11,7 +11,7 @@ interface UserRepository {
 
     fun register(fullName: String, username: String, email: String, password: String, registerResponse: (response: RegisterResponse) -> Unit)
 
-    fun addMoney(userId: Int, amount: Double, moneyAddResponse: (response: Boolean) -> Unit)
+    fun addMoney(amount: Double, moneyAddResponse: (response: Boolean) -> Unit)
 
-    fun getUserDetails(userId: Int, userDetails: (response: UserDataDto) -> Unit)
+    fun getUserDetails(userDetails: (response: UserDataDto) -> Unit)
 }

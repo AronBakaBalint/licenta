@@ -3,10 +3,8 @@ package com.example.licenta_mobile.repository.user
 import com.example.licenta_mobile.activity.login.LoginResponse
 import com.example.licenta_mobile.activity.register.RegisterResponse
 import com.example.licenta_mobile.dto.LoginRequestDto
-import com.example.licenta_mobile.dto.MoneyTransferDto
 import com.example.licenta_mobile.dto.RegistrationDto
 import com.example.licenta_mobile.dto.UserDataDto
-import com.example.licenta_mobile.model.UserData
 import com.example.licenta_mobile.rest.LoginService
 import com.example.licenta_mobile.rest.RegistrationService
 import com.example.licenta_mobile.rest.RestClient
@@ -67,12 +65,8 @@ class UserRepositoryImpl : UserRepository {
         })
     }
 
-    override fun addMoney(userId: Int, amount: Double, moneyAddResponse: (response: Boolean) -> Unit) {
-        val moneyTransferDto = MoneyTransferDto()
-        moneyTransferDto.userId = UserData.userId
-        moneyTransferDto.amount = amount
-
-        val call = userDataService?.transferMoney(moneyTransferDto)
+    override fun addMoney(amount: Double, moneyAddResponse: (response: Boolean) -> Unit) {
+        val call = userDataService?.transferMoney(amount)
         call?.enqueue(object : Callback<Void?> {
             override fun onResponse(call: Call<Void?>, response: Response<Void?>) {
                 if (response.isSuccessful) {
@@ -87,8 +81,8 @@ class UserRepositoryImpl : UserRepository {
         })
     }
 
-    override fun getUserDetails(userId: Int, userDetails: (response: UserDataDto) -> Unit) {
-        val call = userDataService?.getUserDetails(UserData.userId)
+    override fun getUserDetails(userDetails: (response: UserDataDto) -> Unit) {
+        val call = userDataService?.getUserDetails()
         call?.enqueue(object : Callback<UserDataDto> {
             override fun onResponse(call: Call<UserDataDto>, response: Response<UserDataDto>) {
                 if (response.isSuccessful) {

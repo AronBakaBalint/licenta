@@ -50,9 +50,6 @@ dependencies {
     //Retrofit
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
 
-    //JWT
-    implementation 'com.auth0.android:jwtdecode:2.0.0'
-
     //ConstraintLayout
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
