@@ -19,7 +19,7 @@ public class PersonConverter implements BaseConverter<Person, PersonDto> {
 		PersonDto personDto = new PersonDto();
 		personDto.setUsername(entity.getUsername());
 		personDto.setEmail(entity.getEmail());
-		personDto.setCurrentSold(entity.getBalance());
+		personDto.setBalance(entity.getBalance());
 		return personDto;
 	}
 }
