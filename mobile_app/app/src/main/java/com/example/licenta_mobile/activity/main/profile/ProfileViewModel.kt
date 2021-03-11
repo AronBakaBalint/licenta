@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.repository.user.UserRepository
 import com.example.licenta_mobile.repository.user.UserRepositoryImpl
+import com.example.licenta_mobile.util.Event
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
@@ -15,11 +16,11 @@ class ProfileViewModel : BaseViewModel() {
 
     val balance = ObservableField("0 LEI")
 
-    private val _showMoneyTransferDialog = MutableLiveData<Boolean>()
-    val showMoneyTransferDialog: LiveData<Boolean> = _showMoneyTransferDialog
+    private val _showMoneyTransferDialog = MutableLiveData<Event<Boolean>>()
+    val showMoneyTransferDialog: LiveData<Event<Boolean>> = _showMoneyTransferDialog
 
-    private val _toastMsg = MutableLiveData<String>()
-    val toastMsg: LiveData<String> = _toastMsg
+    private val _toastMsg = MutableLiveData<Event<String>>()
+    val toastMsg: LiveData<Event<String>> = _toastMsg
 
     private val userRepository: UserRepository = UserRepositoryImpl()
 
@@ -28,13 +29,13 @@ class ProfileViewModel : BaseViewModel() {
     }
 
     fun showMoneyTransferDialog() {
-        _showMoneyTransferDialog.value = true
+        _showMoneyTransferDialog.value = Event(true)
     }
 
     fun addMoney(amount: Double) {
         userRepository.addMoney(amount) { response ->
             if (response) {
-                _toastMsg.value = "$amount transferred successfully"
+                _toastMsg.value = Event("$amount transferred successfully")
                 updateUserData()
             }
         }

@@ -7,6 +7,7 @@ import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.repository.reservations.ReservationsRepository
 import com.example.licenta_mobile.repository.reservations.ReservationsRepositoryImpl
+import com.example.licenta_mobile.util.Event
 
 class ReservationsViewModel : BaseViewModel() {
 
@@ -16,8 +17,8 @@ class ReservationsViewModel : BaseViewModel() {
     private var _updateReservationHistory = MediatorLiveData<Boolean>()
     var updateReservationHistory: LiveData<Boolean> = _updateReservationHistory
 
-    private var _toastMsg = MutableLiveData<String>()
-    var toastMsg: LiveData<String> = _toastMsg
+    private var _toastMsg = MutableLiveData<Event<String>>()
+    var toastMsg: LiveData<Event<String>> = _toastMsg
 
     private var _toggleFilter = MutableLiveData<Boolean>()
 
@@ -42,7 +43,7 @@ class ReservationsViewModel : BaseViewModel() {
     fun cancelReservation(reservationDto: ReservationDto) {
         reservationRepository.cancelReservation(reservationDto.id) { response ->
             if (response) {
-                _toastMsg.value = "Reservation cancelled"
+                _toastMsg.value = Event("Reservation cancelled")
                 loadReservationHistory()
             }
         }

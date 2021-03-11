@@ -5,7 +5,6 @@ import android.text.InputType
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
@@ -26,11 +25,15 @@ class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileBinding>(R
     private fun setupObservers() {
 
         viewModel.showMoneyTransferDialog.observe(viewLifecycleOwner, {
-            showAddMoneyDialog()
+            it.getContentIfNotHandled()?.let {
+                showAddMoneyDialog()
+            }
         })
 
         viewModel.toastMsg.observe(viewLifecycleOwner, {
-            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(requireContext(), viewModel.toastMsg.value?.peekContent(), Toast.LENGTH_SHORT).show()
+            }
         })
     }
 

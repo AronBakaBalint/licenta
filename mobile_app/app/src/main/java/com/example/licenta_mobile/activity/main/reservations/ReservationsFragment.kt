@@ -18,7 +18,6 @@ import com.example.licenta_mobile.R
 import com.example.licenta_mobile.base.BaseFragment
 import com.example.licenta_mobile.databinding.FragmentReservationHistoryBinding
 import com.google.zxing.WriterException
-import java.util.*
 
 class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReservationHistoryBinding>(R.layout.fragment_reservation_history) {
 
@@ -45,7 +44,9 @@ class ReservationsFragment : BaseFragment<ReservationsViewModel, FragmentReserva
         })
 
         viewModel.toastMsg.observe(viewLifecycleOwner, {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            it.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            }
         })
     }
 
