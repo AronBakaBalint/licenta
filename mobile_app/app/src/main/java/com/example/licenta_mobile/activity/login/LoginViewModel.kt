@@ -6,9 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.activity.login.LoginResponse.*
 import com.example.licenta_mobile.base.BaseViewModel
+import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.dto.LoginRequestDto
 import com.example.licenta_mobile.repository.user.UserRepository
-import com.example.licenta_mobile.repository.user.UserRepositoryImpl
+import javax.inject.Inject
 
 class LoginViewModel : BaseViewModel() {
 
@@ -27,7 +28,12 @@ class LoginViewModel : BaseViewModel() {
     private val _loginToastMessage = MutableLiveData<String>()
     val loginToastMessage: LiveData<String> = _loginToastMessage
 
-    private val userRepository: UserRepository = UserRepositoryImpl()
+    @Inject
+    lateinit var userRepository: UserRepository
+
+    init {
+        DaggerAppComponent.create().inject(this)
+    }
 
     fun login() {
         showProgressBar()

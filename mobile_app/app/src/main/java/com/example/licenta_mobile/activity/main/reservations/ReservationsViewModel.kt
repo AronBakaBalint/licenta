@@ -4,10 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
+import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.repository.reservations.ReservationsRepository
-import com.example.licenta_mobile.repository.reservations.ReservationsRepositoryImpl
 import com.example.licenta_mobile.util.Event
+import javax.inject.Inject
 
 class ReservationsViewModel : BaseViewModel() {
 
@@ -22,9 +23,11 @@ class ReservationsViewModel : BaseViewModel() {
 
     private var _toggleFilter = MutableLiveData<Boolean>()
 
-    private val reservationRepository: ReservationsRepository = ReservationsRepositoryImpl()
+    @Inject
+    lateinit var reservationRepository: ReservationsRepository
 
     init {
+        DaggerAppComponent.create().inject(this)
         loadReservationHistory()
         _updateReservationHistory.addSource(_toggleFilter) { _updateReservationHistory.value = true }
         _updateReservationHistory.addSource(_reservations) { _updateReservationHistory.value = true }

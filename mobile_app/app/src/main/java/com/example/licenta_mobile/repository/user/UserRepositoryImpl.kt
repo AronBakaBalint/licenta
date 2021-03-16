@@ -13,8 +13,9 @@ import com.example.licenta_mobile.security.Token
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class UserRepositoryImpl : UserRepository {
+class UserRepositoryImpl @Inject constructor() : UserRepository {
 
     private val loginService = RestClient.client?.create(LoginService::class.java)
 

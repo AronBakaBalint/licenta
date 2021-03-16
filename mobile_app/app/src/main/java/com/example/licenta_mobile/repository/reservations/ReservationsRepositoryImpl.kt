@@ -6,8 +6,9 @@ import com.example.licenta_mobile.rest.RestClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-class ReservationsRepositoryImpl : ReservationsRepository {
+class ReservationsRepositoryImpl @Inject constructor() : ReservationsRepository {
 
     private val reservationService = RestClient.client?.create(ReservationService::class.java)
 

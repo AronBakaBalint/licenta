@@ -2,17 +2,21 @@ package com.example.licenta_mobile.activity.main.parkingspots
 
 import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
+import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
+import javax.inject.Inject
 
 class ParkingSpotsViewModel(private val spotToReserve: (Int) -> Unit) : BaseViewModel() {
 
     var spotsState: List<MutableLiveData<ParkingSpotDto>> = getInitialSpotsState()
 
-    private val parkingSpotsRepository: ParkingSpotsRepository = ParkingSpotsRepositoryImpl()
+    @Inject
+    lateinit var parkingSpotsRepository: ParkingSpotsRepository
 
     init {
+        DaggerAppComponent.create().inject(this)
         getParkingSpotsState()
     }
 
