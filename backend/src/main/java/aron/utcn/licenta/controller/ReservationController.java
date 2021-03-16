@@ -40,7 +40,7 @@ public class ReservationController {
 	@PostMapping("/reservation")
 	public Integer makeReservation(@RequestHeader("Authorization") String token, @RequestBody ReservationDto reservation) {
 		Integer userId = Integer.parseInt(jwtTokenUtil.getIdFromToken(token.replace("Bearer ", ""))); 
-		reservation.setId(userId);
+		reservation.setUserId(userId);
 		return reservationFacade.reserveParkingPlace(reservation);
 	}
 	
