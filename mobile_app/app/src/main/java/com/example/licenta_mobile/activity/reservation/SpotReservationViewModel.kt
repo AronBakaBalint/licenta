@@ -6,12 +6,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import com.example.licenta_mobile.base.BaseViewModel
+import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.SimpleDate
+import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
+import com.example.licenta_mobile.repository.prices.PriceRepository
 import com.example.licenta_mobile.repository.prices.PriceRepositoryImpl
+import com.example.licenta_mobile.repository.reservations.ReservationsRepository
 import com.example.licenta_mobile.repository.reservations.ReservationsRepositoryImpl
 import java.util.*
+import javax.inject.Inject
 
 
 class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
@@ -45,16 +50,20 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
 
     val progressBar = ObservableField(View.GONE)
 
-    private val parkingSpotsRepository = ParkingSpotsRepositoryImpl()
-
-    private val priceRepository = PriceRepositoryImpl()
-
-    private val reservationRepository = ReservationsRepositoryImpl()
-
     private val _reservationInfo = MutableLiveData<String>()
     val reservationInfo: LiveData<String> = _reservationInfo
 
+    @Inject
+    lateinit var reservationRepository: ReservationsRepository
+
+    @Inject
+    lateinit var parkingSpotsRepository: ParkingSpotsRepository
+
+    @Inject
+    lateinit var priceRepository: PriceRepository
+
     init {
+        DaggerAppComponent.create().inject(this)
         selectedHours.value = arrayListOf()
         getParkingSpotSchedule()
         getPricePerHour()

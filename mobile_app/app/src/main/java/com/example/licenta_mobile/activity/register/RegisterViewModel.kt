@@ -5,9 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.activity.register.RegisterResponse.*
 import com.example.licenta_mobile.base.BaseViewModel
+import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.repository.user.UserRepository
 import com.example.licenta_mobile.repository.user.UserRepositoryImpl
 import com.example.licenta_mobile.util.addOnPropertyChanged
+import javax.inject.Inject
 
 class RegisterViewModel : BaseViewModel() {
 
@@ -29,9 +31,13 @@ class RegisterViewModel : BaseViewModel() {
     private val _registerToastMessage = MutableLiveData<String>()
     val registerToastMessage: LiveData<String> = _registerToastMessage
 
-    private val userRepository: UserRepository = UserRepositoryImpl()
+    @Inject
+    lateinit var userRepository: UserRepository
 
     init {
+
+        DaggerAppComponent.create().inject(this)
+
         username.addOnPropertyChanged {
             if(usernameError.get() != null) {
                 usernameError.set(null)
