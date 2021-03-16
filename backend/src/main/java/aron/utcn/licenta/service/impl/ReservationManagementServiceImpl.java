@@ -1,11 +1,12 @@
 package aron.utcn.licenta.service.impl;
 
+import static java.util.function.Predicate.not;
+
 import java.util.List;
 import java.util.Optional;
-import static java.util.function.Predicate.not;
 import java.util.stream.Collectors;
 
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,18 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ReservationManagementServiceImpl implements ReservationManagementService {
+	
+	@Value("${parking.price_per_hour}")
+	private Double pricePerHour;
+	
+	@Value("${parking.extension_cost}")
+	private Double extensionCost;
 
 	private final ReservationRepository reservationRepository;
 
 	private final ParkingPlaceRepository parkingPlaceRespository;
 
 	private final PersonRepository personRepository;
-
-	private final Environment environment;
 
 	@Override
 	@Transactional
@@ -41,7 +46,6 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 			return -1;
 		} else {
 			Person user = reservation.getUser();
-			Double pricePerHour = Double.parseDouble(environment.getProperty("parking.price_per_hour"));
 			user.pay(pricePerHour * reservation.getDuration());
 			reservation.setReserved();
 			int reservationId = reservationRepository.saveReservation(reservation);
@@ -71,10 +75,8 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	@Transactional
 	public void extendReservation(int reservationId) {
-		Double extensionCost = Double.parseDouble(environment.getProperty("parking.extension_cost"));
 		Reservation reservation = reservationRepository.findById(reservationId).get();
-		Person person = personRepository
-				.findById(parkingPlaceRespository.findById(reservation.getParkingSpotId()).getUser().getId());
+		Person person = personRepository.findById(parkingPlaceRespository.findById(reservation.getParkingSpotId()).getUser().getId());
 		person.pay(extensionCost);
 	}
 
