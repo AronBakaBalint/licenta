@@ -2,7 +2,7 @@ package aron.utcn.licenta.controller;
 
 import java.util.List;
 
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReservationController {
 
-	private final Environment environment;
+	@Value("${parking.price_per_hour}")
+	private Double pricePerHour;
+	
+	@Value("${parking.extension_cost}")
+	private Double extensionCost;
 	
 	private final ReservationFacade reservationFacade;
 	
@@ -58,12 +62,12 @@ public class ReservationController {
 	
 	@GetMapping("/reservation/extension")
 	public Double getExtensionCost() {
-		return Double.parseDouble(environment.getProperty("parking.extension_cost"));
+		return extensionCost;
 	}
 	
 	@GetMapping("/reservation")
 	public Double getPricePerHour() {
-		return Double.parseDouble(environment.getProperty("parking.price_per_hour"));
+		return pricePerHour;
 	}
 	
 }
