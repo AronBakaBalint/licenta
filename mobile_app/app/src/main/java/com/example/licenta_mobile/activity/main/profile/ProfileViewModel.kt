@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.repository.user.UserRepository
-import com.example.licenta_mobile.repository.user.UserRepositoryImpl
 import com.example.licenta_mobile.util.Event
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -30,7 +29,6 @@ class ProfileViewModel : BaseViewModel() {
     init {
         DaggerAppComponent.create().inject(this)
         updateUserData()
-        DaggerAppComponent.create().inject(this)
     }
 
     fun showMoneyTransferDialog() {

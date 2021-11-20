@@ -1,0 +1,307 @@
+// OpenCVApplication.cpp : Defines the entry point for the console application.
+//
+
+#include "stdafx.h"
+#include "common.h"
+#include <iostream>
+#include <fstream>
+#include <queue>
+#include <random>
+#include <vector>
+
+Mat color2GrayScale(Mat src) {
+
+	int height = src.rows;
+	int width = src.cols;
+
+	Mat dst = Mat(height, width, CV_8UC1);
+
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			Vec3b v3 = src.at<Vec3b>(i, j);
+			uchar b = v3[0];
+			uchar g = v3[1];
+			uchar r = v3[2];
+			dst.at<uchar>(i, j) = (r + g + b) / 3;
+		}
+	}
+	return dst;
+}
+
+Mat binarize(Mat src, int threshold)
+{
+	int rows = src.rows;
+	int cols = src.cols;
+
+	Mat dst = Mat(src.rows, src.cols, CV_8UC1);
+
+	for (int row = 0; row < rows; row++) {
+		for (int col = 0; col < cols; col++) {
+			if (src.at<uchar>(row, col) < threshold) {
+				dst.at<uchar>(row, col) = 0;
+			}
+			else {
+				dst.at<uchar>(row, col) = 255;
+			}
+		}
+	}
+
+	return dst;
+}
+
+int di[8] = { 1, 0, -1, 0, 1, -1, -1, 1 };
+int dj[8] = { 0, 1, 0, -1, 1, 1, -1, -1 };
+int nb = 4;
+
+Mat getLabelMap(Mat src) {
+
+	Mat labels = Mat(src.rows, src.cols, CV_8UC1);
+	for (int i = 0; i < src.rows; i++) {
+		for (int j = 0; j < src.cols; j++) {
+			labels.at<uchar>(i, j) = 0;
+		}
+	}
+
+	int label = 0;
+	std::queue<Point2i> q;
+
+	for (int i = 0; i < src.rows; i++) {
+		for (int j = 0; j < src.cols; j++) {
+			if (i == 0 || j == 0 || i == src.rows - 1 || j == src.cols - 1) {
+				src.at<uchar>(i, j) = 0;
+			}
+		}
+	}
+
+	for (int i = 0; i < src.rows; i++) {
+		for (int j = 0; j < src.cols; j++) {
+			if ((src.at<uchar>(i, j) != 0) && (labels.at<uchar>(i, j) == 0)) {
+
+				label++;
+				q = std::queue<Point2i>();
+				labels.at<uchar>(i, j) = label;
+				q.push(Point2i(i, j));
+
+				while (!q.empty()) {
+					Point2i e = q.front();
+					q.pop();
+					for (int k = 0; k < nb; k++) {
+						int ni = e.x + di[k];
+						int nj = e.y + dj[k];
+
+						if ((ni < 0) || (ni >= src.rows)) continue;
+						if ((nj < 0) || (nj >= src.cols)) continue;
+
+						if ((src.at<uchar>(ni, nj) != 0) && (labels.at<uchar>(ni, nj) == 0)) {
+							labels.at<uchar>(ni, nj) = label;
+							q.push(Point2i(ni, nj));
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+	return labels;
+}
+
+Mat erode(Mat src) {
+
+	int erosion_size = 3;
+
+	Mat element = getStructuringElement(MORPH_ERODE, Size(2 * erosion_size + 1, 2 * erosion_size + 1), Point(erosion_size, erosion_size));
+
+	Mat erosion_res;
+	cv::erode(src, erosion_res, element);
+	return erosion_res;
+}
+
+Mat dilate(Mat src) {
+
+	int dilation_size = 1;
+
+	Mat element = getStructuringElement(MORPH_DILATE, Size(2 * dilation_size + 1, 2 * dilation_size + 1), Point(dilation_size, dilation_size));
+
+	Mat dilation_res;
+	cv::dilate(src, dilation_res, element);
+	return dilation_res;
+}
+
+std::vector<uchar> getIndividualLabels(Mat labelMap) {
+
+	std::vector<uchar> labels = std::vector<uchar>();
+
+	for (int i = 0; i < labelMap.rows; i++) {
+		for (int j = 0; j < labelMap.cols; j++) {
+			uchar label = labelMap.at<uchar>(i, j);
+			if (!std::count(labels.begin(), labels.end(), label) && label != 0) {
+				labels.push_back(label);
+			}
+		}
+	}
+
+	return labels;
+}
+
+Mat getLicensePlateFromLabelMap(Mat labelMap, Mat binaryImg) {
+
+	std::vector<uchar> labels = getIndividualLabels(labelMap);
+
+	std::vector<uchar> labelsToRemove = std::vector<uchar>();
+
+	int maxarea = 0;
+	int globalmini = 10000;
+	int globalmaxi = 0;
+	int globalminj = 10000;
+	int globalmaxj = 0;
+
+	for (int k = 0; k < labels.size(); k++) {
+		int label = labels[k];
+		int area = 0;
+		int cmin = 10000;
+		int cmax = 0;
+		int rmin = 10000;
+		int rmax = 0;
+
+		for (int i = 0; i < labelMap.rows; i++) {
+			for (int j = 0; j < labelMap.cols; j++) {
+				if (labelMap.at<uchar>(i, j) == label) {
+					area++;
+
+					if (i < rmin) rmin = i;
+					if (i > rmax) rmax = i;
+					if (j < cmin) cmin = j;
+					if (j > cmax) cmax = j;
+				}
+			}
+		}
+
+		double aspectRatio = (double)(cmax - cmin + 1) / (double)(rmax - rmin + 1);
+
+		if (area < 2000) {
+			labelsToRemove.push_back(label);
+		}
+
+		if (aspectRatio > 8) {
+			labelsToRemove.push_back(label);
+		}
+		else if (area > maxarea) {
+			maxarea = area;
+			globalmini = rmin;
+			globalmaxi = rmax;
+			globalminj = cmin;
+			globalmaxj = cmax;
+		}
+
+	}
+
+	for (int k = 0; k < labelsToRemove.size(); k++) {
+		for (int i = 0; i < labelMap.rows; i++) {
+			for (int j = 0; j < labelMap.cols; j++) {
+				if (labelMap.at<uchar>(i, j) == labelsToRemove[k]) {
+					labelMap.at<uchar>(i, j) = 0;
+				}
+			}
+		}
+	}
+
+	Mat result = Mat(globalmaxi - globalmini + 1, globalmaxj - globalminj + 1, CV_8UC1);
+	for (int i = 0; i < globalmaxi - globalmini + 1; i++) {
+		for (int j = 0; j < globalmaxj - globalminj + 1; j++) {
+			result.at<uchar>(i, j) = binaryImg.at<uchar>(i + globalmini, j + globalminj);
+		}
+	}
+	return result;
+}
+
+
+Mat videoSeqToBinary(Mat frame) {
+	Mat gray = color2GrayScale(frame);
+	Mat binary = binarize(gray, 128);
+	Mat eroded = erode(binary);
+	Mat labeled = getLabelMap(eroded);
+	Mat licensePlate = getLicensePlateFromLabelMap(labeled, binary);
+	return binarize(licensePlate, 2);
+}
+
+void exec_ocr(std::string fileName) {
+	std::string command = "tesseract " + fileName + " tmp/res.txt -l eng";
+	system(command.c_str());
+}
+
+void testSnap()
+{
+	VideoCapture cap(0); // open the deafult camera (i.e. the built in web cam)
+	if (!cap.isOpened()) // openenig the video device failed
+	{
+		printf("Cannot open video capture device.\n");
+		return;
+	}
+
+	Mat frame;
+	char numberStr[256];
+	char fileName[256];
+
+	// video resolution
+	Size capS = Size((int)cap.get(CAP_PROP_FRAME_WIDTH),
+		(int)cap.get(CAP_PROP_FRAME_HEIGHT));
+
+	// Display window
+	const char* WIN_SRC = "Src"; //window for the source frame
+	namedWindow(WIN_SRC, WINDOW_AUTOSIZE);
+	moveWindow(WIN_SRC, 0, 0);
+
+	const char* WIN_DST = "Snapped"; //window for showing the snapped frame
+	namedWindow(WIN_DST, WINDOW_AUTOSIZE);
+	moveWindow(WIN_DST, capS.width + 10, 0);
+
+	char c;
+	int frameNum = -1;
+	int frameCount = 0;
+
+	for (;;)
+	{
+		cap >> frame; // get a new frame from camera
+		if (frame.empty())
+		{
+			printf("End of the video file\n");
+			break;
+		}
+
+		++frameNum;
+
+		imshow(WIN_SRC, frame);
+
+		c = waitKey(10);  // waits a key press to advance to the next frame
+		if (c == 27) {
+			// press ESC to exit
+			printf("ESC pressed - capture finished");
+			break;  //ESC pressed
+		}
+		if (c == 115) { //'s' pressed - snapp the image to a file
+			frameCount++;
+			Mat binaryRes = videoSeqToBinary(frame);
+			imshow(WIN_DST, binaryRes);
+			time_t timeStamp = time(0);
+			std::stringstream strm;
+			strm << timeStamp;
+			std::string timeStampString = strm.str();
+			std::string fileName = "tmp/" + timeStampString + ".bmp";
+			imwrite(fileName, binaryRes);
+			exec_ocr(fileName);
+			imwrite("E:/projects/java/OCRJava/test.bmp", binaryRes);
+		}
+	}
+
+}
+
+int main()
+{
+	system("cls");
+	destroyAllWindows();
+	testSnap();
+	return 0;
+}

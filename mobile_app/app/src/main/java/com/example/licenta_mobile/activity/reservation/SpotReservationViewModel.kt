@@ -10,11 +10,8 @@ import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.dto.ReservationDto
 import com.example.licenta_mobile.model.SimpleDate
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository
-import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepositoryImpl
 import com.example.licenta_mobile.repository.prices.PriceRepository
-import com.example.licenta_mobile.repository.prices.PriceRepositoryImpl
 import com.example.licenta_mobile.repository.reservations.ReservationsRepository
-import com.example.licenta_mobile.repository.reservations.ReservationsRepositoryImpl
 import java.util.*
 import javax.inject.Inject
 
