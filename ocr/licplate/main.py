@@ -1,17 +1,36 @@
-import sys
 from cv2 import cv2
 import easyocr
 import socket
+import time
+import os
 
-img = cv2.imread(sys.argv[1])
-reader = easyocr.Reader(['en'])
-result = reader.readtext(img)
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+SOCKET_PORT = 9877
 
-text = ""
-for x in result:
-    text += x[-2]
-print(text)
+filePath = os.path.join(BASE_DIR, 'img\\licplate.jpg')
 
-clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientSocket.connect(("127.0.0.1", 9090))
-clientSocket.send(bytes(text))
+print('License Plate Detector Started\n')
+
+while True:
+    if os.path.exists(filePath):
+        img = cv2.imread(filePath)
+        reader = easyocr.Reader(['en'])
+        result = reader.readtext(img)
+
+        text = ""
+        for x in result:
+            text += x[-2]
+
+        clientSocket = None
+        try:
+            clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            clientSocket.connect((socket.gethostname(), SOCKET_PORT))
+            clientSocket.send(bytes(text, 'UTF-8'))
+        except ConnectionRefusedError:
+            print('Receiver socket is not open\n')
+        finally:
+            clientSocket.close()
+
+        os.remove(filePath)
+        time.sleep(8)
+    time.sleep(2)

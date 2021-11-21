@@ -3,10 +3,7 @@
 
 #include "stdafx.h"
 #include "common.h"
-#include <iostream>
-#include <fstream>
 #include <queue>
-#include <random>
 #include <vector>
 
 Mat color2GrayScale(Mat src) {
@@ -227,11 +224,6 @@ Mat videoSeqToBinary(Mat frame) {
 	return binarize(licensePlate, 2);
 }
 
-void exec_ocr(std::string fileName) {
-	std::string command = "tesseract " + fileName + " tmp/res.txt -l eng";
-	system(command.c_str());
-}
-
 void testSnap()
 {
 	VideoCapture cap(0); // open the deafult camera (i.e. the built in web cam)
@@ -285,14 +277,7 @@ void testSnap()
 			frameCount++;
 			Mat binaryRes = videoSeqToBinary(frame);
 			imshow(WIN_DST, binaryRes);
-			time_t timeStamp = time(0);
-			std::stringstream strm;
-			strm << timeStamp;
-			std::string timeStampString = strm.str();
-			std::string fileName = "tmp/" + timeStampString + ".bmp";
-			imwrite(fileName, binaryRes);
-			exec_ocr(fileName);
-			imwrite("E:/projects/java/OCRJava/test.bmp", binaryRes);
+			imwrite("E:\\projects\\python\\licplate\\img\\licplate.jpg", binaryRes);
 		}
 	}
 
