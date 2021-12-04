@@ -1,9 +1,9 @@
 package aron.utcn.licenta.facade;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import aron.utcn.licenta.dto.ReservationDto;
-import aron.utcn.licenta.model.SimpleDate;
 
 public interface ReservationFacade {
 
@@ -11,7 +11,7 @@ public interface ReservationFacade {
 
 	public void extendReservation(Integer reservationId);
 	
-	public List<ReservationDto> getReservationSchedule(Integer id, SimpleDate reservationDate);
+	public List<ReservationDto> getReservationSchedule(Integer id, LocalDate reservationDate);
 
 	public void cancelReservation(Integer reservationId);
 	

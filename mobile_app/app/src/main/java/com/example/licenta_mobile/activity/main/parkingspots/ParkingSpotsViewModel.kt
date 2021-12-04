@@ -40,7 +40,7 @@ class ParkingSpotsViewModel(private val spotToReserve: (Int) -> Unit) : BaseView
     }
 
     private fun updateParkingSpotsState(newState: List<ParkingSpotDto>)  {
-        for(i in newState.indices){
+        for(i in newState.indices) {
             spotsState[i].value = ParkingSpotDto(newState[i].id, newState[i].color, newState[i].status, newState[i].occupierCarPlate)
         }
     }

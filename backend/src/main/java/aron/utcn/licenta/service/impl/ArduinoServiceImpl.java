@@ -13,7 +13,7 @@ import gnu.io.SerialPort;
 @Component
 public class ArduinoServiceImpl implements ArduinoService {
 
-	private static Enumeration portList;
+	private static Enumeration<CommPortIdentifier> portList;
 	private static CommPortIdentifier portId;
 	private static SerialPort serialPort;
 	private static OutputStream outputStream;
@@ -25,7 +25,7 @@ public class ArduinoServiceImpl implements ArduinoService {
 		portList = CommPortIdentifier.getPortIdentifiers();
 		
 	    while (portList.hasMoreElements()) {
-	        portId = (CommPortIdentifier) portList.nextElement();
+	        portId = portList.nextElement();
 	        if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
 	             if (portId.getName().equals("COM3")) {
 	                try {
@@ -55,7 +55,7 @@ public class ArduinoServiceImpl implements ArduinoService {
 
 	@Override
 	public void activateBarrier() throws LCDNotFoundException {
-			displayOnLCD("welcome");
+		displayOnLCD("welcome");
 	}
 
 }

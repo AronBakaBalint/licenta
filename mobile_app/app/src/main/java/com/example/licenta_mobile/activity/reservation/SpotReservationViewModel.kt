@@ -8,11 +8,10 @@ import androidx.lifecycle.map
 import com.example.licenta_mobile.base.BaseViewModel
 import com.example.licenta_mobile.di.DaggerAppComponent
 import com.example.licenta_mobile.dto.ReservationDto
-import com.example.licenta_mobile.model.SimpleDate
 import com.example.licenta_mobile.repository.parkingspots.ParkingSpotsRepository
 import com.example.licenta_mobile.repository.prices.PriceRepository
 import com.example.licenta_mobile.repository.reservations.ReservationsRepository
-import java.util.*
+import java.time.LocalDate
 import javax.inject.Inject
 
 
@@ -43,7 +42,7 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
 
     var selectedHours = MutableLiveData<MutableList<Int>>()
 
-    private var selectedDate = today()
+    private var selectedDate = LocalDate.now()
 
     val progressBar = ObservableField(View.GONE)
 
@@ -83,7 +82,7 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
     }
 
     fun setSelectedDate(year: Int, month: Int, day: Int) {
-        selectedDate = SimpleDate(day, month, year)
+        selectedDate = LocalDate.of(year, month, day)
         getParkingSpotSchedule()
     }
 
@@ -91,29 +90,15 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
         val reservationDto = ReservationDto()
         reservationDto.parkingSpotId = spotId!!
         reservationDto.licensePlate = licensePlate.get()!!
-        reservationDto.startTime = selectedDate
+        reservationDto.startTime = selectedDate.toString()
         reservationDto.duration = selectedHours.value!!
 
         showProgressBar()
 
-        reservationRepository.makeReservation(reservationDto) { reservationId ->
+        reservationRepository.makeReservation(reservationDto) {
             hideProgressBar()
-            if (reservationId == -1) {
-                _reservationInfo.value = "An error occurred. Please try again."
-            } else {
-                _reservationInfo.value = "Your reservation has been made. You can find the QR code in the reservation history."
-            }
+            _reservationInfo.value = "Your reservation has been made. You can find the QR code in the reservation history."
         }
-    }
-
-    private fun today(): SimpleDate {
-        val date = Date()
-        val cal = Calendar.getInstance()
-        cal.time = date
-        val year = cal[Calendar.YEAR]
-        val month = cal[Calendar.MONTH]
-        val day = cal[Calendar.DAY_OF_MONTH]
-        return SimpleDate(day, month + 1, year)
     }
 
     private fun getParkingSpotSchedule() {
@@ -127,12 +112,12 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
     }
 
     fun getSelectedDate(): String {
-        return "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}"
+        return "${selectedDate.dayOfMonth}/${selectedDate.monthValue}/${selectedDate.year}"
     }
 
     fun onHourSelected(hour: Int) {
-        val selectedHoursList = selectedHours.value
-        if(selectedHoursList?.contains(hour)!!) {
+        val selectedHoursList = selectedHours.value!!
+        if(selectedHoursList.contains(hour)) {
             selectedHoursList.remove(hour)
         } else {
             selectedHoursList.add(hour)

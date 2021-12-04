@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.model.Reservation;
-import aron.utcn.licenta.model.SimpleDate;
 import aron.utcn.licenta.service.ParkingSpotManagementService;
 import aron.utcn.licenta.service.PersonManagementService;
 import lombok.RequiredArgsConstructor;
@@ -33,10 +33,12 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		reservation.setReservationDate(new Date());
 		reservation.setParkingSpot(parkingSpotService.findById(dto.getParkingSpotId()));
 		
-		SimpleDate date = dto.getStartTime(); 
+		String date = dto.getStartTime();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate localDate = LocalDate.parse(date, formatter);
 		Date reservationDate;
 		try {
-			reservationDate = new SimpleDateFormat("dd/MM/yyyy HH").parse(date.getDay()+"/"+date.getMonth()+"/"+date.getYear()+" "+dto.getDuration().get(0));
+			reservationDate = new SimpleDateFormat("dd/MM/yyyy HH").parse(localDate.getDayOfMonth() + "/" + localDate.getMonthValue() + "/" + localDate.getYear() + " " + dto.getDuration().get(0));
 			reservation.setReservationDate(reservationDate);
 		} catch (ParseException e) {
 			System.err.println("Date Conversion Error!");
@@ -54,7 +56,7 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		reservationDto.setParkingSpotId(entity.getParkingSpotId());
 		reservationDto.setDuration(generateHours(entity.getReservationDate().getHours(), entity.getDuration()));
 		LocalDate localDate = entity.getReservationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		reservationDto.setStartTime(new SimpleDate(localDate.getDayOfMonth(), localDate.getMonthValue(), localDate.getYear()));
+		reservationDto.setStartTime(localDate.toString());
 		return reservationDto;
 	}
 	

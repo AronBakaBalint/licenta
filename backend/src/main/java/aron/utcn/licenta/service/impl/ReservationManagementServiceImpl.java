@@ -2,8 +2,8 @@ package aron.utcn.licenta.service.impl;
 
 import static java.util.function.Predicate.not;
 
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
-import aron.utcn.licenta.model.SimpleDate;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import aron.utcn.licenta.repository.PersonRepository;
 import aron.utcn.licenta.repository.ReservationRepository;
@@ -23,10 +22,10 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ReservationManagementServiceImpl implements ReservationManagementService {
-	
+
 	@Value("${parking.price_per_hour}")
 	private Double pricePerHour;
-	
+
 	@Value("${parking.extension_cost}")
 	private Double extensionCost;
 
@@ -39,20 +38,13 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Override
 	@Transactional
 	public Integer reserveParkingPlace(Reservation reservation) {
-		Optional<List<Reservation>> reservations = reservationRepository
-				.findByLicensePlate(reservation.getLicensePlate());
-		if (reservations.isPresent()
-				&& (reservations.get().get(0).isReserved() || reservations.get().get(0).isOccupied())) {
-			return -1;
-		} else {
-			Person user = reservation.getUser();
-			user.pay(pricePerHour * reservation.getDuration());
-			reservation.setReserved();
-			int reservationId = reservationRepository.saveReservation(reservation);
-			reserve(reservationId, reservation.getParkingSpotId(), reservation.getLicensePlate(),
-					reservation.getUser().getId());
-			return reservationId;
-		}
+		Person user = reservation.getUser();
+		user.pay(pricePerHour * reservation.getDuration());
+		reservation.setReserved();
+		int reservationId = reservationRepository.saveReservation(reservation);
+		reserve(reservationId, reservation.getParkingSpotId(), reservation.getLicensePlate(), reservation.getUser().getId());
+		return reservationId;
+
 	}
 
 	@Transactional
@@ -76,7 +68,8 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	@Transactional
 	public void extendReservation(int reservationId) {
 		Reservation reservation = reservationRepository.findById(reservationId).get();
-		Person person = personRepository.findById(parkingPlaceRespository.findById(reservation.getParkingSpotId()).getUser().getId());
+		Person person = personRepository
+				.findById(parkingPlaceRespository.findById(reservation.getParkingSpotId()).getUser().getId());
 		person.pay(extensionCost);
 	}
 
@@ -96,11 +89,10 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	}
 
 	@Override
-	public List<Reservation> getReservationSchedule(Integer parkingSpotId, SimpleDate reservationDate) {
+	public List<Reservation> getReservationSchedule(Integer parkingSpotId, LocalDate reservationDate) {
 		return reservationRepository.getAllReservations().stream()
 				.filter(reservation -> reservation.getParkingSpotId() == parkingSpotId)
-				.filter(reservation -> reservation.hasDate(reservationDate))
-				.filter(not(Reservation::isCancelled))
+				.filter(reservation -> reservation.hasDate(reservationDate)).filter(not(Reservation::isCancelled))
 				.collect(Collectors.toList());
 	}
 

@@ -18,6 +18,4 @@ public interface ParkingSpotManagementService {
 	public List<Reservation> findUnconfirmedReservations(int userId);
 	
 	public void handleScannedCode(String qrCode);
-	
-	public void clearUnoccupiedPlaces();
 }

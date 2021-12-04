@@ -2,12 +2,12 @@ package com.example.licenta_mobile.repository.parkingspots
 
 import com.example.licenta_mobile.dto.ParkingSpotDto
 import com.example.licenta_mobile.dto.ReservationDto
-import com.example.licenta_mobile.model.SimpleDate
 import com.example.licenta_mobile.rest.ReservationService
 import com.example.licenta_mobile.rest.RestClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
 import javax.inject.Inject
 
 class ParkingSpotsRepositoryImpl @Inject constructor(): ParkingSpotsRepository {
@@ -30,8 +30,8 @@ class ParkingSpotsRepositoryImpl @Inject constructor(): ParkingSpotsRepository {
         })
     }
 
-    override fun getReservationSchedule(parkingSpotId: Int, date: SimpleDate, reservationScheduleResponse: (reservations: List<ReservationDto>) -> Unit) {
-        val call = parkingService.getReservationSchedule(parkingSpotId, date)
+    override fun getReservationSchedule(parkingSpotId: Int, date: LocalDate, reservationScheduleResponse: (reservations: List<ReservationDto>) -> Unit) {
+        val call = parkingService.getReservationSchedule(parkingSpotId, date.toString())
         call.enqueue(object : Callback<List<ReservationDto>> {
             override fun onResponse(call: Call<List<ReservationDto>>, response: Response<List<ReservationDto>>) {
                 if (response.isSuccessful) {

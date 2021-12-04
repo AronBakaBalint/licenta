@@ -3,7 +3,6 @@ package aron.utcn.licenta.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,31 +84,12 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 		}
 	}
 
-	@Override
-	@Transactional
-	public void clearUnoccupiedPlaces() {
-		List<ParkingSpot> parkingPlaces = parkingPlaceRepository.getAllParkingPlaces();
-		Date currentDate = new Date();
-		parkingPlaces.forEach(pp -> {
-			if (pp.isReserved() && getTimeDiff(pp.getReservation().getReservationDate(), currentDate) > 30 * 60) {
-				pp.getReservation().cancel();
-				pp.setFree();
-			}
-		});
-	}
-
 	private void displayOnLCD(String message) {
 		arduinoService.displayOnLCD(message);
 	}
 
 	private void openBarrier() {
 		arduinoService.activateBarrier();
-	}
-
-	private float getTimeDiff(Date start, Date finish) {
-		long diffInMillies = Math.abs(start.getTime() - finish.getTime());
-		long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-		return diff;
 	}
 
 }

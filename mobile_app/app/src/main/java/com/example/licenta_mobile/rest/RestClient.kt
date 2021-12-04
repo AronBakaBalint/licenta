@@ -17,7 +17,8 @@ import javax.net.ssl.X509TrustManager
 
 object RestClient {
 
-    private const val BASE_URL = "https://192.168.196.102:8443"
+    private const val BASE_URL = "https://172.18.128.1:8443"
+
     private var retrofit: Retrofit? = null
 
     @JvmStatic
@@ -27,7 +28,7 @@ object RestClient {
                 retrofit = Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(unsafeOkHttpClient().build())
-                        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+                        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create()))
                         .build()
             }
             return retrofit
