@@ -2,6 +2,7 @@ package aron.utcn.licenta.service.impl;
 
 import static java.util.function.Predicate.not;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import aron.utcn.licenta.model.ParkingSpot;
 import aron.utcn.licenta.model.Person;
 import aron.utcn.licenta.model.Reservation;
-import aron.utcn.licenta.model.SimpleDate;
 import aron.utcn.licenta.repository.ParkingPlaceRepository;
 import aron.utcn.licenta.repository.PersonRepository;
 import aron.utcn.licenta.repository.ReservationRepository;
@@ -89,7 +89,7 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	}
 
 	@Override
-	public List<Reservation> getReservationSchedule(Integer parkingSpotId, SimpleDate reservationDate) {
+	public List<Reservation> getReservationSchedule(Integer parkingSpotId, LocalDate reservationDate) {
 		return reservationRepository.getAllReservations().stream()
 				.filter(reservation -> reservation.getParkingSpotId() == parkingSpotId)
 				.filter(reservation -> reservation.hasDate(reservationDate)).filter(not(Reservation::isCancelled))

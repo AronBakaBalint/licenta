@@ -71,13 +71,8 @@ public class Reservation {
 		return parkingSpot.getId();
 	}
 	
-	public boolean hasDate(SimpleDate date) {
+	public boolean hasDate(LocalDate date) {
 		LocalDate localDate = reservationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		if(date.getDay() != localDate.getDayOfMonth()) {
-			return false;
-		} else if(date.getMonth() != localDate.getMonthValue()) {
-			return false;
-		}
-		return date.getYear() == localDate.getYear();
+		return localDate.isEqual(date);
 	}
 }

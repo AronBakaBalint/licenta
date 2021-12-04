@@ -1,5 +1,7 @@
 package aron.utcn.licenta.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -10,12 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import aron.utcn.licenta.dto.ReservationDto;
 import aron.utcn.licenta.facade.ReservationFacade;
 import aron.utcn.licenta.jwt.JwtTokenUtil;
-import aron.utcn.licenta.model.SimpleDate;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -54,9 +56,11 @@ public class ReservationController {
 		reservationFacade.cancelReservation(reservationId);
 	}
 	
-	@PostMapping("/reservation/date/{id}")
-	public List<ReservationDto> getReservationSchedule(@PathVariable("id") Integer parkingSpotId, @RequestBody SimpleDate reservationDate) {
-		List<ReservationDto> response = reservationFacade.getReservationSchedule(parkingSpotId, reservationDate);
+	@GetMapping("/reservation/schedule")
+	public List<ReservationDto> getReservationSchedule(@RequestParam("id") Integer parkingSpotId, @RequestParam("date") String reservationDate) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate reservationLocalDate = LocalDate.parse(reservationDate, formatter);
+		List<ReservationDto> response = reservationFacade.getReservationSchedule(parkingSpotId, reservationLocalDate);
 		return response;
 	}
 	

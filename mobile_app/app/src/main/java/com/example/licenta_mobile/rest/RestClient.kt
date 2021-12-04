@@ -28,7 +28,7 @@ object RestClient {
                 retrofit = Retrofit.Builder()
                         .baseUrl(BASE_URL)
                         .client(unsafeOkHttpClient().build())
-                        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+                        .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setDateFormat("yyyy-MM-dd").setLenient().create()))
                         .build()
             }
             return retrofit

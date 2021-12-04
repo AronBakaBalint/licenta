@@ -1,9 +1,9 @@
 package aron.utcn.licenta.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import aron.utcn.licenta.model.Reservation;
-import aron.utcn.licenta.model.SimpleDate;
 
 public interface ReservationManagementService {
 
@@ -15,7 +15,7 @@ public interface ReservationManagementService {
 	
 	public Reservation findById(int reservationId);
 	
-	public List<Reservation> getReservationSchedule(Integer parkingSpotId, SimpleDate reservationDate);
+	public List<Reservation> getReservationSchedule(Integer parkingSpotId, LocalDate reservationDate);
 	
 	public List<Reservation> findReservationsByUser(int userId);
 	
