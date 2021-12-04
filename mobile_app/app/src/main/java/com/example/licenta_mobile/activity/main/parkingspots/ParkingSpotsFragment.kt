@@ -2,6 +2,7 @@ package com.example.licenta_mobile.activity.main.parkingspots
 
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.licenta_mobile.R
 import com.example.licenta_mobile.activity.main.MainCommandListener

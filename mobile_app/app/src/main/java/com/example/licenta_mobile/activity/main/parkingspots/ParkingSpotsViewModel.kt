@@ -33,7 +33,7 @@ class ParkingSpotsViewModel(private val spotToReserve: (Int) -> Unit) : BaseView
         return defaultColors
     }
 
-    private fun getParkingSpotsState() {
+    fun getParkingSpotsState() {
         parkingSpotsRepository.getParkingSpotsState {
             updateParkingSpotsState(it)
         }

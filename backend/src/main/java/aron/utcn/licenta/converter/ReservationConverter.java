@@ -1,9 +1,6 @@
 package aron.utcn.licenta.converter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,19 +27,13 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		Reservation reservation = new Reservation();
 		reservation.setUser(personService.findById(dto.getUserId()));
 		reservation.setLicensePlate(dto.getLicensePlate());
-		reservation.setReservationDate(new Date());
+		reservation.setReservationMakingDate(new Date());
 		reservation.setParkingSpot(parkingSpotService.findById(dto.getParkingSpotId()));
 		
-		String date = dto.getStartTime();
+		int reservationStartHour = dto.getDuration().get(0);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDate localDate = LocalDate.parse(date, formatter);
-		Date reservationDate;
-		try {
-			reservationDate = new SimpleDateFormat("dd/MM/yyyy HH").parse(localDate.getDayOfMonth() + "/" + localDate.getMonthValue() + "/" + localDate.getYear() + " " + dto.getDuration().get(0));
-			reservation.setReservationDate(reservationDate);
-		} catch (ParseException e) {
-			System.err.println("Date Conversion Error!");
-		}  
+		LocalDate localDate = LocalDate.parse(dto.getStartTime(), formatter);
+		reservation.setReservationDate(localDate.atTime(reservationStartHour, 0)); 
 		reservation.setDuration(dto.getDuration().size());
 		return reservation;
 	}
@@ -54,8 +45,8 @@ public class ReservationConverter implements BaseConverter<Reservation, Reservat
 		reservationDto.setId(entity.getId());
 		reservationDto.setLicensePlate(entity.getLicensePlate());
 		reservationDto.setParkingSpotId(entity.getParkingSpotId());
-		reservationDto.setDuration(generateHours(entity.getReservationDate().getHours(), entity.getDuration()));
-		LocalDate localDate = entity.getReservationDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		reservationDto.setDuration(generateHours(entity.getReservationStartHour(), entity.getDuration()));
+		LocalDate localDate = entity.getReservationDate().toLocalDate();
 		reservationDto.setStartTime(localDate.toString());
 		return reservationDto;
 	}

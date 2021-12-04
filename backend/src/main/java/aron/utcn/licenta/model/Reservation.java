@@ -1,7 +1,7 @@
 package aron.utcn.licenta.model;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -28,7 +28,7 @@ public class Reservation {
 	private String status;
 	private String licensePlate;
 	private Date reservationMakingDate;
-	private Date reservationDate;
+	private LocalDateTime reservationDate;
 	private Integer duration;
 	
 	public void cancel() {
@@ -71,8 +71,11 @@ public class Reservation {
 		return parkingSpot.getId();
 	}
 	
+	public Integer getReservationStartHour() {
+		return reservationDate.getHour();
+	}
+	
 	public boolean hasDate(LocalDate date) {
-		LocalDate localDate = reservationDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-		return localDate.isEqual(date);
+		return date.isEqual(reservationDate.toLocalDate());
 	}
 }
