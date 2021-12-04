@@ -3,8 +3,6 @@ package aron.utcn.licenta.seed;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.Ordered;
@@ -70,19 +68,6 @@ public class ApplicationSeed implements CommandLineRunner {
 		reservation.setStartTime(new SimpleDate(day+dayOffset, month+1, year));
 		reservation.setDuration(duration);
 		reservationFacade.reserveParkingPlace(reservation);
-	}
-	
-	private void startTimer() {
-		Timer timer = new Timer ();
-		TimerTask hourlyTask = new TimerTask () {
-		    @Override
-		    public void run () {
-		    	parkingPlaceService.clearUnoccupiedPlaces();
-		    }
-		};
-
-		// schedule the task to run starting now and then every hour...
-		timer.schedule (hourlyTask, 0l, 1000*60/**60*/);
 	}
 	
 }

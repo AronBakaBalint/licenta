@@ -131,8 +131,8 @@ class SpotReservationViewModel(private val spotId: Int?) : BaseViewModel() {
     }
 
     fun onHourSelected(hour: Int) {
-        val selectedHoursList = selectedHours.value
-        if(selectedHoursList?.contains(hour)!!) {
+        val selectedHoursList = selectedHours.value!!
+        if(selectedHoursList.contains(hour)) {
             selectedHoursList.remove(hour)
         } else {
             selectedHoursList.add(hour)

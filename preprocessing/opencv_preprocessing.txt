@@ -224,11 +224,9 @@ Mat videoSeqToBinary(Mat frame) {
 	return binarize(licensePlate, 2);
 }
 
-void testSnap()
-{
+void testSnap() {
 	VideoCapture cap(0); // open the deafult camera (i.e. the built in web cam)
-	if (!cap.isOpened()) // openenig the video device failed
-	{
+	if (!cap.isOpened()) { // openenig the video device failed
 		printf("Cannot open video capture device.\n");
 		return;
 	}
@@ -254,11 +252,9 @@ void testSnap()
 	int frameNum = -1;
 	int frameCount = 0;
 
-	for (;;)
-	{
+	for (;;) {
 		cap >> frame; // get a new frame from camera
-		if (frame.empty())
-		{
+		if (frame.empty()) {
 			printf("End of the video file\n");
 			break;
 		}
@@ -278,13 +274,13 @@ void testSnap()
 			Mat binaryRes = videoSeqToBinary(frame);
 			imshow(WIN_DST, binaryRes);
 			imwrite("E:\\projects\\python\\licplate\\img\\licplate.jpg", binaryRes);
+			system("python E:\\projects\\python\\licplate\\main.py");
 		}
 	}
 
 }
 
-int main()
-{
+int main() {
 	system("cls");
 	destroyAllWindows();
 	testSnap();
