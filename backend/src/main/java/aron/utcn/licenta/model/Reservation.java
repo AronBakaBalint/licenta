@@ -78,4 +78,8 @@ public class Reservation {
 	public boolean hasDate(LocalDate date) {
 		return date.isEqual(reservationDate.toLocalDate());
 	}
+	
+	public Integer getUserId() {
+		return user.getId();
+	}
 }

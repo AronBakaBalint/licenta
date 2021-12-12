@@ -27,11 +27,6 @@ public class ReservationFacadeImpl implements ReservationFacade {
 	}
 
 	@Override
-	public void extendReservation(Integer reservationId) {
-		reservationService.extendReservation(reservationId);
-	}
-
-	@Override
 	public void cancelReservation(Integer reservationId) {
 		reservationService.cancelReservation(reservationId);
 	}
@@ -44,6 +39,19 @@ public class ReservationFacadeImpl implements ReservationFacade {
 	@Override
 	public List<ReservationDto> getReservationSchedule(Integer parkingSpotId, LocalDate reservationDate) {
 		return reservationService.getReservationSchedule(parkingSpotId, reservationDate).stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<ReservationDto> findAllReservations(int userId) {
+		List<Reservation> reservations = reservationService.findReservationsByUser(userId);
+		return reservations.stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
+	}
+
+	@Override
+	public List<ReservationDto> findUnconfirmedReservations(int userId) {
+		List<Reservation> reservedPlaces = reservationService.findReservationsByUser(userId);
+		reservedPlaces = reservedPlaces.stream().filter(Reservation::isReserved).collect(Collectors.toList());
+		return reservedPlaces.stream().map(reservationConverter::convertToDto).collect(Collectors.toList());
 	}
 
 }

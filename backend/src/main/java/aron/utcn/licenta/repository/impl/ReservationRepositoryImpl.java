@@ -18,7 +18,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 	private final EntityManager entityManager;
 
 	@Override
-	public Integer saveReservation(Reservation reservation) {
+	public Integer save(Reservation reservation) {
 		entityManager.persist(reservation);
 		return reservation.getId();
 	}
@@ -43,7 +43,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Reservation> findReservationsByUser(int userId) {
+	public List<Reservation> findByUser(int userId) {
 		return entityManager
 				.createQuery("SELECT reservation FROM Reservation reservation WHERE reservation.user.id LIKE :userId")
 				.setParameter("userId", userId).getResultList();
@@ -51,7 +51,7 @@ public class ReservationRepositoryImpl implements ReservationRepository {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Reservation> getAllReservations() {
+	public List<Reservation> getAll() {
 		return entityManager.createQuery("SELECT r FROM Reservation r").getResultList();
 	}
 

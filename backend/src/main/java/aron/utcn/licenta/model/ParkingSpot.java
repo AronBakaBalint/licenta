@@ -58,4 +58,8 @@ public class ParkingSpot {
 	public boolean isReserved() {
 		return status.equals("reserved");
 	}
+	
+	public Integer getUserId() {
+		return user.getId();
+	}
 }

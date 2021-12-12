@@ -17,7 +17,7 @@ import javax.net.ssl.X509TrustManager
 
 object RestClient {
 
-    private const val BASE_URL = "https://172.18.128.1:8443"
+    private const val BASE_URL = "https://172.26.112.1:8443"
 
     private var retrofit: Retrofit? = null
 

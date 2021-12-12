@@ -7,14 +7,14 @@ import aron.utcn.licenta.model.Reservation;
 
 public interface ReservationRepository {
 
-	public Integer saveReservation(Reservation reservation);
+	public Integer save(Reservation reservation);
 	
 	public Optional<Reservation> findById(int reservationId);
 	
 	public Optional<List<Reservation>> findByLicensePlate(String licensePlate);
 	
-	public List<Reservation> getAllReservations();
+	public List<Reservation> getAll();
 	
-	public List<Reservation> findReservationsByUser(int userId);
+	public List<Reservation> findByUser(int userId);
 
 }
