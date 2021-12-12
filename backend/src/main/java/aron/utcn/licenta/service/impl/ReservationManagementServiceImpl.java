@@ -4,6 +4,7 @@ import static java.util.function.Predicate.not;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -41,8 +42,8 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 		Person user = reservation.getUser();
 		user.pay(pricePerHour * reservation.getDuration());
 		reservation.setReserved();
-		int reservationId = reservationRepository.saveReservation(reservation);
-		reserve(reservationId, reservation.getParkingSpotId(), reservation.getLicensePlate(), reservation.getUser().getId());
+		int reservationId = reservationRepository.save(reservation);
+		reserve(reservationId, reservation.getParkingSpotId(), reservation.getLicensePlate(), reservation.getUserId());
 		return reservationId;
 
 	}
@@ -65,35 +66,41 @@ public class ReservationManagementServiceImpl implements ReservationManagementSe
 	}
 
 	@Override
-	@Transactional
-	public void extendReservation(int reservationId) {
-		Reservation reservation = reservationRepository.findById(reservationId).get();
-		Person person = personRepository
-				.findById(parkingPlaceRespository.findById(reservation.getParkingSpotId()).getUser().getId());
-		person.pay(extensionCost);
-	}
-
-	@Override
 	public Reservation findById(int reservationId) {
 		return reservationRepository.findById(reservationId).get();
 	}
 
 	@Override
 	public List<Reservation> findReservationsByUser(int userId) {
-		return reservationRepository.findReservationsByUser(userId);
+		return reservationRepository.findByUser(userId);
 	}
 
 	@Override
 	public Boolean isReservationPending(Integer reservationId) {
-		return reservationRepository.findById(reservationId).get().isReserved();
+		Optional<Reservation> reservation = reservationRepository.findById(reservationId);
+		if(reservation.isPresent()) {
+			return reservation.get().isReserved();
+		}
+		return false;
 	}
 
 	@Override
 	public List<Reservation> getReservationSchedule(Integer parkingSpotId, LocalDate reservationDate) {
-		return reservationRepository.getAllReservations().stream()
+		return reservationRepository.getAll().stream()
 				.filter(reservation -> reservation.getParkingSpotId() == parkingSpotId)
-				.filter(reservation -> reservation.hasDate(reservationDate)).filter(not(Reservation::isCancelled))
+				.filter(reservation -> reservation.hasDate(reservationDate))
+				.filter(not(Reservation::isCancelled))
 				.collect(Collectors.toList());
+	}
+	
+	@Override
+	public List<Reservation> findUnconfirmedReservationsOfUser(int userId) {
+		return reservationRepository.findByUser(userId);
+	}
+
+	@Override
+	public List<Reservation> findAllReservationsOfUser(int userId) {
+		return reservationRepository.findByUser(userId);
 	}
 
 }

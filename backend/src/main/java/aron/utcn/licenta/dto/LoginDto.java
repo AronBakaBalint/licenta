@@ -7,9 +7,4 @@ public class LoginDto {
 
 	private String username;
 	private String password;
-	
-	@Override
-	public String toString() {
-		return "{ username: "+username+", password: "+password+"}";
-	}
 }

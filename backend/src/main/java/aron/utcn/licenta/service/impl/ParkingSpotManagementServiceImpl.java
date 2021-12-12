@@ -26,7 +26,7 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 	private final ReservationRepository reservationRepository;
 
 	@Override
-	public List<ParkingSpot> getAllParkingPlaces() {
+	public List<ParkingSpot> getAll() {
 		return parkingPlaceRepository.getAllParkingPlaces();
 	}
 
@@ -39,16 +39,6 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 	@Override
 	public ParkingSpot findById(int id) {
 		return parkingPlaceRepository.findById(id);
-	}
-
-	@Override
-	public List<Reservation> findUnconfirmedReservations(int userId) {
-		return reservationRepository.findReservationsByUser(userId);
-	}
-
-	@Override
-	public List<Reservation> findAllReservations(int userId) {
-		return reservationRepository.findReservationsByUser(userId);
 	}
 
 	@Override
@@ -67,16 +57,16 @@ public class ParkingSpotManagementServiceImpl implements ParkingSpotManagementSe
 			if (reservation.isExpired()) {
 				displayOnLCD("reservation expired");
 			} else {
-				ParkingSpot parkingPlace = parkingPlaceRepository.findById(reservation.getParkingSpotId());
-				if (parkingPlace.isOccupied()) {
+				ParkingSpot parkingSpot = parkingPlaceRepository.findById(reservation.getParkingSpotId());
+				if (parkingSpot.isOccupied()) {
 					reservation.setFinished();
-					parkingPlace.setFree();
+					parkingSpot.setFree();
 					displayOnLCD("Goodbye");
 				} else {
 					openBarrier();
 					reservation.setOccupied();
-					parkingPlace.setOccupied();
-					parkingPlace.setArrivalTime(new Date());
+					parkingSpot.setOccupied();
+					parkingSpot.setArrivalTime(new Date());
 				}
 			}
 		} else {

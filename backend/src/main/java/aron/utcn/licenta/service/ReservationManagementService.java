@@ -9,8 +9,6 @@ public interface ReservationManagementService {
 
 	public Integer reserveParkingPlace(Reservation reservation);
 	
-	public void extendReservation(int reservationId);
-	
 	public void cancelReservation(int reservationId);
 	
 	public Reservation findById(int reservationId);
@@ -20,5 +18,9 @@ public interface ReservationManagementService {
 	public List<Reservation> findReservationsByUser(int userId);
 	
 	public Boolean isReservationPending(Integer reservationId);
+	
+	public List<Reservation> findAllReservationsOfUser(int userId);
+	
+	public List<Reservation> findUnconfirmedReservationsOfUser(int userId);
 	
 }
