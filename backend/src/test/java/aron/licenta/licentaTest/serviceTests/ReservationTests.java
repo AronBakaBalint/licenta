@@ -1,4 +1,4 @@
-package aron.licenta.licentaTest;
+package aron.licenta.licentaTest.serviceTests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

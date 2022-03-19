@@ -1,6 +1,4 @@
-package aron.licenta.licentaTest;
-
-import static org.junit.Assert.assertEquals;
+package aron.licenta.licentaTest.serviceTests;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import aron.utcn.licenta.ParkingApplication;
-import aron.utcn.licenta.service.ParkingSpotManagementService;
+import aron.utcn.licenta.facade.PersonFacade;
+import aron.utcn.licenta.service.PersonManagementService;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -23,13 +22,20 @@ import aron.utcn.licenta.service.ParkingSpotManagementService;
 @ComponentScan("aron.utcn.licenta")
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @ContextConfiguration(classes = { ParkingApplication.class })
-public class ParkingSpotTests {
+public class MoneyTransferTests {
 
 	@Autowired
-	private ParkingSpotManagementService parkingSpotService;
+	private PersonManagementService personManagementService;
+	
+	@Autowired
+	private PersonFacade personFacade;
 	
 	@Test
-	public void testGetAllParkingSpots() {
-		assertEquals(parkingSpotService.getAll().size(), 24);
+	public void testMoneyTransfer() {
+		double amount = 5.0;
+		double balanceBeforeTransaction = personFacade.findById(1).getBalance();
+		personManagementService.addMoney(1, amount);
+		double balanceAfterTransaction = personFacade.findById(1).getBalance();
+		assert(balanceBeforeTransaction + amount == balanceAfterTransaction);
 	}
 }

@@ -1,4 +1,6 @@
-package aron.licenta.licentaTest;
+package aron.licenta.licentaTest.serviceTests;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,16 +9,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import aron.utcn.licenta.ParkingApplication;
-import aron.utcn.licenta.model.Person;
-import aron.utcn.licenta.service.PersonManagementService;
+import aron.utcn.licenta.service.ParkingSpotManagementService;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -24,27 +23,13 @@ import aron.utcn.licenta.service.PersonManagementService;
 @ComponentScan("aron.utcn.licenta")
 @DirtiesContext(classMode = ClassMode.BEFORE_EACH_TEST_METHOD)
 @ContextConfiguration(classes = { ParkingApplication.class })
-public class AuthTests {
-	
-	@Autowired
-	private PersonManagementService personManagementService;
+public class ParkingSpotTests {
 
-	private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	@Autowired
+	private ParkingSpotManagementService parkingSpotService;
 	
 	@Test
-	public void testCorrectLogin() {
-		String username = "asd31";
-		String password = "123";
-		Person person = personManagementService.findByUsername(username);
-		assert(passwordEncoder.matches(password, person.getPassword()));
+	public void testGetAllParkingSpots() {
+		assertEquals(parkingSpotService.getAll().size(), 24);
 	}
-	
-	@Test
-	public void testIncorrectLogin() {
-		String username = "asd31";
-		String password = "1234";
-		Person person = personManagementService.findByUsername(username);
-		assert(!passwordEncoder.matches(password, person.getPassword()));
-	}
-	
 }
